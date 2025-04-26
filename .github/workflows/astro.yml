@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write  # ← readからwriteに変更（重要！）
   pages: write
   id-token: write
 
@@ -28,7 +28,6 @@ jobs:
         with:
           name: github-pages
           path: ./dist
-          retention-days: 1
 
   deploy:
     needs: build
@@ -40,4 +39,4 @@ jobs:
       - uses: actions/deploy-pages@v2
         id: deploy
         with:
-          artifact_name: github-pages  # ← ここが重要
+          artifact_name: github-pages
