@@ -1,23 +1,30 @@
 ---
-import "../styles/tailwind.css";
+import '../styles/layout.css';
 ---
-
+<!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Astro Portfolio</title>
   </head>
   <body>
-    <header>
-      <h1>My Astro Portfolio</h1>
+    <header class="site-header">
+      <div class="header-content">
+        <a href="/" class="site-title">My Astro Portfolio</a>
+        <nav class="site-nav">
+          <a href="/proof/">Proof</a>
+          <a href="/structure/">Structure</a>
+        </nav>
+      </div>
     </header>
 
-    <main>
+    <main class="site-main">
       <slot />
     </main>
 
-    <footer>
-      <p>&copy; 2025 My Portfolio</p>
+    <footer class="site-footer">
+      © 2025 My Astro Portfolio
     </footer>
   </body>
 </html>
