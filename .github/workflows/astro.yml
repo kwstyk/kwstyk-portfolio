@@ -1,49 +1,67 @@
 name: Deploy Astro site to GitHub Pages
 
+# ───────────────────────────────────────────────
+# ① main ブランチに push されたらトリガ
+# ───────────────────────────────────────────────
 on:
   push:
     branches: [main]
 
+# ───────────────────────────────────────────────
+# ② Secrets と権限
+# ───────────────────────────────────────────────
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: read       # ソースを読む
+  pages: write         # GitHub Pages へ書き込む
+  id-token: write      # OIDC 署名
 
-concurrency:
+concurrency:           # 同時実行防止
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
+# ───────────────────────────────────────────────
+# ③ ビルド & デプロイ
+# ───────────────────────────────────────────────
 jobs:
   build:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
+    runs-on: ubuntu-latest
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+    steps:
+      # 1) ソース取得
+      - uses: actions/checkout@v4
+
+      # 2) Node.js + npm キャッシュ
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      # 3) 依存関係インストール
+      - run: npm ci
 
-      - name: Build Astro site
-        run: npm run build
+      # 4) Astro ビルド
+      - run: npm run build
 
-      - name: Upload build artifact  # ★ v2 に変更
-        uses: actions/upload-pages-artifact@v2
+      # 5) ★ “upload-artifact” を先にダミー実行して許可を取る
+      - name: Pre-authorize upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: noop
+          if-no-files-found: ignore
+
+      # 6) dist/ を Pages 用アーティファクトにパッケージ
+      - uses: actions/upload-pages-artifact@v2
         with:
           path: ./dist
 
   deploy:
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
+
     steps:
-      - name: Deploy to GitHub Pages
-        id: deploy
+      # 7) GitHub Pages へ公開
+      - id: deploy
         uses: actions/deploy-pages@v2
