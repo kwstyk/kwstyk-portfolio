@@ -15,10 +15,11 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04       # ← 22.04 固定で OK
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -27,9 +28,15 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      - uses: actions/upload-pages-artifact@v1  # ← あえて一旦v1に戻す
+      # ─────────────────────────────────────────
+      # dist/ を artifact 名 "github-pages" で直接アップロード
+      # ─────────────────────────────────────────
+      - name: Upload dist as artifact
+        uses: actions/upload-artifact@v4   # ★ v4 を明示
         with:
-          path: ./dist
+          name: github-pages
+          path: ./dist          # ← ビルド成果物
+          retention-days: 1     # 任意（短期でOK）
 
   deploy:
     needs: build
@@ -39,5 +46,8 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
 
     steps:
-      - id: deploy
+      - name: Deploy to GitHub Pages
+        id: deploy
         uses: actions/deploy-pages@v2
+        with:
+          artifact-name: github-pages     # ★ 上で付けた名前を指定
