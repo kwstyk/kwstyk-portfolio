@@ -19,23 +19,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      # ──★ ここで v3 を一度取得して権限を確実に通す
-      - name: Pre-authorize upload-artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: noop
-          if-no-files-found: ignore
-
       - run: npm ci
       - run: npm run build
 
-      - uses: actions/upload-pages-artifact@v2
+      - uses: actions/upload-pages-artifact@v1  # ← あえて一旦v1に戻す
         with:
           path: ./dist
 
