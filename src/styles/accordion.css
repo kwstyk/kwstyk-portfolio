@@ -1,0 +1,58 @@
+/* accordion.css — トグル部分だけ担当 */
+
+/* アコーディオンラベル（クリックできるところ） */
+.accordion-label {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--card-accent);
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    user-select: none;
+  }
+  
+  /* ラベル左のアイコン（▸） */
+  .accordion-label::before {
+    content: "▸";
+    display: inline-block;
+    margin-right: 0.5rem;
+    transition: transform 0.3s ease;
+  }
+  
+  /* チェックが入ったら下向きにする（▾） */
+  input[type="checkbox"]:checked + .accordion-label::before {
+    content: "▾";
+  }
+  
+  .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+    margin-top: 0.5rem;
+  }
+  
+  /* チェックされたら最大高さ拡張 */
+  input[type="checkbox"]:checked + .accordion-label + .accordion-content {
+    max-height: 500px; /* 適当に大きくしておく（足りなかったら増やせばいい） */
+  }
+  
+  /* 中のリスト */
+  .accordion-content ul {
+    list-style: disc inside;
+    margin: 0.5rem 0 1rem;
+    padding: 0;
+  }
+  
+  .accordion-content li {
+    margin: 0.4rem 0;
+  }
+  
+  /* ★ 追加：入力そのものを見えなくする */
+.accordion-toggle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* （既存の .accordion-label / .accordion-content はそのまま） */

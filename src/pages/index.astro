@@ -1,40 +1,43 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import '../styles/landing.css';
+import '../styles/accordion.css';
 ---
 
 <Layout>
   <div class="page-background">
     <h1 class="title">My Astro Portfolio</h1>
     <p class="catchcopy">実証と成長の記録 — Proof-Based Portfolio</p>
+
+    <section class="intro">
+      <h2>自己紹介</h2>
+      <p>セキュリティエンジニアを目指して、実践と学習を重ねています。</p>
+      <p>本サイトはその成長過程と実績を、具体的な証明（Proof）を通じて可視化するポートフォリオです。</p>
+    </section>
+
+    <section class="intro">
+      <h2>保有資格</h2>
+      <ul>
+        <li>情報処理安全確保支援士（受験予定）</li>
+        <li>応用情報技術者</li>
+        <li>ITパスポート</li>
+      </ul>
+
+      <input type="checkbox" id="toggle-other" class="accordion-toggle">
+      <label for="toggle-other" class="accordion-label">その他の資格</label>
+      <div class="accordion-content">
+        <ul>
+          <li>宅地建物取引士</li>
+          <li>インテリアコーディネーター</li>
+          <li>2級建築施工管理技士補</li>
+          <li>ファイナンシャル・プランニング技能士3級</li>
+          <li>普通自動車免許</li>
+        </ul>
+      </div>
+    </section>
+
     <div class="button-wrapper">
       <a class="nav-button" href="/structure/">▶ Structureページを見る</a>
     </div>
-    <section class="intro">
-      <h2>自己紹介</h2>
-      <p>こんにちは！私は社内SE・セキュリティエンジニア志望の◯◯です。<br>
-      このポートフォリオは、実践的な技術力と成長過程を証明するために作成しました。</p>
-    
-      <h3>IT系資格</h3>
-      <ul>
-        <li>ITパスポート</li>
-        <li>応用情報技術者</li>
-        <li>情報処理安全確保支援士（取得予定）</li>
-        <li>（ここにあと追加してもOK）</li>
-      </ul>
-    
-      <div class="accordion">
-        <input type="checkbox" id="toggle">
-        <label for="toggle" class="accordion-label">▼ その他の資格を見る</label>
-        <div class="accordion-content">
-          <ul>
-            <li>宅地建物取引士</li>
-            <li>2級建築施工管理技士補</li>
-            <li>（他にもあればここに追加）</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-    
   </div>
 </Layout>
