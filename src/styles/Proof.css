@@ -1,0 +1,49 @@
+.page-background {
+    background: linear-gradient(to bottom right, #f0f4f8, #ffffff);
+    padding: 2rem;
+    min-height: 100vh;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    background: linear-gradient(to right, #007cf0, #00dfd8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .description {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #666;
+    font-size: 1.2rem;
+  }
+  
+  .proof-list ul {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .proof-list li {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+  }
+  
+  .proof-list li:hover {
+    transform: translateY(-3px);
+  }
+  
+  .proof-list a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  

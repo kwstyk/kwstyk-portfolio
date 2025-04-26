@@ -1,0 +1,54 @@
+.page-background {
+    background: linear-gradient(to bottom right, #f0f4f8, #ffffff);
+    padding: 2rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .title {
+    font-size: 3rem;
+    font-weight: bold;
+    background: linear-gradient(to right, #007cf0, #00dfd8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+  }
+  
+  .catchcopy {
+    font-size: 1.5rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .description {
+    font-size: 1.2rem;
+    color: #666;
+    text-align: center;
+    max-width: 600px;
+    margin-bottom: 2rem;
+  }
+  
+  .button-wrapper {
+    margin-top: 1rem;
+  }
+  
+  .nav-button {
+    display: inline-block;
+    background: linear-gradient(to right, #00dfd8, #007cf0);
+    color: white;
+    font-weight: bold;
+    padding: 1rem 2rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.2s;
+  }
+  
+  .nav-button:hover {
+    background: linear-gradient(to right, #007cf0, #00dfd8);
+    transform: translateY(-3px);
+  }
+  
