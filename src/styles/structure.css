@@ -1,11 +1,9 @@
 .page-background {
     min-height: 100vh;
     padding: 4rem 2rem;
-    background: linear-gradient(135deg, var(--bg-start), var(--bg-mid), var(--bg-end));
-    background-size: 400% 400%;
-    animation: gradientShift 20s ease infinite;
-    color: var(--text);
-  }
+    background-color: var(--bg-start); /* ←ここ！ */
+    color: var(--text); /* ←ここも揃えるなら同じ。 */
+}
   
 
 .structure-header {

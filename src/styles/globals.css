@@ -16,4 +16,14 @@
   --card-accent: #64ffda;     /* 100 255 218 */
 
   --border: #233554;          /* 35 53 84 */
+  a {
+    color: var(--text);
+    text-decoration: none; /* 必要なら下線も消す */
+  }
+  
+  a:hover {
+    color: var(--accent); /* ホバー時に色変えたいなら */
+  }
+
 }
+
