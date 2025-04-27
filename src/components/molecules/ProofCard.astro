@@ -1,0 +1,29 @@
+import Card from '@/components/molecules/Card.astro';
+import Badge from '@/components/atoms/Badge.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  link: string;
+  class?: string;
+}
+
+const {
+  title,
+  description,
+  link,
+  class: className,
+} = Astro.props;
+
+<Card
+  title={title}
+  link={link}
+  class:list={[
+    'hover:translate-y-[-2px]',
+    'hover:shadow-lg',
+    className
+  ]}
+>
+  <i slot="icon" class="fas fa-shield-alt text-accent-0"></i>
+  <p class="text-text-muted">{description}</p>
+</Card> 

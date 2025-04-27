@@ -1,0 +1,16 @@
+:root {
+  --surface-0: #0D1117;
+  --surface-1: #161B22;
+  --accent-0: #39A8FF;
+  --accent-1: #1E85E6;
+  --success: #22C55E;
+  --text-0: #F1F5FF;
+  --text-muted: #C0C6D4;
+  --border: #30363D;
+}
+
+/* ダークテーマのデフォルト設定 */
+body {
+  background-color: var(--surface-0);
+  color: var(--text-0);
+} 

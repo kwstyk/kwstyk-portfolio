@@ -1,5 +1,11 @@
-import { defineConfig } from 'astro/config';
+// astro.config.mjs
+import { defineConfig } from "astro/config";
+import react from "@astrojs/react";
+import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
-  integrations: [],
+  integrations: [react(), tailwind()],
+  alias: {
+    "@": "./src",  // これだけにする
+  },
 });

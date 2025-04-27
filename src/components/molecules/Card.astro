@@ -1,0 +1,15 @@
+---
+// components/molecules/Card.astro
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+}
+
+const { title, description, href } = Astro.props;
+---
+
+<a href={href} class="card">
+  <div class="card-title">{title}</div>
+  <div class="card-description">{description}</div>
+</a>

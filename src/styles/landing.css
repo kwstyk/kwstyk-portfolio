@@ -1,54 +1,294 @@
+/* landing.css — トップページ共通デザインだけ担当 */
+
+:root {
+  --bg-start:    #0d1b2a;
+  --bg-mid:      #162d46;
+  --bg-end:      #0a2540;
+  --accent:      #61dafb;
+  --text:        #e0e7ff;
+  --card-bg:     #112240;
+  --card-accent: #64ffda;
+  --border:      #233554;
+}
+
+/* ページ全体背景 */
 .page-background {
-    background: linear-gradient(to bottom right, #f0f4f8, #ffffff);
-    padding: 2rem;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, var(--bg-start), var(--bg-mid), var(--bg-end));
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+  color: var(--text);
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* タイトル */
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+/* キャッチコピー */
+.catchcopy {
+  font-size: 1.2rem;
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* ナビゲーションボタン */
+.nav-button {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s;
+}
+
+.nav-button:hover {
+  background: var(--accent);
+  color: var(--bg-start);
+}
+
+/* 自己紹介セクション */
+.intro {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 720px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.intro h2 {
+  font-size: 1.5rem;
+  color: var(--card-accent);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+
+.intro p {
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.intro h3 {
+  font-size: 1.2rem;
+  color: var(--card-accent);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.intro ul {
+  list-style: disc inside;
+  margin: 0.5rem 0 1rem;
+  padding: 0;
+}
+
+.intro li {
+  margin: 0.5rem 0;
+}
+
+/* モバイル対応 */
+@media (max-width: 600px) {
+  .title { font-size: 2.5rem; }
+  .catchcopy { font-size: 1rem; }
+  .nav-button { padding: 0.6rem 1.5rem; font-size: 0.9rem; }
+  .intro { padding: 1.5rem; margin: 1.5rem auto; }
+}
+
+/* 文章（pタグ）改善 */
+.intro p {
+  font-size: 1rem;
+  line-height: 1.6; /* 行間を広げる */
+  margin-bottom: 1.5rem; /* 段落間に余裕 */
+}
+
+/* 見出し（h1, h2, h3）メリハリ */
+.title {
+  font-size: 3rem;
+  margin-bottom: 1rem; /* 少し広げる */
+}
+
+.intro h2 {
+  font-size: 1.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.intro h3 {
+  font-size: 1.3rem;
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+/* リスト項目を少しリズミカルに */
+.intro ul {
+  list-style: disc inside;
+  margin: 0.5rem 0 1rem 0;
+  padding-left: 1rem;
+}
+
+.intro li {
+  margin-bottom: 0.5rem;
+}
+
+/* ボタンHover演出 */
+.button {
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background-color: rgba(0, 191, 255, 0.15); /* ちょっと濃い透明ブルー */
+  transform: scale(1.03); /* 少しだけ大きくする */
+  font-weight: bold;
+  border-color: #00bfff; /* 枠線を強調 */
+}
+
+/* スマホ最適化 */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 2rem;
   }
   
-  .title {
-    font-size: 3rem;
-    font-weight: bold;
-    background: linear-gradient(to right, #007cf0, #00dfd8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 1rem;
-  }
-  
-  .catchcopy {
+  h2 {
     font-size: 1.5rem;
-    color: #555;
-    margin-bottom: 1.5rem;
-    text-align: center;
   }
   
-  .description {
-    font-size: 1.2rem;
-    color: #666;
-    text-align: center;
-    max-width: 600px;
-    margin-bottom: 2rem;
+  p, li {
+    font-size: 1rem;
+  }
+
+  .button {
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+  }
+
+  .intro-card {
+    padding: 1rem;
+    margin: 1rem 0;
   }
   
-  .button-wrapper {
-    margin-top: 1rem;
+  .intro-card h2 {
+    margin-bottom: 0.5rem;
   }
-  
-  .nav-button {
-    display: inline-block;
-    background: linear-gradient(to right, #00dfd8, #007cf0);
-    color: white;
-    font-weight: bold;
-    padding: 1rem 2rem;
-    border-radius: 9999px;
-    text-decoration: none;
-    transition: background 0.3s, transform 0.2s;
+}
+.button-wrapper {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* セクション間隔の調整 */
+.section-spacing {
+  margin-bottom: 4rem;
+}
+
+/* 資格リストのスタイル改善 */
+.qualification-list {
+  list-style: disc inside;
+  margin: 0.5rem 0 1.5rem;
+  padding-left: 1rem;
+}
+
+.qualification-list li {
+  margin: 0.75rem 0;
+  line-height: 1.5;
+}
+
+/* アコーディオンラベルのスタイル調整 */
+.accordion-label {
+  color: var(--text);
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.accordion-label:hover {
+  opacity: 1;
+}
+
+/* CTAセクションのスタイル */
+.cta-section {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* レスポンシブ調整 */
+@media (max-width: 600px) {
+  .section-spacing {
+    margin-bottom: 3rem;
   }
-  
-  .nav-button:hover {
-    background: linear-gradient(to right, #007cf0, #00dfd8);
-    transform: translateY(-3px);
+
+  .qualification-list li {
+    margin: 0.5rem 0;
   }
-  
+
+  .cta-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+  }
+}
+
+/* Cardグリッド用レイアウト */
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* 個別カード */
+.card {
+  background-color: var(--surface-1);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--border);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.card-description {
+  font-size: 1rem;
+  color: var(--text-muted);
+}

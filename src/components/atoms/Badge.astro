@@ -1,0 +1,29 @@
+---
+interface Props {
+  type?: 'success' | 'warn' | 'info';
+  class?: string;
+}
+
+const { 
+  type = 'info',
+  class: className,
+  ...rest
+} = Astro.props;
+
+const styles = {
+  success: 'bg-success/10 text-success',
+  warn: 'bg-yellow-500/10 text-yellow-400',
+  info: 'bg-accent-0/10 text-accent-0'
+};
+---
+
+<span
+  class:list={[
+    'px-2 py-1 text-sm rounded-full font-medium',
+    styles[type],
+    className
+  ]}
+  {...rest}
+>
+  <slot />
+</span> 

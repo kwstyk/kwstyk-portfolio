@@ -1,0 +1,24 @@
+import ProofCard from '@/components/molecules/ProofCard.astro';
+
+interface ProofItem {
+  title: string;
+  description: string;
+  link: string;
+}
+
+interface Props {
+  items: ProofItem[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+
+<div class:list={['grid grid-cols-1 md:grid-cols-2 gap-6', className]}>
+  {items.map(item => (
+    <ProofCard
+      title={item.title}
+      description={item.description}
+      link={item.link}
+    />
+  ))}
+</div> 

@@ -1,0 +1,36 @@
+---
+import Layout from '@/components/organisms/Layout.astro';
+import Heading from '@/components/atoms/Heading.astro';
+import Navbar from '@/components/molecules/Navbar.astro';
+import Accordion from '@/components/molecules/Accordion.astro';
+---
+
+<Layout>
+  <Navbar slot="header">
+    <a slot="left" href="/" class="text-text-0 hover:text-accent-0">Home</a>
+  </Navbar>
+
+  <main class="max-w-4xl mx-auto py-12">
+    <Heading level="h1" class="mb-8">Story</Heading>
+    
+    <div class="space-y-8">
+      <Accordion title="保有資格">
+        <ul class="list-disc list-inside space-y-2">
+          <li>情報処理安全確保支援士（受験予定）</li>
+          <li>応用情報技術者</li>
+          <li>ITパスポート</li>
+        </ul>
+      </Accordion>
+
+      <Accordion title="その他の資格">
+        <ul class="list-disc list-inside space-y-2">
+          <li>宅地建物取引士</li>
+          <li>インテリアコーディネーター</li>
+          <li>2級建築施工管理技士補</li>
+          <li>ファイナンシャル・プランニング技能士3級</li>
+          <li>普通自動車免許</li>
+        </ul>
+      </Accordion>
+    </div>
+  </main>
+</Layout> 

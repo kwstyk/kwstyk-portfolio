@@ -1,0 +1,54 @@
+.page-background {
+    background-color: #0D1117;
+    min-height: 100vh;
+    padding: 4rem 2rem;
+}
+
+.structure-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.structure-header h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #39A8FF;
+}
+
+.structure-header p {
+    color: #C0C6D4;
+    margin-top: 1rem;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.card {
+    background-color: #161B22; /* ←ここを修正 */
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border: 1px solid #30363D;
+}
+
+.card:hover {
+    background-color: #22303c; /* ここは少し動きが出る色でOK */
+    transform: translateY(-4px);
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #F1F5FF;
+    margin-bottom: 0.5rem;
+}
+
+.card-description {
+    color: #C0C6D4;
+    font-size: 0.95rem;
+}

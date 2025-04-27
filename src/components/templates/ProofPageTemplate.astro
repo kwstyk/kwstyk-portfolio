@@ -1,0 +1,29 @@
+---
+import Layout from '@/components/organisms/Layout.astro';
+import Navbar from '@/components/molecules/Navbar.astro';
+import Heading from '@/components/atoms/Heading.astro';
+
+interface Props {
+  title: string;
+  proofMarkdown: string;
+  class?: string;
+}
+
+const { title, proofMarkdown, class: className } = Astro.props;
+---
+
+<Layout>
+  <Navbar slot="header">
+    <slot name="nav-left" slot="left" />
+    <slot name="nav-right" slot="right" />
+  </Navbar>
+
+  <main class:list={['max-w-4xl mx-auto py-12', className]}>
+    <Heading level="h1" class="mb-8">{title}</Heading>
+    <div class="prose prose-invert max-w-none">
+      <slot />
+    </div>
+  </main>
+
+  <slot name="footer" slot="footer" />
+</Layout> 

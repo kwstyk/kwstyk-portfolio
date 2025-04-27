@@ -1,0 +1,21 @@
+---
+// Propsを受け取る
+const { title, subtitle, buttons = [] } = Astro.props;
+---
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1 class="hero-title">{title}</h1>
+    <p class="hero-subtitle">{subtitle}</p>
+
+    {buttons.length > 0 && (
+      <div class="hero-buttons">
+        {buttons.map((btn) => (
+          <a href={btn.href} class={`hero-button ${btn.variant}`}>
+            {btn.text}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</section>

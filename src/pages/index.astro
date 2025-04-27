@@ -1,23 +1,40 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import '../styles/landing.css';
-import '../styles/accordion.css';
+import Layout from '@/components/organisms/Layout.astro';
+import Button from '@/components/atoms/Button.astro';
+import Heading from '@/components/atoms/Heading.astro';
+import Hero from '@/components/organisms/Hero.astro';
+import '@/styles/landing.css';
+import '@/styles/accordion.css';
+import '@/styles/heading.css';
+import '@/styles/hero.css';
 ---
 
 <Layout>
   <div class="page-background">
+    <Hero 
+    title="成長と実績を証明するポートフォリオ" 
+    subtitle="セキュリティ × インフラ × 運用の全方位スキルに挑戦"
+  >
+    <Button variant="primary" href="/structure/">
+      Structureを見る
+    </Button>
+    <Button variant="ghost" href="/proof/">
+      Proofを見る
+    </Button>
+  </Hero>
+  
     <h1 class="title">My Astro Portfolio</h1>
     <p class="catchcopy">実証と成長の記録 — Proof-Based Portfolio</p>
 
-    <section class="intro">
+    <section class="intro section-spacing">
       <h2>自己紹介</h2>
       <p>セキュリティエンジニアを目指して、実践と学習を重ねています。</p>
       <p>本サイトはその成長過程と実績を、具体的な証明（Proof）を通じて可視化するポートフォリオです。</p>
     </section>
 
-    <section class="intro">
+    <section class="intro section-spacing">
       <h2>保有資格</h2>
-      <ul>
+      <ul class="qualification-list">
         <li>情報処理安全確保支援士（受験予定）</li>
         <li>応用情報技術者</li>
         <li>ITパスポート</li>
@@ -26,7 +43,7 @@ import '../styles/accordion.css';
       <input type="checkbox" id="toggle-other" class="accordion-toggle">
       <label for="toggle-other" class="accordion-label">その他の資格</label>
       <div class="accordion-content">
-        <ul>
+        <ul class="qualification-list">
           <li>宅地建物取引士</li>
           <li>インテリアコーディネーター</li>
           <li>2級建築施工管理技士補</li>
@@ -34,10 +51,20 @@ import '../styles/accordion.css';
           <li>普通自動車免許</li>
         </ul>
       </div>
+
+      <div class="cta-section">
+        <Button href="/structure/" variant="primary">
+          Structureページを見る
+        </Button>
+        
+        <Button href="/story/" variant="ghost">
+          成長物語を読む
+        </Button>      </div>
     </section>
 
-    <div class="button-wrapper">
-      <a class="nav-button" href="/structure/">▶ Structureページを見る</a>
+    <div class="button-group">
+      <Button variant="primary" href="/structure">Structureを見る</Button>
+      <Button variant="ghost" href="/proof">Proofを見る</Button>
     </div>
   </div>
 </Layout>

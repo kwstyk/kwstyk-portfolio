@@ -1,0 +1,15 @@
+---
+// src/components/atoms/Heading.astro
+interface Props {
+  level?: 1 | 2 | 3 | 4;
+  className?: string;
+}
+
+const { level = 1, className = '' } = Astro.props;
+
+const Tag = `h${level}` as keyof HTMLElementTagNameMap;
+---
+
+<Tag class={`heading h${level} ${className}`}>
+  <slot />
+</Tag>
