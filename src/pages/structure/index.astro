@@ -2,13 +2,13 @@
 import Layout from '@/components/organisms/Layout.astro';
 import Hero from '@/components/organisms/Hero.astro';
 import Card from '@/components/molecules/Card.astro';
-import '@/styles/landing.css';
+import '@/styles/structure.css';
 ---
 
-<Layout>
+<Layout class="page-background">
   <Hero title="Structure" subtitle="技術要素 × 証明プロジェクトを体系化" />
 
-  <section class="proof-grid">
+  <section class="card-grid">
     <Card
       title="ネットワークセキュリティ"
       description="安全な通信と監視体制を確立するための実践"

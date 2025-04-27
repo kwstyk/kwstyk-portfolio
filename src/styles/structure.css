@@ -1,8 +1,12 @@
 .page-background {
-    background-color: #0D1117;
     min-height: 100vh;
     padding: 4rem 2rem;
-}
+    background: linear-gradient(135deg, var(--bg-start), var(--bg-mid), var(--bg-end));
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
+    color: var(--text);
+  }
+  
 
 .structure-header {
     text-align: center;
@@ -12,11 +16,11 @@
 .structure-header h1 {
     font-size: 2.5rem;
     font-weight: bold;
-    color: #39A8FF;
+    color: var(--accent);
 }
 
 .structure-header p {
-    color: #C0C6D4;
+    color: var(--text);
     margin-top: 1rem;
 }
 
@@ -28,7 +32,7 @@
 }
 
 .card {
-    background-color: #161B22; /* ←ここを修正 */
+    background-color: var(--card-bg); /* ←ここを修正 */
     padding: 2rem;
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -44,11 +48,16 @@
 .card-title {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #F1F5FF;
     margin-bottom: 0.5rem;
 }
 
 .card-description {
-    color: #C0C6D4;
+    color: var(--text);
     font-size: 0.95rem;
 }
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }

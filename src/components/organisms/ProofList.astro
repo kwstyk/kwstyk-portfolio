@@ -1,24 +1,23 @@
+---
 import ProofCard from '@/components/molecules/ProofCard.astro';
 
+// ProofItem型を定義
 interface ProofItem {
   title: string;
   description: string;
   link: string;
 }
 
-interface Props {
-  items: ProofItem[];
-  class?: string;
-}
+const { items } = Astro.props;
+---
 
-const { items, class: className } = Astro.props;
-
-<div class:list={['grid grid-cols-1 md:grid-cols-2 gap-6', className]}>
-  {items.map(item => (
+<div class:list={['grid grid-cols-1 md:grid-cols-2 gap-6']}>
+  {items.map((item: ProofItem) => (  <!-- ここで型注釈 -->
     <ProofCard
       title={item.title}
       description={item.description}
       link={item.link}
+      className="h-full"
     />
   ))}
-</div> 
+</div>

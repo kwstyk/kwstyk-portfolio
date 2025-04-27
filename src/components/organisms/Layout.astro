@@ -1,5 +1,5 @@
 ---
-import '@/styles/theme.css';
+import '@/styles/globals.css';   
 import Navbar from '@/components/molecules/Navbar.astro';
 
 interface Props {
@@ -21,16 +21,19 @@ const {
   </head>
   <body>
     <div class="min-h-screen flex flex-col">
-      <header class="sticky top-0 z-50 border-b border-border bg-surface-0/80 backdrop-blur">
+      <header class="sticky top-0 z-50 border-b border-border bg-bg-start/80 backdrop-blur">
         <Navbar />
       </header>
       
-      <main class:list={['flex-1 container mx-auto px-4 py-8', className]}>
-        <slot />
+      <main class:list={['flex-1 px-4 py-8', className]}>
+        <!-- 必要なら幅制限を掛けたい所だけ wrapper を置く -->
+        <div class="container mx-auto">
+          <slot />
+        </div>
       </main>
 
       {Astro.slots.has('footer') && (
-        <footer class="border-t border-border bg-surface-0">
+        <footer class="border-t border-border bg-bg-start">
           <div class="container mx-auto px-4 py-8">
             <slot name="footer" />
           </div>

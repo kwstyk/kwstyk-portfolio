@@ -10,20 +10,20 @@
   .heading.h1 {
     font-size: 2.5rem; /* 約text-4xl */
     font-weight: 800;
-    color: var(--accent-0);
+    color: var(--accent);
   }
   
   /* h2専用 */
   .heading.h2 {
     font-size: 2rem; /* 約text-3xl */
     font-weight: 700;
-    color: var(--text-0);
+    color: var(--text);
   }
   
   /* h3専用 */
   .heading.h3 {
     font-size: 1.5rem; /* 約text-2xl */
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--text);
   }
   

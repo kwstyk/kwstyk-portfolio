@@ -19,7 +19,8 @@ const { title, proofMarkdown, class: className } = Astro.props;
   </Navbar>
 
   <main class:list={['max-w-4xl mx-auto py-12', className]}>
-    <Heading level="h1" class="mb-8">{title}</Heading>
+    <Heading level={1} className="mb-8">{title}</Heading>
+
     <div class="prose prose-invert max-w-none">
       <slot />
     </div>

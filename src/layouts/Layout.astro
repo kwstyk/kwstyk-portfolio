@@ -1,5 +1,11 @@
 ---
 import '@/styles/layout.css';
+
+// ここを追加する！
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -10,8 +16,9 @@ import '@/styles/layout.css';
     <title>My Astro Portfolio</title>
   </head>
   <body>
-    <main>
+    <!-- ここを修正する！ -->
+    <main class:list={['site-main', className]}>
       <slot />
     </main>
   </body>
-</html> 
+</html>

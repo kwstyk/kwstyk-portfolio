@@ -1,15 +1,3 @@
-/* landing.css — トップページ共通デザインだけ担当 */
-
-:root {
-  --bg-start:    #0d1b2a;
-  --bg-mid:      #162d46;
-  --bg-end:      #0a2540;
-  --accent:      #61dafb;
-  --text:        #e0e7ff;
-  --card-bg:     #112240;
-  --card-accent: #64ffda;
-  --border:      #233554;
-}
 
 /* ページ全体背景 */
 .page-background {
@@ -268,7 +256,7 @@
 
 /* 個別カード */
 .card {
-  background-color: var(--surface-1);
+  background-color: var(--card-bg);
   padding: 1.5rem;
   border-radius: 1rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -290,5 +278,5 @@
 
 .card-description {
   font-size: 1rem;
-  color: var(--text-muted);
+  color: var(--text);
 }

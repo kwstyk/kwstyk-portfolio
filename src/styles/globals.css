@@ -1,0 +1,19 @@
+:root {
+  --bg-start: #0d1b2a;        /* 13 27 42 */
+  --bg-mid: #162d46;          /* 22 45 70 */
+  --bg-end: #0a2540;          /* 10 37 64 */
+
+  --text: #e0e7ff;            /* 224 231 255 */
+  --accent: #61dafb;          /* 97 218 251 */
+
+  --proof-bg-start: #f0f4f8;  /* 240 244 248 */
+  --proof-bg-end: #ffffff;    /* 255 255 255 */
+  --proof-title-start: #007cf0; /* 0 124 240 */
+  --proof-title-end: #00dfd8; /* 0 223 216 */
+
+  --card-bg: #112240;         /* 17 34 64 */
+  --card-bg-light: #ffffff;   /* 255 255 255 */
+  --card-accent: #64ffda;     /* 100 255 218 */
+
+  --border: #233554;          /* 35 53 84 */
+}

@@ -1,5 +1,4 @@
 ---
-// Propsを受け取る
 const { title, subtitle, buttons = [] } = Astro.props;
 ---
 
@@ -10,7 +9,7 @@ const { title, subtitle, buttons = [] } = Astro.props;
 
     {buttons.length > 0 && (
       <div class="hero-buttons">
-        {buttons.map((btn) => (
+        {buttons.map((btn: { href: string; variant: string; text: string }) => (
           <a href={btn.href} class={`hero-button ${btn.variant}`}>
             {btn.text}
           </a>

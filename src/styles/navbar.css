@@ -1,7 +1,7 @@
 /* src/styles/navbar.css */
 
 .navbar {
-  background-color: var(--surface-0);
+  background-color: var(--bg-start);
   width: 100%;
   padding: 0.75rem 1.5rem;
   display: flex;
@@ -23,7 +23,7 @@
 .navbar-logo {
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--accent-0);
+  color: var(--accent);
   text-decoration: none;
 }
 
@@ -33,12 +33,12 @@
 }
 
 .navbar-link {
-  color: var(--text-0);
+  color: var(--text);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s;
 }
 
 .navbar-link:hover {
-  color: var(--accent-0);
+  color: var(--accent);
 }

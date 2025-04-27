@@ -1,20 +1,25 @@
-/** @type {import('tailwindcss').Config} */
+// tailwind.config.mjs
+
 export default {
-    content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
-    theme: {
-      extend: {
-        colors: {
-          'surface-0': 'var(--surface-0)',
-          'surface-1': 'var(--surface-1)',
-          'accent-0': 'var(--accent-0)',
-          'accent-1': 'var(--accent-1)',
-          'success': 'var(--success)',
-          'text-0': 'var(--text-0)',
-          'text-muted': 'var(--text-muted)',
-          'border': 'var(--border)',
+  content: ['./src/**/*.{astro,mdx,tsx}'],
+  darkMode: 'media',
+  theme: {
+    extend: {
+      colors: {
+        bg: {
+          start: 'rgb(var(--bg-start))',
+          mid: 'rgb(var(--bg-mid))',
+          end: 'rgb(var(--bg-end))',
         },
+        text: 'rgb(var(--text))',
+        accent: 'rgb(var(--accent))',
+        card: {
+          bg: 'rgb(var(--card-bg))',
+          accent: 'rgb(var(--card-accent))',
+        },
+        border: 'rgb(var(--border))',
       },
     },
-    plugins: [],
-  };
-  
+  },
+  plugins: [],
+};
