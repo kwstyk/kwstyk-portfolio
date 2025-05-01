@@ -1,27 +1,28 @@
-name: CI
+name: build
 
-on: 
-  push:
-    branches: [main]
+on:
   pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          version: 8
+          node-version: 20
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci  # ←ここを変更
 
       - name: Run Lint
-        run: pnpm run lint
+        run: npm run lint
 
       - name: Run TypeCheck
-        run: pnpm run typecheck
+        run: npm run typecheck
