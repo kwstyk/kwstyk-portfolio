@@ -1,19 +1,21 @@
-// eslint.config.js
 import js from "@eslint/js";
-import astro from "eslint-plugin-astro";
+import * as astro from "eslint-plugin-astro";
 
 export default [
   js.configs.recommended,
   {
     files: ["**/*.astro"],
     languageOptions: {
-      parser: astro.parsers["astro"],
+      parser: astro.parser,
     },
     plugins: {
       astro,
     },
     rules: {
-      // 必要ならカスタムルールを追加
+      "astro/no-set-html-directive": "error",
     },
+  },
+  {
+    ignores: ["dist/", "**/node_modules/**"],
   },
 ];
