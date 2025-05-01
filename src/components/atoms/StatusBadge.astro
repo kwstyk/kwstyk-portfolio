@@ -1,0 +1,11 @@
+---
+// src/components/atoms/StatusBadge.astro
+interface Props {
+  src: string;
+  alt?: string;
+}
+const { src, alt = "CI Status" } = Astro.props;
+---
+
+<img src={src} alt={alt} class="h-5" loading="lazy" />
+

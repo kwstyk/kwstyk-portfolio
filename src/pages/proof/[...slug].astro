@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import ProofPageTemplate from '@/components/templates/ProofPageTemplate.astro';
+
+/* ① すべての proof エントリを静的化 */
+export async function getStaticPaths() {
+  const proofs = await getCollection('proofs');
+
+  return proofs.map((p) => ({
+    /* [...slug] には「配列」で渡す */
+    params: { slug: p.slug }, 
+    /* 後段でそのまま受け取れる様に entry を渡す */
+    props : { entry: p },
+  }));
+}
+
+/* ② getStaticPaths で渡した entry を受け取る */
+const { entry } = Astro.props;
+
+/* ③ MDX をレンダリングすると <Content /> が得られる */
+const { Content } = await entry.render();
+
+/* front-matter は entry.data に入っている */
+const { data } = entry;
+---
+
+<ProofPageTemplate
+  title      ={data.title}
+  difficulty ={data.difficulty}
+  repro      ={data.repro}
+  stack      ={data.stack}
+  updated    ={data.updated}
+  tags       ={data.tags ?? []}     
+  ci_status  ={data.ci_status ?? ''} 
+>
+  <Content />        <!-- ← MDX 本文 -->
+</ProofPageTemplate>
