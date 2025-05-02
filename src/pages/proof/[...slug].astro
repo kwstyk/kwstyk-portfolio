@@ -27,7 +27,7 @@ const { data } = entry;
 <ProofPageTemplate
   title      ={data.title}
   difficulty ={data.difficulty}
-  repro      ={data.repro}
+  repro      ={Array.isArray(data.repro) ? data.repro : [data.repro] as ('docker'|'terraform'|'vagrant'|'manual')[]}
   stack      ={data.stack}
   updated    ={data.updated}
   tags       ={data.tags ?? []}     
