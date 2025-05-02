@@ -6,7 +6,7 @@ interface Props {
 
 const { level = 1, className = '' } = Astro.props as Props;
 
-const Tag = `h${level}` as keyof HTMLElementTagNameMap;
+const Tag = `h${level}` as any;
 ---
 
 <Tag class={`heading h${level} ${className}`}>

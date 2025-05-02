@@ -1,0 +1,21 @@
+---
+interface Props {
+  level: 'easy' | 'medium' | 'hard' | 'expert';
+}
+
+const { level } = Astro.props as Props;
+
+const levelMap = {
+  easy:   { label: 'Easy',   bg: 'bg-green-500'  },
+  medium: { label: 'Medium', bg: 'bg-yellow-400' },
+  hard:   { label: 'Hard',   bg: 'bg-orange-500' },
+  expert: { label: 'Expert', bg: 'bg-red-600'    },
+};
+---
+
+<span class:list={[
+  'inline-block text-xs font-bold rounded-full px-2 py-1 text-white',
+  levelMap[level].bg,
+]}>
+  {levelMap[level].label}
+</span>
