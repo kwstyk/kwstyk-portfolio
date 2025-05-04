@@ -1,11 +1,10 @@
 ---
-import '@/styles/layout.css';
+import '@/styles/globals.css';
+import Navbar from '@/components/molecules/Navbar.astro';
 
-// ここを追加する！
-interface Props {
-  class?: string;
-}
-const { class: className } = Astro.props;
+const props = Astro.props;
+const title = props.title ?? 'My Portfolio';
+const className = props.class ?? '';
 ---
 
 <!DOCTYPE html>
@@ -13,12 +12,29 @@ const { class: className } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Astro Portfolio</title>
+    <title>{title}</title>
   </head>
-  <body>
-    <!-- ここを修正する！ -->
-    <main class:list={['site-main', className]}>
+  <body class="bg-bg-start text-text flex flex-col min-h-screen">
+    <!-- ヘッダー -->
+    <header class="site-header sticky top-0 z-50 bg-bg-mid/90 backdrop-blur border-b border-border">
+      <div class="max-w-7xl w-full mx-auto flex items-center justify-between px-4 sm:px-8 py-4">
+        <a href="/" class="text-xl sm:text-2xl font-bold text-white">{title}</a>
+        <Navbar />
+      </div>
+    </header>
+
+    <!-- ページ固有コンテンツ -->
+    <main class:list={['flex-1 px-4 py-8', className]}>
       <slot />
     </main>
+
+    <!-- footer slot があれば表示 -->
+    {props.footer && (
+      <footer class="border-t border-border bg-bg-start">
+        <div class="max-w-4xl mx-auto px-4 py-8">
+          <slot name="footer" />
+        </div>
+      </footer>
+    )}
   </body>
 </html>

@@ -1,44 +1,44 @@
 ---
-import Layout    from '@/components/organisms/Layout.astro';
-import Navbar    from '@/components/molecules/Navbar.astro';
-import ProofHero from '@/components/organisms/ProofHero.astro';
-import '@/styles/proof.css';
+import Layout         from '@/layouts/Layout.astro';
+import ProofHero      from '@/components/organisms/ProofHero.astro';
+import ProofMetaCard  from '@/components/organisms/ProofMetaCard.astro';
 
 interface Props {
   title:       string;
-  difficulty:  'easy' | 'medium' | 'hard' | 'expert';
-  repro:       ('docker' | 'terraform' | 'vagrant' | 'manual')[];
+  difficulty?: 'easy' | 'medium' | 'hard' | 'expert';
+  repro:       string[];
   stack:       string[];
   updated:     string;
-  tags?:       string[];   /* ← optional に変更 */
-  ci_status?:  string;     /* ← optional に変更 */
+  ci_status?:  string;
+  tags?:       string[];
   class?:      string;
 }
 
 const {
-  title, difficulty, repro, stack,
-  updated, ci_status, class: className
+  title,
+  difficulty,
+  repro,
+  stack,
+  updated,
+  ci_status,
+  tags = [],
+  class: className,
 } = Astro.props as Props;
 ---
 
-<Layout>
-  <Navbar slot="header" />
-
-  <main class:list={['max-w-4xl mx-auto py-12', className]}>
+<Layout title={title} class={className}>
+  <section class="max-w-4xl mx-auto px-4 py-12 space-y-8">
     <ProofHero
-      title      ={title}
-      difficulty ={difficulty}
-      repro      ={repro}
-      stack      ={stack}
-      updated    ={updated}
-      ci_status  ={ci_status ?? ''}
+      title={title}
+      difficulty={difficulty}
+      repro={repro}
+      stack={stack}
+      updated={updated}
+      ci_status={ci_status}
     />
-
-    <!-- ここから MDX 本文 -->
-    <article class="prose prose-invert max-w-none">
+    <ProofMetaCard updated={updated} tags={tags} />
+    <article class="prose prose-invert mt-6" lang="ja">
       <slot />
     </article>
-  </main>
-
-  <slot name="footer" slot="footer" />
+  </section>
 </Layout>
