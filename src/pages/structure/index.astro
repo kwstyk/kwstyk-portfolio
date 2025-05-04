@@ -2,6 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import Hero from '@/components/organisms/Hero.astro';
 import Card from '@/components/molecules/Card.astro';
+import categories from '@/data/categories.json';
 import '@/styles/structure.css';
 ---
 
@@ -9,50 +10,15 @@ import '@/styles/structure.css';
   <Hero title="Structure" subtitle="技術要素 × 証明プロジェクトを体系化" />
 
   <section class="card-grid">
-    <Card
-      title="ネットワークセキュリティ"
-      description="安全な通信と監視体制を確立するための実践"
-      href="/proof/network-security/"
-    />
-    <Card
-      title="クラウドセキュリティ"
-      description="AWS基盤での脆弱性管理とIAM設計"
-      href="/proof/cloud-security/"
-    />
-    <Card
-      title="OSハードニング"
-      description="Linuxサーバをセキュリティベースラインに準拠設定"
-      href="/proof/os-hardening/"
-    />
-    <Card
-      title="脅威モデリング"
-      description="STRIDE手法に基づくシステム脅威分析"
-      href="/proof/threat-modeling/"
-    />
-    <Card
-      title="ログ・SIEM分析"
-      description="収集・検知・相関分析によるアラート対応"
-      href="/proof/logs-siem/"
-    />
-    <Card
-      title="脆弱性管理"
-      description="スキャン・分析・リスク評価・対処プロセス構築"
-      href="/proof/vuln-mgmt/"
-    />
-    <Card
-      title="インシデントレスポンス"
-      description="実際のアラートに基づく対応手順の設計"
-      href="/proof/incident-response/"
-    />
-    <Card
-      title="DevSecOps"
-      description="CI/CDパイプラインにセキュリティ検証を統合"
-      href="/proof/devsecops/"
-    />
-    <Card
-      title="ADセキュリティ"
-      description="Active Directory構成に対する最小権限化・監査設定"
-      href="/proof/ad-security/"
-    />
+    {categories.map((cat) => (
+      <Card
+        key={cat.id}
+        title={cat.title}
+        description={cat.description}
+        href={cat.href}
+        icon={cat.icon}
+        badge={cat.badge}
+      />
+    ))}
   </section>
 </Layout>

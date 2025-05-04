@@ -1,15 +1,29 @@
 ---
-// components/molecules/Card.astro
 interface Props {
   title: string;
   description: string;
   href: string;
+  icon?: string;       // オプション：カテゴリのアイコン（例: 🚀）
+  badge?: string;      // オプション：バッジ表示（例: NEW）
 }
 
-const { title, description, href } = Astro.props;
+const { title, description, href, icon, badge } = Astro.props;
 ---
 
-<a href={href} class="card">
+<a href={href} class="card group">
+  <!-- アイコン（オプション） -->
+  {icon && (
+    <div class="card-icon">{icon}</div>
+  )}
+
+  <!-- タイトル -->
   <div class="card-title">{title}</div>
+
+  <!-- 説明文 -->
   <div class="card-description">{description}</div>
+
+  <!-- バッジ（オプション） -->
+  {badge && (
+    <span class="card-badge">{badge}</span>
+  )}
 </a>
