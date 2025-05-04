@@ -1,26 +1,24 @@
 ---
+layout: '@/components/templates/ProofPageTemplate.astro'
 title: "Packet Capture Lab"
 difficulty: "easy"
 repro: ["docker"]
 stack: ["docker", "tcpdump"]
 updated: "2024-05-01"
-tags: ["network", "wireshark"]
-ci_status: "https://github.com/kwstyk/astro-repro/actions/workflows/ci.yml/badge.svg"
+tags: ["network", "pcap", "wireshark"]
+ci_status: "https://img.shields.io/badge/ci-passing-brightgreen.svg"
 ---
 
-import Alert from '@/components/atoms/Alert.astro';
-
-Docker ネットワーク上でシンプルな HTTP 通信を再現し、tcpdump と Wireshark でパケットを可視化する。
+Docker ネットワーク上でシンプルな HTTP 通信を再現し、`tcpdump` と `Wireshark` でパケットを可視化する。
 
 ## Design Rationale
 
-（…）
+…
 
 ## Prerequisites
 
-- Windows 11 + WSL2 推奨
-- Docker Desktop インストール済み
-- …
+- Windows 11 + WSL2 推奨  
+- Docker Desktop インストール済み  
 
 ## How to Reproduce
 
@@ -44,3 +42,5 @@ just up
 ## References
 
 - [TCP/IP 入門](https://example.com)
+
+

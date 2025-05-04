@@ -1,3 +1,12 @@
+/* ── 1. リセット & ボックスモデル基準 ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 :root {
   --bg-start: #0d1b2a;        /* 13 27 42 */
   --bg-mid: #162d46;          /* 22 45 70 */
@@ -16,6 +25,16 @@
   --card-accent: #64ffda;     /* 100 255 218 */
 
   --border: #233554;          /* 35 53 84 */
+
+/* ── 3. ベースタイポグラフィ ── */
+body {
+  font-family: sans-serif;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg-start);
+  min-height: 100vh;
+}
+
   a {
     color: var(--text);
     text-decoration: none; /* 必要なら下線も消す */
@@ -27,3 +46,34 @@
 
 }
 
+/* ── 5. 全ページ共通のメディアクエリ（例） ── */
+/* タブレット以上 */
+@media (min-width: 600px) {
+  body {
+    /* 例：フォントサイズを少し大きく */
+    font-size: 1.05rem;
+  }
+}
+/* PC以上 */
+@media (min-width: 900px) {
+  body {
+    font-size: 1.1rem;
+  }
+}
+
+/* もしヘッダーが 2 個以上出たら、2 個め以降を非表示にする */
+.site-header + .site-header {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

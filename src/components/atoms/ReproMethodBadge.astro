@@ -1,20 +1,7 @@
 ---
-interface Props {
-  method: 'docker' | 'terraform' | 'vagrant' | 'manual';
-}
-
-const { method } = Astro.props;
-
-const methodMap = {
-  docker: { label: "Docker", icon: "🐳" },
-  terraform: { label: "Terraform", icon: "🏗" },
-  vagrant: { label: "Vagrant", icon: "📦" },
-  manual: { label: "Manual", icon: "🔧" },
-};
-
-const { label, icon } = methodMap[method];
+interface Props { method?: string }
+const { method = '' } = Astro.props as Props;
 ---
-
-<span class="inline-flex items-center gap-1 text-xs font-bold rounded-full px-2 py-1 bg-slate-700 text-white">
-  <span>{icon}</span> {label}
+<span class="inline-block px-2 py-1 bg-slate-700 text-white rounded-full text-xs">
+  {method}
 </span>

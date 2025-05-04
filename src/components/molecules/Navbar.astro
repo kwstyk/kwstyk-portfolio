@@ -1,15 +1,19 @@
 ---
-// Navbar.astro
 import '@/styles/navbar.css';
 ---
 
-<nav class="navbar">
-  <div class="navbar-container">
-    <a href="/" class="navbar-logo">My Portfolio</a>
-    <div class="navbar-links">
-      <a href="/structure" class="navbar-link">Structure</a>
-      <a href="/proof" class="navbar-link">Proof</a>
-      <a href="/story" class="navbar-link">Story</a>
-    </div>
-  </div>
+<nav class="flex items-center gap-6">
+  <a href="/structure" class="navbar-link">Structure</a>
+  <a href="/proof" class="navbar-link">Proof</a>
+  <a href="/story" class="navbar-link">Story</a>
 </nav>
+
+<script is:inline>
+  // 二重ヘッダーがあったら 2 個め以降を削除
+  document.addEventListener('DOMContentLoaded', () => {
+    const headers = document.querySelectorAll('.site-header');
+    headers.forEach((el, idx) => {
+      if (idx > 0) el.remove();
+    });
+  });
+</script>

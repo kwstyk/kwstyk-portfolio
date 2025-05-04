@@ -1,35 +1,8 @@
-/* src/styles/navbar.css */
-
-.navbar {
-  background-color: var(--bg-start);
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  display: flex;
-  justify-content: center;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
-
-.navbar-container {
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.navbar-logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--accent);
-  text-decoration: none;
-}
-
 .navbar-links {
   display: flex;
-  gap: 2rem;
+  gap:6rem;
+  justify-content: flex-end; /* 明示 */
+  align-items: center;
 }
 
 .navbar-link {
@@ -41,4 +14,9 @@
 
 .navbar-link:hover {
   color: var(--accent);
+}
+
+/* navbar.css */
+.navbar-link {
+  padding: 0.25rem 0.5rem;
 }

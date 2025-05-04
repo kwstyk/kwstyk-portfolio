@@ -1,38 +1,31 @@
 ---
-import DifficultyBadge   from '@/components/atoms/DifficultyBadge.astro';
-import ReproMethodBadge  from '@/components/atoms/ReproMethodBadge.astro';
-import StackChip         from '@/components/molecules/StackChip.astro';
-import StatusBadge       from '@/components/atoms/StatusBadge.astro';
-import Heading           from '@/components/atoms/Heading.astro';
+import DifficultyBadge  from '@/components/atoms/DifficultyBadge.astro';
+import ReproMethodBadge from '@/components/atoms/ReproMethodBadge.astro';
+import StackChip        from '@/components/molecules/StackChip.astro';
+import StatusBadge      from '@/components/atoms/StatusBadge.astro';
+import Heading          from '@/components/atoms/Heading.astro';
 
 interface Props {
   title:      string;
-  difficulty: 'easy' | 'medium' | 'hard' | 'expert';
-  repro:      ('docker' | 'terraform' | 'vagrant' | 'manual')[];
-  stack:      string[];
+  difficulty?: string;
+  repro?:     string[];
+  stack?:     string[];
   ci_status?: string;
   updated:    string;
 }
-
-const { title, difficulty, repro, stack, ci_status, updated } = Astro.props as Props;
+const { title, difficulty, repro = [], stack = [], ci_status, updated } = Astro.props as Props;
 ---
-
-<section class="w-full max-w-4xl mx-auto py-12 px-6 text-center space-y-8">
-  <div class="space-y-4">
-    <Heading level={1}>{title}</Heading>
-
-    <div class="flex flex-wrap justify-center gap-2">
-      <DifficultyBadge level={difficulty} />
-      {repro.map((m) => <ReproMethodBadge method={m} />)}
-    </div>
+<section class="mx-auto w-full max-w-4xl py-12 px-6 text-center space-y-8">
+  <Heading level={1}>{title}</Heading>
+  <div class="flex flex-wrap justify-center gap-2">
+    <DifficultyBadge level={difficulty} />
+    {repro.map(m => <ReproMethodBadge method={m} />)}
   </div>
-
   {stack.length > 0 && (
     <div class="flex flex-wrap justify-center gap-2">
-      {stack.map((tool) => <StackChip name={tool} />)}
+      {stack.map(s => <StackChip name={s} />)}
     </div>
   )}
-
   {ci_status && (
     <div class="flex flex-col items-center gap-2">
       <StatusBadge src={ci_status} />
