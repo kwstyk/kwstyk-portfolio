@@ -1,45 +1,73 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import categories from '@/data/categories.json';
+import '@/styles/structure.css';
+import Layout      from '@/layouts/Layout.astro';
+import categories  from '@/data/categories.json';
+import Card        from '@/components/molecules/Card.astro';
+import { getCollection } from 'astro:content';
 
-// 1) getStaticPaths で slug → category オブジェクトを渡す
+// 各カテゴリの slug → category をパスに渡す
 export async function getStaticPaths() {
   return categories.map((cat) => ({
     params: { slug: cat.slug },
-    props: { category: cat },
+    props:  { category: cat },
   }));
 }
 
-// 2) Props の型定義（必要なら）
 interface Props {
   category: {
-    id: string;
-    slug: string;
-    title: string;
-    description: string;
-    href: string;
-    icon?: string;
-    badge?: string;
-    color?: string;
+    id:           string;
+    slug:         string;
+    title:        string;
+    description:  string;
+    color?:       string;
+    icon?:        string;
+    badge?:       string;
   };
 }
 
-// 3) Astro.props から受け取る
 const { category } = Astro.props as Props;
+
+// このカテゴリに属する記事のみ取得
+const all = await getCollection('structure');
+const entries = all.filter((e) => e.slug.startsWith(category.slug));
 ---
 
-<Layout 
-  siteName="KWSTYK Portfolio"     
-  pageTitle={category.title}        
+<Layout
+  siteName="KWSTYK Portfolio"
+  pageTitle={`${category.title} | Structure`}
 >
-  <header class="structure-header">
-    <h1>{category.icon} {category.title}</h1>
-    <p>{category.description}</p>
+  <header class="mb-6">
+    <h1 class="text-2xl font-bold flex items-center gap-2">
+      {category.icon && <span class="text-3xl">{category.icon}</span>}
+      {category.title}
+    </h1>
+    <p class="text-text/75 mt-1">{category.description}</p>
   </header>
 
-  <!-- このカテゴリの Proof リストなどをここに動的表示 -->
+  <!-- 1列(sm)→2列(md)→3列(lg) のグリッド -->
   <section class="card-grid">
-    <!-- 例: このカテゴリに属する proof をリスト -->
-    {/* 例: proofList.filter(p => p.category === category.slug).map(...) */}
+    {entries.map((entry) => (
+      <Card
+        title={entry.data.title}
+        description={entry.data.description}
+        href={`/structure/${entry.slug}`}
+        icon={entry.data.icon}
+        badge={entry.data.badge}
+        color={category.color}
+        difficulty={entry.data.difficulty}
+        repro={entry.data.repro}
+        updated={entry.data.updated}
+      />
+    ))}
+      {Array.from({ length: 2 }).map((_, i) => (
+        <Card
+          title="Coming Soon"
+          description="ただいま準備中です"
+          href="#"
+          badge=""
+          color="var(--accent)"
+          class="opacity-50 pointer-events-none"
+        />
+      ))}
   </section>
 </Layout>

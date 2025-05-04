@@ -31,6 +31,9 @@
      カードグリッド
   ------------------------------ */
   .card-grid {
+    margin: 0;       /* 必要なら */
+    padding: 0;      /* 必要なら */
+    /* グリッド定義を必ず書く */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
@@ -82,10 +85,10 @@
     color: var(--accent);
   }
   
-  .card-badge {
+  .card-badge:not([class*="bg-"]) {
     display: inline-block;
     background-color: var(--accent);
-    color: white;
+    color: #fff;
     font-size: 0.75rem;
     font-weight: bold;
     padding: 0.25rem 0.5rem;

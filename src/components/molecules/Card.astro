@@ -1,50 +1,48 @@
 ---
+// Card.astro  ── Structure 詳細ページ & 一覧ページの共通カード
 interface Props {
-  title: string;
-  description: string;
-  href: string;
-  icon?: string;
-  badge?: string;
-  color?: string;
+  title: string; description: string; href: string;
+  icon?: string; badge?: string; color?: string;
+  difficulty?: string; repro?: string[]; updated?: string; class?: string
 }
-const { title, description, href, icon, badge, color } = Astro.props as Props;
+const {
+  title, description, href, icon, badge, color,
+  difficulty, repro, updated,class: className,
+} = Astro.props as Props;
 
-// バッジ文字ごとの Tailwind クラスマップ
-const badgeColorMap: Record<string, string> = {
-  '重要': 'bg-red-500 text-white',
-  '執筆中': 'bg-gray-500 text-white',
-  '完了': 'bg-green-500 text-white',
-  '検討中': 'bg-yellow-400 text-black',
-  'PoCあり': 'bg-blue-500 text-white',
-  '実装中': 'bg-indigo-500 text-white',
-  '準備中': 'bg-purple-500 text-white',
+const badgeColor: Record<string,string> = {
+  '重要':'bg-red-500 text-white', '完了':'bg-green-500 text-white',
+  '執筆中':'bg-gray-500 text-white', '検討中':'bg-yellow-400 text-black',
+  'PoCあり':'bg-blue-500 text-white', '実装中':'bg-indigo-500 text-white',
+  '準備中':'bg-purple-500 text-white',
 };
-
-// false 側を空文字にする
-const badgeClass = badge
-  ? (badgeColorMap[badge] ?? 'bg-gray-400 text-white')
-  : '';
+const badgeClass = badge ? (badgeColor[badge] ?? 'bg-gray-400 text-white') : '';
 ---
-
 <a
   href={href}
-  class="card group"
-  style={color ? `border-color: ${color}` : undefined}
+  class={`card w-full max-w-sm border rounded-lg p-4 flex flex-col gap-3 transition hover:shadow-lg ${className ?? ''}`}
+  style={color && `border-color:${color}`}
 >
+  <!-- アイコン＋タイトル行 -->
+  <div class="flex items-center gap-2">
+    {icon && <span class="text-2xl">{icon}</span>}
+    <h3 class="font-bold text-lg leading-snug">{title}</h3>
+  </div>
 
-  <!-- アイコン（オプション） -->
-  {icon && <div class="card-icon">{icon}</div>}
+  <p class="text-sm opacity-80 leading-relaxed">{description}</p>
 
-  <!-- タイトル -->
-  <div class="card-title">{title}</div>
-
-  <!-- 説明文 -->
-  <div class="card-description">{description}</div>
-
-  <!-- バッジ（オプション） -->
   {badge && (
-    <span class="card-badge" class:list={badgeClass}>
+    <span class:list={['inline-block px-2 py-1 rounded text-xs font-semibold', badgeClass]}>
       {badge}
     </span>
+  )}
+
+  <!-- メタ情報は 2 列レイアウトで折り返し -->
+  {(difficulty || repro || updated) && (
+    <dl class="grid grid-cols-[auto_1fr] gap-x-2 gap-y-1 text-xs opacity-80">
+      {difficulty && (<><dt>難易度</dt><dd>{difficulty}</dd></>)}
+      {repro      && (<><dt>再現方法</dt><dd>{repro.join(', ')}</dd></>)}
+      {updated    && (<><dt>更新日</dt><dd>{updated}</dd></>)}
+    </dl>
   )}
 </a>

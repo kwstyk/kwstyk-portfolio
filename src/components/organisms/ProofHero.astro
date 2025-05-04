@@ -11,9 +11,8 @@ interface Props {
   repro?:     string[];
   stack?:     string[];
   ci_status?: string;
-  updated:    string;
 }
-const { title, difficulty, repro = [], stack = [], ci_status, updated } = Astro.props as Props;
+const { title, difficulty, repro = [], stack = [], ci_status } = Astro.props as Props;
 ---
 <section class="mx-auto w-full max-w-4xl py-12 px-6 text-center space-y-8">
   <Heading level={1}>{title}</Heading>
@@ -29,7 +28,6 @@ const { title, difficulty, repro = [], stack = [], ci_status, updated } = Astro.
   {ci_status && (
     <div class="flex flex-col items-center gap-2">
       <StatusBadge src={ci_status} />
-      <p class="text-sm text-gray-400">Updated: {updated}</p>
     </div>
   )}
 </section>
