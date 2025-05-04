@@ -12,6 +12,6 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["astro/client", "astro/content"]
+    "types": ["astro/client"]
   }
 }

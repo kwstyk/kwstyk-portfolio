@@ -1,9 +1,9 @@
 ---
-import Card from '@/components/atoms/Card.astro'; // ← これを必ず書く！
+import Card from '@/components/molecules/Card.astro'; // ← これを必ず書く！
 
 const { title, description, link, className } = Astro.props;
 ---
 
-<Card title={title} link={link} class={className}>
+<Card title={title} description={description} href={link} class={className}>
   <p class="text-text-muted">{description}</p>
 </Card>
