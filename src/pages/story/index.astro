@@ -1,7 +1,21 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import Layout from '@/layouts/Layout.astro';
+import StoryCard from '@/components/molecules/StoryCard.astro';
+import stories from '@/data/stories.json'; // JSON 配置場所に合わせてパス調整
+import Hero from '@/components/organisms/Hero.astro';
+const sample = stories.slice(0, 6);
 ---
-
-<Layout>
-  <h1>Story（成長物語）</h1>
+<Layout class="page-background">
+  <Hero title="Lab Notes" subtitle="～Proof から得た知見～" />
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+    {sample.map((s) => (
+      <StoryCard
+        title={s.title}
+        summary={s.summary}
+        url={s.url}
+        source={s.source}
+        published={s.published}
+      />
+    ))}
+  </section>
 </Layout>

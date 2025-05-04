@@ -6,7 +6,7 @@ import ProofMetaCard  from '@/components/organisms/ProofMetaCard.astro';
 interface Props {
   title:       string;
   difficulty?: 'easy' | 'medium' | 'hard' | 'expert';
-  repro:       string[];
+  repro:      ('docker'|'terraform'|'vagrant'|'manual')[];
   stack:       string[];
   updated:     string;
   ci_status?:  string;
@@ -36,6 +36,7 @@ const {
       ci_status={ci_status}
     />
     <ProofMetaCard updated={updated} tags={tags} />
+
     <article class="prose prose-invert mt-6" lang="ja">
       <slot />
     </article>

@@ -1,25 +1,17 @@
 ---
-interface Props {
-  code: string;
-  lang: string;
-}
-
-const { code, lang } = Astro.props;
+interface Props { code: string; lang?: string }
+const { code, lang = "bash" } = Astro.props as Props;
 ---
-
-<div class="relative bg-slate-800 text-white p-4 rounded-md overflow-x-auto">
-  <pre><code class={`language-${lang}`}>{code}</code></pre>
+<div class="relative">
   <button
     type="button"
-    class="absolute top-2 right-2 text-xs bg-slate-600 hover:bg-slate-500 px-2 py-1 rounded"
+   onclick={`navigator.clipboard.writeText(${JSON.stringify(code)})`}
+    class="px-2 py-1 rounded bg-gray-700 hover:bg-gray-600 text-white text-xs"
   >
+    class="px-2 py-1 rounded bg-gray-700 hover:bg-gray-600 text-white text-xs"
     Copy
   </button>
+  <pre class="overflow-x-auto rounded bg-slate-800 p-4 text-sm">
+    <code class={`language-${lang}`}>{code}</code>
+  </pre>
 </div>
-
-<script type="text/javascript" is:inline>
-  const button = document.getElementById('copy-button');
-  button?.addEventListener('click', () => {
-    navigator.clipboard.writeText({code});
-  });
-</script>

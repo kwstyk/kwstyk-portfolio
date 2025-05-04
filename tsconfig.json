@@ -2,16 +2,18 @@
   "extends": "astro/tsconfigs/strict",
   "include": [
     "src",
-    "src/content/config.ts",   // ←これを追加
+    "src/content/config.ts",
     ".astro/types.d.ts"
   ],
   "exclude": ["dist"],
   "compilerOptions": {
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    },
+    },   
+    "resolveJsonModule": true,      // ← JSON を import 可能に
+   "esModuleInterop": true,        // ← JSON default import の互換を確保
     "types": ["astro/client"]
   }
 }

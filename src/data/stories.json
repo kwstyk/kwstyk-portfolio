@@ -1,0 +1,23 @@
+[
+  {
+    "title": "初めてのパケットキャプチャ解析",
+    "summary": "Wireshark を使って ARP→DNS→HTTP の流れを可視化したラボをまとめました。",
+    "url": "https://zenn.dev/kwstyk/articles/packet-capture",
+    "source": "zenn",
+    "published": "2025-04-20"
+  },
+  {
+    "title": "Linux サーバのハードニング手順",
+    "summary": "CIS ベンチマークに基づく Ubuntu のセキュリティ強化手順を整理。",
+    "url": "https://note.com/kwstyk/n/linux-hardening",
+    "source": "note",
+    "published": "2025-03-15"
+  },
+  {
+    "title": "Terraform で VPC をゼロトラスト化",
+    "summary": "Terraform＋AWS セキュリティグループでネットワークセグメンテーションを実装。",
+    "url": "https://zenn.dev/kwstyk/articles/terraform-vpc",
+    "source": "zenn",
+    "published": "2025-02-28"
+  }
+]

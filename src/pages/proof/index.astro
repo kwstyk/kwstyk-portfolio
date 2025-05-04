@@ -1,7 +1,24 @@
 ---
 import Layout from '@/layouts/Layout.astro';
----
+import Card from '@/components/molecules/Card.astro';
+import { getCollection } from 'astro:content';
 
-<Layout>
-  <h1>Proof（証明集合）</h1>
+// proof コレクションから先頭 6 件だけ取得（任意）
+const allProofs = await getCollection('proofs');
+const sample = allProofs.slice(0, 6);
+---
+<Layout class="page-background">
+  <h1 class="text-2xl font-bold mb-6">Proof（証明集合）</h1>
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {sample.map((entry) => (
+      <Card
+        title={entry.data.title}
+        description={entry.data.difficulty} 
+        href={`/proof/${entry.slug}`}
+        icon="🔍"
+        badge={entry.data.difficulty}
+        color="var(--accent)"
+      />
+    ))}
+  </section>
 </Layout>
