@@ -1,0 +1,45 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import categories from '@/data/categories.json';
+
+// 1) getStaticPaths で slug → category オブジェクトを渡す
+export async function getStaticPaths() {
+  return categories.map((cat) => ({
+    params: { slug: cat.slug },
+    props: { category: cat },
+  }));
+}
+
+// 2) Props の型定義（必要なら）
+interface Props {
+  category: {
+    id: string;
+    slug: string;
+    title: string;
+    description: string;
+    href: string;
+    icon?: string;
+    badge?: string;
+    color?: string;
+  };
+}
+
+// 3) Astro.props から受け取る
+const { category } = Astro.props as Props;
+---
+
+<Layout 
+  siteName="KWSTYK Portfolio"     
+  pageTitle={category.title}        
+>
+  <header class="structure-header">
+    <h1>{category.icon} {category.title}</h1>
+    <p>{category.description}</p>
+  </header>
+
+  <!-- このカテゴリの Proof リストなどをここに動的表示 -->
+  <section class="card-grid">
+    <!-- 例: このカテゴリに属する proof をリスト -->
+    {/* 例: proofList.filter(p => p.category === category.slug).map(...) */}
+  </section>
+</Layout>

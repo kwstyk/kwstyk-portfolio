@@ -21,5 +21,15 @@ export default {
       },
     },
   },
+  safelist: [
+    'bg-red-500','text-white',
+    'bg-gray-500','text-white',
+    'bg-green-500','text-white',
+    'bg-yellow-400','text-black',
+    'bg-blue-500','text-white',
+    'bg-indigo-500','text-white',
+    'bg-purple-500','text-white',
+    'bg-gray-400','text-white',
+  ],
   plugins: [],
 };

@@ -3,18 +3,37 @@ interface Props {
   title: string;
   description: string;
   href: string;
-  icon?: string;       // オプション：カテゴリのアイコン（例: 🚀）
-  badge?: string;      // オプション：バッジ表示（例: NEW）
+  icon?: string;
+  badge?: string;
+  color?: string;
 }
+const { title, description, href, icon, badge, color } = Astro.props as Props;
 
-const { title, description, href, icon, badge } = Astro.props;
+// バッジ文字ごとの Tailwind クラスマップ
+const badgeColorMap: Record<string, string> = {
+  '重要': 'bg-red-500 text-white',
+  '執筆中': 'bg-gray-500 text-white',
+  '完了': 'bg-green-500 text-white',
+  '検討中': 'bg-yellow-400 text-black',
+  'PoCあり': 'bg-blue-500 text-white',
+  '実装中': 'bg-indigo-500 text-white',
+  '準備中': 'bg-purple-500 text-white',
+};
+
+// false 側を空文字にする
+const badgeClass = badge
+  ? (badgeColorMap[badge] ?? 'bg-gray-400 text-white')
+  : '';
 ---
 
-<a href={href} class="card group">
+<a
+  href={href}
+  class="card group"
+  style={color ? `border-color: ${color}` : undefined}
+>
+
   <!-- アイコン（オプション） -->
-  {icon && (
-    <div class="card-icon">{icon}</div>
-  )}
+  {icon && <div class="card-icon">{icon}</div>}
 
   <!-- タイトル -->
   <div class="card-title">{title}</div>
@@ -24,6 +43,8 @@ const { title, description, href, icon, badge } = Astro.props;
 
   <!-- バッジ（オプション） -->
   {badge && (
-    <span class="card-badge">{badge}</span>
+    <span class="card-badge" class:list={badgeClass}>
+      {badge}
+    </span>
   )}
 </a>

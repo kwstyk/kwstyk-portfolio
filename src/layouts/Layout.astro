@@ -1,10 +1,11 @@
 ---
 import '@/styles/globals.css';
 import Navbar from '@/components/molecules/Navbar.astro';
-
-const props = Astro.props;
-const title = props.title ?? 'My Portfolio';
-const className = props.class ?? '';
+const { siteName = 'My Portfolio', pageTitle, class: className = '' } = Astro.props as {
+  siteName?: string;
+  pageTitle?: string;
+  class?: string;
+};
 ---
 
 <!DOCTYPE html>
@@ -12,13 +13,13 @@ const className = props.class ?? '';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
+    <title>{pageTitle ?? siteName}</title>
   </head>
   <body class="bg-bg-start text-text flex flex-col min-h-screen">
     <!-- ヘッダー -->
     <header class="site-header sticky top-0 z-50 bg-bg-mid/90 backdrop-blur border-b border-border">
       <div class="max-w-7xl w-full mx-auto flex items-center justify-between px-4 sm:px-8 py-4">
-        <a href="/" class="text-xl sm:text-2xl font-bold text-white">{title}</a>
+        <a href="/" class="text-xl sm:text-2xl font-bold text-white">{siteName}</a>
         <Navbar />
       </div>
     </header>
@@ -29,12 +30,12 @@ const className = props.class ?? '';
     </main>
 
     <!-- footer slot があれば表示 -->
-    {props.footer && (
-      <footer class="border-t border-border bg-bg-start">
-        <div class="max-w-4xl mx-auto px-4 py-8">
-          <slot name="footer" />
-        </div>
-      </footer>
-    )}
+        {Astro.slots.has('footer') && (
+          <footer class="border-t border-border bg-bg-start">
+            <div class="max-w-4xl mx-auto px-4 py-8">
+              <slot name="footer" />
+            </div>
+          </footer>
+        )}
   </body>
 </html>

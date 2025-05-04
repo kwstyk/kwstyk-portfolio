@@ -15,9 +15,10 @@ import '@/styles/structure.css';
         key={cat.id}
         title={cat.title}
         description={cat.description}
-        href={cat.href}
+        href={`/structure/${cat.slug}`}
         icon={cat.icon}
         badge={cat.badge}
+        color={cat.color}
       />
     ))}
   </section>
