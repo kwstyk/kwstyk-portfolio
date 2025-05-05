@@ -6,8 +6,9 @@ interface Props {
   url: string;
   source: string;
   published: string;
+  tags?: string[];
 }
-const { title, summary, url, source, published } = Astro.props as Props;
+const { title, summary, url, source, published,tags = [] } = Astro.props as Props;
 const colorMap: Record<string,string> = {
    zenn:  'bg-sky-500',
    note:  'bg-yellow-500',
@@ -20,4 +21,7 @@ const colorMap: Record<string,string> = {
   <h3 class="mt-2 font-bold">{title}</h3>
   <p class="text-sm opacity-80">{summary}</p>
   <p class="text-xs mt-2">Published: {published}</p>
+      {tags.map(tag => (
+          <span class="text-xs bg-gray-200 text-gray-800 px-2 py-0.5 rounded-full">{tag}</span>
+        ))}
 </a>

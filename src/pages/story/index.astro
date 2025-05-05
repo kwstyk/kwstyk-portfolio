@@ -13,20 +13,23 @@ interface Story {
   url: string;
   tags: string[];
   published: string;
+  hidden?: boolean
 }
 const stories = (storiesJson as unknown) as Story[];
-const sample = stories.slice(0, 6);
+// hidden フラグが true のものだけ除外
+const visibleStories = stories.filter(s => s.hidden !== true)
 ---
 <Layout class="page-background">
   <Hero title="Lab Notes" subtitle="～Proof から得た知見～" />
   <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-    {sample.map((s) => (
+    {visibleStories.map((s) => (
       <StoryCard
         title={s.title}
         summary={s.summary}
         url={s.url}
         source={s.source}
         published={s.published}
+        tags={s.tags}  
       />
     ))}
   </section>
