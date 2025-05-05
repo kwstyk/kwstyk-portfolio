@@ -3,6 +3,7 @@ import '@/styles/structure.css';
 import Layout      from '@/layouts/Layout.astro';
 import categories  from '@/data/categories.json';
 import Card        from '@/components/molecules/Card.astro';
+import ProofList   from '@/components/molecules/ProofList.astro';
 import { getCollection } from 'astro:content';
 
 // 各カテゴリの slug → category をパスに渡す
@@ -25,11 +26,20 @@ interface Props {
   };
 }
 
+// Astro.props から category を取り出す
 const { category } = Astro.props as Props;
+
+// 相対ではなくルート/src からの絶対パス
+const introModules = import.meta.glob('/src/descriptions/structure/*/intro.mdx', { eager: true }) as Record<string,{ default:any }>;
+const key = `/src/descriptions/structure/${category.slug}/intro.mdx`;
+console.log('glob keys:', Object.keys(introModules));
+console.log('looking for key:', key);
+const Intro = introModules[key]?.default;
 
 // このカテゴリに属する記事のみ取得
 const all = await getCollection('structure');
 const entries = all.filter((e) => e.slug.startsWith(category.slug));
+
 ---
 
 <Layout
@@ -43,6 +53,15 @@ const entries = all.filter((e) => e.slug.startsWith(category.slug));
     </h1>
     <p class="text-text/75 mt-1">{category.description}</p>
   </header>
+
+  {Intro && (
+    <section class="mb-12">
+      <Intro />
+    </section>
+  )}
+
+  <!-- ProofList を表示 -->
+  <ProofList categorySlug={category.slug} class="mt-12" />
 
   <!-- 1列(sm)→2列(md)→3列(lg) のグリッド -->
   <section class="card-grid">
@@ -59,15 +78,15 @@ const entries = all.filter((e) => e.slug.startsWith(category.slug));
         updated={entry.data.updated}
       />
     ))}
-      {Array.from({ length: 2 }).map((_, i) => (
-        <Card
-          title="Coming Soon"
-          description="ただいま準備中です"
-          href="#"
-          badge=""
-          color="var(--accent)"
-          class="opacity-50 pointer-events-none"
-        />
-      ))}
+    {Array.from({ length: 2 }).map((_, i) => (
+      <Card
+        title="Coming Soon"
+        description="ただいま準備中です"
+        href="#"
+        badge=""
+        color="var(--accent)"
+        class="opacity-50 pointer-events-none"
+      />
+    ))}
   </section>
 </Layout>
