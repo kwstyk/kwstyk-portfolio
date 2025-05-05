@@ -3,7 +3,9 @@
   "include": [
     "src",
     "src/content/config.ts",
-    ".astro/types.d.ts"
+    ".astro/types.d.ts",
+    "scripts",
+    "src/rss-parser.d.ts"
   ],
   "exclude": ["dist"],
   "compilerOptions": {
@@ -14,6 +16,7 @@
     },   
     "resolveJsonModule": true,      // ← JSON を import 可能に
    "esModuleInterop": true,        // ← JSON default import の互換を確保
-    "types": ["astro/client"]
+    "types": ["astro/client", "node"]
+    
   }
 }

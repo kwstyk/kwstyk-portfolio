@@ -1,0 +1,52 @@
+name: sync-stories
+
+on:
+  # 毎日 00:00 JST（15:00 UTC）に実行
+  schedule:
+    - cron: '15 0 * * *'
+  # 手動トリガー用
+  workflow_dispatch:
+
+jobs:
+  update-stories:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          # Bot がコミットできるように fetch-depth:0
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Generate stories.json
+        run: pnpm run rss-to-json
+
+      - name: Commit updated stories.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain src/data/stories.json)" ]; then
+            git add src/data/stories.json
+            git commit -m "chore(story): auto update stories.json [skip ci]"
+            git push origin HEAD:sync-stories
+          else
+            echo "No changes to stories.json"
+          fi
+
+      - name: Create Pull Request
+        if: success() && github.ref == 'refs/heads/sync-stories'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          branch: sync-stories
+          title: "chore(story): auto update stories.json"
+          body: |
+            This PR updates `stories.json` from the latest RSS feeds.
+          labels: automated-pr
