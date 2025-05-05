@@ -1,14 +1,13 @@
 name: sync-stories
 
 on:
-  # 毎日 00:00 JST（15:00 UTC）に実行
   schedule:
     - cron: '15 0 * * *'
-  # 手動トリガー用
   workflow_dispatch:
+
 permissions:
-    contents: write 
-    pull-requests: write
+  contents: write
+  pull-requests: write
 
 jobs:
   update-stories:
@@ -17,7 +16,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          # Bot がコミットできるように fetch-depth:0
           fetch-depth: 0
           persist-credentials: true
 
@@ -45,18 +43,16 @@ jobs:
           if [ -n "$(git status --porcelain src/data/stories.json)" ]; then
             git add src/data/stories.json
             git commit -m "chore(story): auto update stories.json [skip ci]"
-           # sync-stories ブランチのリモート最新を取り込んでからプッシュ
-            git fetch origin sync-stories
-            git rebase origin/sync-stories
-            git push origin HEAD:sync-stories
+            # JSON の自動マージ競合を避けるため上書きプッシュ
+            git push --force-with-lease origin HEAD:sync-stories
           else
             echo "No changes to stories.json"
           fi
 
       - name: Create Pull Request
-        if: success() 
         uses: peter-evans/create-pull-request@v5
         with:
+          base: main
           branch: sync-stories
           title: "chore(story): auto update stories.json"
           body: |
