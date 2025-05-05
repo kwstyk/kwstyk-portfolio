@@ -6,6 +6,9 @@ on:
     - cron: '15 0 * * *'
   # 手動トリガー用
   workflow_dispatch:
+permissions:
+    contents: write 
+    pull-requests: write
 
 jobs:
   update-stories:
@@ -16,6 +19,7 @@ jobs:
         with:
           # Bot がコミットできるように fetch-depth:0
           fetch-depth: 0
+          persist-credentials: true
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
