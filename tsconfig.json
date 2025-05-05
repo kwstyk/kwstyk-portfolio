@@ -5,7 +5,8 @@
     "src/content/config.ts",
     ".astro/types.d.ts",
     "scripts",
-    "src/rss-parser.d.ts"
+    "src/rss-parser.d.ts",
+    "src/data"
   ],
   "exclude": ["dist"],
   "compilerOptions": {

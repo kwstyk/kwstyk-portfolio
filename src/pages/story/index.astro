@@ -1,8 +1,20 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import StoryCard from '@/components/molecules/StoryCard.astro';
-import stories from '@/data/stories.json'; // JSON 配置場所に合わせてパス調整
+import storiesJson from '@/data/stories.json'; // JSON 配置場所に合わせてパス調整
 import Hero from '@/components/organisms/Hero.astro';
+
+// JSON の中身は Story 型の配列であると明示する
+interface Story {
+  id: string;
+  source: string;
+  title: string;
+  summary: string;
+  url: string;
+  tags: string[];
+  published: string;
+}
+const stories = (storiesJson as unknown) as Story[];
 const sample = stories.slice(0, 6);
 ---
 <Layout class="page-background">
