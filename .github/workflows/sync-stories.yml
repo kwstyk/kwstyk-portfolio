@@ -47,7 +47,7 @@ jobs:
           fi
 
       - name: Create Pull Request
-        if: success() && github.ref == 'refs/heads/sync-stories'
+        if: success() 
         uses: peter-evans/create-pull-request@v5
         with:
           branch: sync-stories
