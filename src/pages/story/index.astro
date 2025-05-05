@@ -1,35 +1,52 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import StoryCard from '@/components/molecules/StoryCard.astro';
-import storiesJson from '@/data/stories.json'; // JSON 配置場所に合わせてパス調整
+import storiesJson from '@/data/stories.json';
 import Hero from '@/components/organisms/Hero.astro';
+import FilterBar from '@/components/molecules/FilterBar.astro';
 
-// JSON の中身は Story 型の配列であると明示する
+// Story 型定義
 interface Story {
   id: string;
   source: string;
   title: string;
   summary: string;
   url: string;
-  tags: string[];
+  tags?: string[];
   published: string;
-  hidden?: boolean
+  hidden?: boolean;
 }
+// JSON を型付き配列にキャスト
 const stories = (storiesJson as unknown) as Story[];
-// hidden フラグが true のものだけ除外
-const visibleStories = stories.filter(s => s.hidden !== true)
+
+// URL の ?tag= に応じて絞り込む
+const url = new URL(Astro.url);
+const selectedTag = url.searchParams.get('tag') || '';
+
+// hidden フラグで除外し、タグフィルタを適用
+const visible = stories.filter(
+  (s) => s.hidden !== true && (selectedTag === '' || (s.tags ?? []).includes(selectedTag))
+);
+
+// ユニークタグ一覧を生成
+const allTags = Array.from(new Set(stories.flatMap((s) => s.tags ?? [])));
 ---
 <Layout class="page-background">
   <Hero title="Lab Notes" subtitle="～Proof から得た知見～" />
+
+  <!-- タグ絞り込み -->
+  <FilterBar tags={allTags} selectedTag={selectedTag} />
+
+  <!-- 記事グリッド -->
   <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-    {visibleStories.map((s) => (
+    {visible.map((s) => (
       <StoryCard
         title={s.title}
         summary={s.summary}
         url={s.url}
         source={s.source}
         published={s.published}
-        tags={s.tags}  
+        tags={s.tags ?? []}
       />
     ))}
   </section>

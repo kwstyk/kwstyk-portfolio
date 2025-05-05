@@ -1,0 +1,34 @@
+---
+// src/components/molecules/FilterBar.astro
+
+// props を必ず取り出す
+interface Props {
+  tags: string[];
+  selectedTag?: string;
+}
+const { tags, selectedTag = '' } = Astro.props as Props;
+---
+
+<div class="mb-4">
+  <label for="filter-tag" class="sr-only">タグで絞り込み</label>
+  <select
+    id="filter-tag"
+    class="p-2 border rounded"
+    value={selectedTag}
+    onchange="location.search = new URLSearchParams({
+      ...Object.fromEntries(new URLSearchParams(location.search)),
+      tag: this.value
+    }).toString()"
+  >
+    <!-- デフォルト項目 -->
+    <option value="">
+      すべてのタグ
+    </option>
+    <!-- 各タグ項目 -->
+    {tags.map((tag) => (
+      <option value={tag}>
+        {tag}
+      </option>
+    ))}
+  </select>
+</div>
