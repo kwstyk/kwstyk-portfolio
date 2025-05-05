@@ -45,6 +45,9 @@ jobs:
           if [ -n "$(git status --porcelain src/data/stories.json)" ]; then
             git add src/data/stories.json
             git commit -m "chore(story): auto update stories.json [skip ci]"
+           # sync-stories ブランチのリモート最新を取り込んでからプッシュ
+            git fetch origin sync-stories
+            git rebase origin/sync-stories
             git push origin HEAD:sync-stories
           else
             echo "No changes to stories.json"
