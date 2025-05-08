@@ -1,9 +1,16 @@
 ---
 // Card.astro  ── Structure 詳細ページ & 一覧ページの共通カード
 interface Props {
-  title: string; description: string; href: string;
-  icon?: string; badge?: string; color?: string;
-  difficulty?: string; repro?: string[]; updated?: string; class?: string
+  title: string; 
+  description?: string;
+  href: string;
+  icon?: string; 
+  badge?: string; 
+  color?: string;
+  difficulty?: string; 
+  repro?: string[]; 
+  updated?: string; 
+  class?: string
 }
 const {
   title, description, href, icon, badge, color,

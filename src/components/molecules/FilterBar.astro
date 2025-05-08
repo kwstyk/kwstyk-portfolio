@@ -1,7 +1,4 @@
 ---
-// src/components/molecules/FilterBar.astro
-
-// props を必ず取り出す
 interface Props {
   tags: string[];
   selectedTag?: string;
@@ -17,18 +14,13 @@ const { tags, selectedTag = '' } = Astro.props as Props;
     value={selectedTag}
     onchange="location.search = new URLSearchParams({
       ...Object.fromEntries(new URLSearchParams(location.search)),
-      tag: this.value
+      tag: this.value,
+      page: '1'    /* タグ変更時は必ず 1 ページ目に戻す */
     }).toString()"
   >
-    <!-- デフォルト項目 -->
-    <option value="">
-      すべてのタグ
-    </option>
-    <!-- 各タグ項目 -->
-    {tags.map((tag) => (
-      <option value={tag}>
-        {tag}
-      </option>
+    <option value="">すべてのタグ</option>
+    {tags.map((t) => (
+      <option value={t}>{t}</option>
     ))}
   </select>
 </div>

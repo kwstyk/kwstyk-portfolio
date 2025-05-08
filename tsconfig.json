@@ -1,23 +1,16 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [
-    "src",
-    "src/content/config.ts",
-    ".astro/types.d.ts",
-    "scripts",
-    "src/rss-parser.d.ts",
-    "src/data"
-  ],
+  "include": ["src", ".astro/types.d.ts"],
   "exclude": ["dist"],
   "compilerOptions": {
-    "jsx": "preserve",
+    // JSX は使わないので特別な設定は不要ですが、
+    // 万一 JSX を残す場合はこの２行を入れておくと安心です:
+    "jsx": "react-jsx",
+    "jsxImportSource": "@vercel/og",
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },   
-    "resolveJsonModule": true,      // ← JSON を import 可能に
-   "esModuleInterop": true,        // ← JSON default import の互換を確保
+    "paths": { "@/*": ["src/*"] },
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "types": ["astro/client", "node"]
-    
   }
 }

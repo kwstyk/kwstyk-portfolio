@@ -1,11 +1,17 @@
 ---
 import '@/styles/navbar.css';
+const links = [
+  { href: '/structure', label: 'Structure' },
+  { href: '/proof',      label: 'Proof' },
+  { href: '/story',      label: 'Story' },
+];
 ---
-
-<nav class="flex items-center gap-6">
-  <a href="/structure" class="navbar-link">Structure</a>
-  <a href="/proof" class="navbar-link">Proof</a>
-  <a href="/story" class="navbar-link">Story</a>
+<nav>
+  <ul class="flex gap-6 items-center">
+    {links.map(l => (
+      <li><a href={l.href} class="hover:underline">{l.label}</a></li>
+    ))}
+  </ul>
 </nav>
 
 <script is:inline>

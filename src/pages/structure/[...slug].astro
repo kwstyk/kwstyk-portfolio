@@ -1,12 +1,15 @@
 ---
+export const prerender = true;
+
 import '@/styles/structure.css';
-import Layout      from '@/layouts/Layout.astro';
-import categories  from '@/data/categories.json';
-import Card        from '@/components/molecules/Card.astro';
-import ProofList   from '@/components/molecules/ProofList.astro';
+import Layout     from '@/layouts/Layout.astro';
+import categories from '@/data/categories.json';
+
+import Card      from '@/components/molecules/Card.astro';
+import ProofList from '@/components/molecules/ProofList.astro';
 import { getCollection } from 'astro:content';
 
-// 各カテゴリの slug → category をパスに渡す
+// ■ getStaticPaths ────────────────────────────────
 export async function getStaticPaths() {
   return categories.map((cat) => ({
     params: { slug: cat.slug },
@@ -16,36 +19,38 @@ export async function getStaticPaths() {
 
 interface Props {
   category: {
-    id:           string;
-    slug:         string;
-    title:        string;
-    description:  string;
-    color?:       string;
-    icon?:        string;
-    badge?:       string;
+    id: string;
+    slug: string;
+    title: string;
+    description: string;
+    color?: string;
+    icon?: string;
+    badge?: string;
   };
 }
 
-// Astro.props から category を取り出す
 const { category } = Astro.props as Props;
 
-// 相対ではなくルート/src からの絶対パス
-const introModules = import.meta.glob('/src/descriptions/structure/*/intro.mdx', { eager: true }) as Record<string,{ default:any }>;
-const key = `/src/descriptions/structure/${category.slug}/intro.mdx`;
-console.log('glob keys:', Object.keys(introModules));
-console.log('looking for key:', key);
-const Intro = introModules[key]?.default;
+// ■ Intro .mdx を動的 import（存在しなくても OK） ─────
+ const introModules = import.meta.glob(
+   './src/content/descriptions/structure/*/intro.mdx',   // ← “./” にするだけ
+   { eager: true }
+ ) as Record<string, { default: any }>;
 
-// このカテゴリに属する記事のみ取得
-const all = await getCollection('structure');
-const entries = all.filter((e) => e.slug.startsWith(category.slug));
+ const key = `./src/content/descriptions/structure/${category.slug}/intro.mdx`;
+const Intro = introModules[key]?.default ?? null;  // ← 未定なら null
 
+// ■ このカテゴリに属する Proof 一覧を取得 ───────────
+const allProofs = await getCollection('proofs');
+const entries   = allProofs.filter(
+  (p) => p.data.category === category.slug
+);
 ---
 
-<Layout
-  siteName="KWSTYK Portfolio"
-  pageTitle={`${category.title} | Structure`}
->
+<Layout siteName="KWSTYK Portfolio"
+        pageTitle={`${category.title} | Structure`}>
+
+  <!-- ヘッダー -->
   <header class="mb-6">
     <h1 class="text-2xl font-bold flex items-center gap-2">
       {category.icon && <span class="text-3xl">{category.icon}</span>}
@@ -54,22 +59,23 @@ const entries = all.filter((e) => e.slug.startsWith(category.slug));
     <p class="text-text/75 mt-1">{category.description}</p>
   </header>
 
+  <!-- Intro セクション（あれば） -->
   {Intro && (
     <section class="mb-12">
       <Intro />
     </section>
   )}
 
-  <!-- ProofList を表示 -->
+  <!-- ProofList（小カード一覧） -->
   <ProofList categorySlug={category.slug} class="mt-12" />
 
-  <!-- 1列(sm)→2列(md)→3列(lg) のグリッド -->
+  <!-- 大カードグリッド -->
   <section class="card-grid">
     {entries.map((entry) => (
       <Card
         title={entry.data.title}
         description={entry.data.description}
-        href={`/structure/${entry.slug}`}
+        href={`/proof/${entry.slug}`}          
         icon={entry.data.icon}
         badge={entry.data.badge}
         color={category.color}
@@ -78,9 +84,11 @@ const entries = all.filter((e) => e.slug.startsWith(category.slug));
         updated={entry.data.updated}
       />
     ))}
-    {Array.from({ length: 2 }).map((_, i) => (
+
+    {/* 空きスペース用ダミーカード */}
+    {Array.from({ length: 2 }).map(() => (
       <Card
-        title="Coming Soon"
+        title="Coming Soon"
         description="ただいま準備中です"
         href="#"
         badge=""

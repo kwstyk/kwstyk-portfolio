@@ -1,11 +1,10 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import StoryCard from '@/components/molecules/StoryCard.astro';
-import storiesJson from '@/data/stories.json';
 import Hero from '@/components/organisms/Hero.astro';
 import FilterBar from '@/components/molecules/FilterBar.astro';
+import StoryCard from '@/components/molecules/StoryCard.astro';
+import storiesJson from '@/data/stories.json';
 
-// Story 型定義
 interface Story {
   id: string;
   source: string;
@@ -16,30 +15,36 @@ interface Story {
   published: string;
   hidden?: boolean;
 }
-// JSON を型付き配列にキャスト
 const stories = (storiesJson as unknown) as Story[];
 
-// URL の ?tag= に応じて絞り込む
+// URL から tag／page を取得
 const url = new URL(Astro.url);
 const selectedTag = url.searchParams.get('tag') || '';
+const page = parseInt(url.searchParams.get('page') || '1', 10);
+const perPage = 6;
 
-// hidden フラグで除外し、タグフィルタを適用
-const visible = stories.filter(
+// ① hidden を除外＋タグ絞り込み
+const filtered = stories.filter(
   (s) => s.hidden !== true && (selectedTag === '' || (s.tags ?? []).includes(selectedTag))
 );
 
-// ユニークタグ一覧を生成
+// ② ページネーション用 slice
+const totalPages = Math.ceil(filtered.length / perPage);
+const paged = filtered.slice((page - 1) * perPage, page * perPage);
+
+// ドロップダウンの選択肢用に全タグをユニーク抽出
 const allTags = Array.from(new Set(stories.flatMap((s) => s.tags ?? [])));
 ---
+
 <Layout class="page-background">
   <Hero title="Lab Notes" subtitle="～Proof から得た知見～" />
 
   <!-- タグ絞り込み -->
   <FilterBar tags={allTags} selectedTag={selectedTag} />
 
-  <!-- 記事グリッド -->
+  <!-- 記事グリッド（絞り込み＋ページネーション後の paged を使う） -->
   <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-    {visible.map((s) => (
+    {paged.map((s) => (
       <StoryCard
         title={s.title}
         summary={s.summary}
@@ -50,4 +55,29 @@ const allTags = Array.from(new Set(stories.flatMap((s) => s.tags ?? [])));
       />
     ))}
   </section>
+
+  <!-- Prev/Next ページャー -->
+  <div class="flex justify-between items-center mt-6">
+    {page > 1 ? (
+      <a
+        href={`?tag=${encodeURIComponent(selectedTag)}&page=${page - 1}`}
+        class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded"
+      >
+        ← 前のページ
+      </a>
+    ) : (
+      <span></span>
+    )}
+    <span>Page {page} / {totalPages}</span>
+    {page < totalPages ? (
+      <a
+        href={`?tag=${encodeURIComponent(selectedTag)}&page=${page + 1}`}
+        class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded"
+      >
+        次のページ →
+      </a>
+    ) : (
+      <span></span>
+    )}
+  </div>
 </Layout>

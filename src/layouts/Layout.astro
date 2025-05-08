@@ -1,24 +1,50 @@
 ---
 import '@/styles/globals.css';
 import Navbar from '@/components/molecules/Navbar.astro';
-const { siteName = 'My Portfolio', pageTitle, class: className = '' } = Astro.props as {
+import { generateMeta } from '@/utils/seo';
+
+const { 
+  siteName = 'My Portfolio', 
+  pageTitle, 
+  class: className = '',
+  description = 'KWSTYK Portfolio のポートフォリオサイトです。',
+  pathname = '',
+  ogImage = '/api/og?title=' + encodeURIComponent(pageTitle ?? siteName),
+} = Astro.props as {
   siteName?: string;
   pageTitle?: string;
   class?: string;
+  description?: string;
+  pathname?: string;
+  ogImage?: string;
 };
----
 
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{pageTitle ?? siteName}</title>
-  </head>
+const seo = generateMeta({
+  title: pageTitle ?? siteName,
+  description,  
+  pathname,
+  imagePath: ogImage,
+});
+---
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{seo.title}</title>
+  <meta name="description" content={seo.description} />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:site_name"   content={siteName} />
+  <meta property="og:title"       content={seo.title} />
+  <meta property="og:description" content={seo.description} />
+  <meta property="og:url"         content={seo.url} />
+  <meta property="og:image"       content={seo.image} />
+  <meta name="twitter:card"       content="summary_large_image" />
+</head>
   <body class="bg-bg-start text-text flex flex-col min-h-screen">
     <!-- ヘッダー -->
-    <header class="site-header sticky top-0 z-50 bg-bg-mid/90 backdrop-blur border-b border-border">
-      <div class="max-w-7xl w-full mx-auto flex items-center justify-between px-4 sm:px-8 py-4">
+    <header class="sticky top-0 z-50 bg-bg-mid/90 backdrop-blur border-b border-border">
+      <div class="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-8 py-4">
         <a href="/" class="text-xl sm:text-2xl font-bold text-white">{siteName}</a>
         <Navbar />
       </div>
