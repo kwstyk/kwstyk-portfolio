@@ -1,8 +1,3 @@
-/* eslint-disable */
-// ────────────────────────────────────────────────
-//  src/pages/api/og.ts     ← ここに上書きコピー
-// ────────────────────────────────────────────────
-
 import { ImageResponse } from '@vercel/og';
 // JSX を書かずに React 要素を作るためのユーティリティ
 import { jsx } from 'react/jsx-runtime';
