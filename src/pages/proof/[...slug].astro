@@ -7,15 +7,11 @@ export const prerender = true;
 
 // ■ getStaticPaths ─────────────────────────
 export async function getStaticPaths() {
-  const proofs = await getCollection('proofs');
-  return proofs.map((entry) => {
-    // entry.id は "network-security/packet-capture"
-    const segments = entry.id.split('/');
-    return {
-      params: { slug: segments },
-      props:  { entry },
-    };
-  });
+ const proofs = await getCollection('proofs');
+  return proofs.map((p) => ({
+    params: { slug: p.id.split('/') },
+    props:  { entry: p },
+  }));
 }
 
 interface Props {
@@ -24,7 +20,7 @@ interface Props {
 
 const { entry }       = Astro.props as Props;
 // render() → rendered プロパティに変更
-const { Content }     = entry.rendered!;
+const { Content } = await entry.render();
 const { data }        = entry;
 ---
 

@@ -10,7 +10,7 @@ const { categorySlug, class: _class = '' } = Astro.props as Props;
 
 // proofs コレクションから該当カテゴリのアイテムを抽出
 const allProofs = await getCollection('proofs');
-const proofs = allProofs.filter((p) => p.slug.split('/')[0] === categorySlug);
+const proofs = allProofs.filter((p) => p.id.split('/')[0] === categorySlug);
 ---
 
 <section class={`mt-8 ${_class}`}>
@@ -20,12 +20,12 @@ const proofs = allProofs.filter((p) => p.slug.split('/')[0] === categorySlug);
   <div class="grid gap-4 md:grid-cols-2">
     {proofs.map((p) => (
       <a
-        href={`/proof/${p.slug}/`}
+      href={`/proof/${p.id}/`}
         class="card p-4 border rounded-lg hover:shadow transition"
       >
         <h3 class="font-semibold">
           {/* front‑matter に title があればそれを、なければ slug の後半を表示 */}
-          {p.data.title ?? p.slug.split('/')[1]}
+          { p.data.title ?? p.id.split('/')[1] }
         </h3>
         <p class="text-sm text-gray-400">
           難易度: {p.data.difficulty}
