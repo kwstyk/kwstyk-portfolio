@@ -5,33 +5,60 @@ import react    from '@astrojs/react';
 import mdx      from '@astrojs/mdx';
 import vercel   from '@astrojs/vercel';
 
+// カスタムプラグイン
+import remarkDirective        from 'remark-directive';
+import remarkGfm              from 'remark-gfm';
+import remarkKwstykCallout    from './plugins/remark-kwstyk-callout.js';
+import remarkInclude          from './plugins/remark-include.js';
+import rehypeCopyButton       from './plugins/rehype-copy-button.js';
+import rehypeExternalLinks    from 'rehype-external-links';
+
 export default defineConfig(({ command }) => ({
   // build 時だけ Vercel Adapter を有効化
   adapter: command === 'build' ? vercel() : undefined,
 
-  // Astro の各種インテグレーション
   integrations: [
-    content(),
-    tailwind(),              // Tailwind CSS
-    react(),                 // React コンポーネント
-    mdx({                    // MDX をページとコンテンツコレクションで扱う
-      extension: '.mdx'
+    tailwind(),
+    react(),
+    mdx({
+      extension: '.mdx',
+      // MDX／Markdown 両方にプラグインを適用
+      remarkPlugins: [
+        remarkDirective,
+        remarkGfm,
+        remarkKwstykCallout,
+        remarkInclude,
+      ],
+      rehypePlugins: [
+        rehypeExternalLinks,  // 外部リンク自動 target="_blank"
+        rehypeCopyButton,     // Copy ボタン注入
+      ],
     }),
-    // ※vercel() は integrations 配列には入れない
   ],
 
-  // Content Collections で読み込む拡張子
+  // Astro 組み込み Content Collections 設定
   content: {
-    entryExtensions: ['.md', '.mdx']
+    entryExtensions: ['.md', '.mdx'],
+    markdown: {
+      remarkPlugins: [
+        remarkDirective,
+        remarkGfm,
+        remarkKwstykCallout,
+        remarkInclude,
+      ],
+      rehypePlugins: [
+        rehypeExternalLinks,
+        rehypeCopyButton,
+      ],
+    },
   },
 
-  // Vite の設定
   vite: {
     resolve: {
       alias: {
         // Vercel OG 用ランタイムのエイリアス
-        '@vercel/og/jsx-runtime': '@vercel/og'
-      }
-    }
-  }
+        '@vercel/og/jsx-runtime': '@vercel/og',
+      },
+    },
+  },
 }));

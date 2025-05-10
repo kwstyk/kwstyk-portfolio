@@ -8,6 +8,7 @@ import categories from '@/data/categories.json';
 import Card      from '@/components/molecules/Card.astro';
 import ProofList from '@/components/molecules/ProofList.astro';
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 
 // ■ getStaticPaths ────────────────────────────────
 export async function getStaticPaths() {
@@ -18,6 +19,7 @@ export async function getStaticPaths() {
 }
 
 interface Props {
+  key?: number; // リスト用キー
   category: {
     id: string;
     slug: string;
@@ -32,18 +34,18 @@ interface Props {
 const { category } = Astro.props as Props;
 
 // ■ Intro .mdx を動的 import（存在しなくても OK） ─────
- const introModules = import.meta.glob(
-   './src/content/descriptions/structure/*/intro.mdx',   // ← “./” にするだけ
-   { eager: true }
- ) as Record<string, { default: any }>;
+const introModules = import.meta.glob(
+  './src/content/descriptions/structure/*/intro.mdx',
+  { eager: true }
+) as Record<string, { default: any }>;
 
- const key = `./src/content/descriptions/structure/${category.slug}/intro.mdx`;
-const Intro = introModules[key]?.default ?? null;  // ← 未定なら null
+const key = `./src/content/descriptions/structure/${category.slug}/intro.mdx`;
+const Intro = introModules[key]?.default ?? null;
 
 // ■ このカテゴリに属する Proof 一覧を取得 ───────────
 const allProofs = await getCollection('proofs');
-const entries   = allProofs.filter(
-  (p) => p.data.category === category.slug
+const entries: CollectionEntry<'proofs'>[] = allProofs.filter(
+  (p: CollectionEntry<'proofs'>) => p.data.category === category.slug
 );
 ---
 
@@ -71,11 +73,11 @@ const entries   = allProofs.filter(
 
   <!-- 大カードグリッド -->
   <section class="card-grid">
-    {entries.map((entry) => (
+    {entries.map((entry: CollectionEntry<'proofs'>) => (
       <Card
         title={entry.data.title}
         description={entry.data.description}
-        href={`/proof/${entry.slug}`}          
+        href={`/proof/${entry.id.replace(/\.mdx?$/, '')}`}
         icon={entry.data.icon}
         badge={entry.data.badge}
         color={category.color}
@@ -86,8 +88,9 @@ const entries   = allProofs.filter(
     ))}
 
     {/* 空きスペース用ダミーカード */}
-    {Array.from({ length: 2 }).map(() => (
+    {Array.from({ length: 2 }).map((_, idx: number) => (
       <Card
+        key={idx}
         title="Coming Soon"
         description="ただいま準備中です"
         href="#"

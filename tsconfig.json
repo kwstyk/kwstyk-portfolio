@@ -1,6 +1,6 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": ["src", ".astro/types.d.ts"],
+  "include": ["src", ".astro/types.d.ts","global.d.ts","env.d.ts"],
   "exclude": ["dist"],
   "compilerOptions": {
     // JSX は使わないので特別な設定は不要ですが、

@@ -1,0 +1,33 @@
+name: Proof v1.3 CI
+
+on:
+  push:
+    paths:
+      - 'src/content/proofs/**'
+      - 'scripts/validate-frontmatter.cjs'
+      - '.github/workflows/proof-ci.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+      - run: pnpm install --frozen-lockfile
+      - name: Typecheck & Lint
+        run: pnpm run lint && pnpm run typecheck
+      - name: Convert MDX→MD
+        run: pnpm run convert:proof
+      - name: Validate front-matter
+        run: pnpm run validate:frontmatter
+      - name: Markdown lint
+        run: npx remark src/content/proofs --ext .md --no-config
+
+  build:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+      - run: pnpm install
+      - run: pnpm run build

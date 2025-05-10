@@ -8,13 +8,17 @@
     "preview": "astro preview",
     "lint": "eslint --ext .astro,.ts,.js src/",
     "typecheck": "tsc --noEmit && astro check",
-    "rss-to-json": "node ./scripts/rss-to-json.js"
+    "rss-to-json": "node ./scripts/rss-to-json.js",
+    "convert:proof": "node scripts/mdx2md.cjs",
+    "validate:frontmatter": "node scripts/validate-frontmatter.cjs"
   },
   "dependencies": {
     "@types/react": "^18.3.20",
     "@types/react-dom": "^18.2.19",
     "@vercel/og": "^0.6.8",
     "clsx": "^2.1.0",
+    "fast-glob": "^3.3.3",
+    "gray-matter": "^4.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "rss-parser": "^3.13.0",
@@ -36,9 +40,17 @@
     "eslint": "^9",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-astro": "^1",
+    "hastscript": "^9.0.1",
     "prettier": "^3.5.3",
+    "rehype-external-links": "^3.0.0",
+    "remark": "^15.0.1",
+    "remark-cli": "^12.0.1",
+    "remark-directive": "^4.0.0",
+    "remark-external-links": "^10.0.0",
+    "remark-gfm": "^4.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
+    "unist-util-visit": "^5.0.0",
     "zod": "^3.24.3"
   }
 }

@@ -1,6 +1,7 @@
 ---
 // src/components/molecules/ProofList.astro
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 
 export interface Props {
   categorySlug: string;
@@ -10,7 +11,7 @@ const { categorySlug, class: _class = '' } = Astro.props as Props;
 
 // proofs コレクションから該当カテゴリのアイテムを抽出
 const allProofs = await getCollection('proofs');
-const proofs = allProofs.filter((p) => p.id.split('/')[0] === categorySlug);
+const proofs = allProofs.filter((p: CollectionEntry<'proofs'>) => p.id.split('/')[0] === categorySlug);
 ---
 
 <section class={`mt-8 ${_class}`}>
@@ -18,7 +19,7 @@ const proofs = allProofs.filter((p) => p.id.split('/')[0] === categorySlug);
     このカテゴリの Proof（{proofs.length} 件）
   </h2>
   <div class="grid gap-4 md:grid-cols-2">
-    {proofs.map((p) => (
+    {proofs.map((p: CollectionEntry<'proofs'>) => (
       <a
       href={`/proof/${p.id}/`}
         class="card p-4 border rounded-lg hover:shadow transition"

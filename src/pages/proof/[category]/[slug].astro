@@ -1,0 +1,54 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import ProofPageTemplate from '@/components/templates/ProofPageTemplate.astro';
+
+export const prerender = true;
+
+/**
+ * getStaticPaths で proofs コレクションからカテゴリとスラッグを取得
+ */
+export async function getStaticPaths() {
+  const proofs = await getCollection('proofs');
+  return proofs.map((entry: CollectionEntry<'proofs'>) => {
+    // entry.id は "category/slug.md" 形式なので拡張子を除去
+    const id = entry.id.replace(/\.mdx?$/, '');
+    const [category, slug] = id.split('/');
+    return {
+      params: { category, slug },
+      props:  { entry },
+    };
+  });
+}
+
+interface Props {
+  entry: CollectionEntry<'proofs'>;
+}
+
+const { entry } = Astro.props as Props;
+const { Content } = await entry.render();
+const { data } = entry;
+---
+
+<ProofPageTemplate
+  title={data.title}
+  difficulty={data.difficulty}
+  repro={data.repro}
+  stack={data.stack}
+  updated={data.updated}
+  ci_status={data.ci_status ?? ''}
+  tags={data.tags ?? []}
+>
+  <Content />
+
+  {data.stories && (
+    <div slot="footer">
+      <h2>関連ストーリー</h2>
+      <ul class="list-disc ml-6">
+        {data.stories.map((id: string) => (
+          <li><a href={`/story/${id}/`} class="underline">{id}</a></li>
+        ))}
+      </ul>
+    </div>
+  )}
+</ProofPageTemplate>
