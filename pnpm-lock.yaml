@@ -75,6 +75,9 @@ importers:
       astro-eslint-parser:
         specifier: ^1
         version: 1.2.2
+      autoprefixer:
+        specifier: ^10.4.21
+        version: 10.4.21(postcss@8.5.3)
       eslint:
         specifier: ^9
         version: 9.25.1(jiti@2.4.2)
