@@ -1,7 +1,7 @@
 // tailwind.config.mjs
 
 export default {
-  content: ['./src/**/*.{astro,mdx,tsx}'],
+  content: ["./src/**/*.{astro,html,js,jsx,ts,tsx,md,mdx}"],
   darkMode: 'media',
   theme: {
     extend: {
@@ -31,5 +31,5 @@ export default {
     'bg-purple-500','text-white',
     'bg-gray-400','text-white',
   ],
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')],
 };
