@@ -70,17 +70,19 @@ const entries = allProofs.filter(p => p.data.category === category.slug);
     <span class="font-medium text-blue-400">{Math.min(5, entries.length)}</span> 件
   </h3>
   <ProofList categorySlug={category.slug} type="latest" count={5}
-    class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" />
+    class="" />
 
   <!-- 人気のProofセクション -->
-  <h3 class="text-lg font-semibold mt-10 mb-4">
+  <h3 class="text-lg font-semibold mt-8 mb-4">
     人気のProof&nbsp;
     <span class="font-medium text-green-400">{Math.min(5, entries.length)}</span> 件
   </h3>
   <ProofList categorySlug={category.slug} type="popular" count={5}
-    class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" />
+    class="" />
 
   <!-- 全 Proof グリッド -->
+  <h3 class="text-lg font-semibold mt-8 mb-4">
+    全Proof: <span class="font-medium text-red-400">{entries.length}</span> 件&nbsp;
   <section class="card-grid">
     {entries.map(entry => (
       <Card
@@ -89,7 +91,6 @@ const entries = allProofs.filter(p => p.data.category === category.slug);
         href={`/proof/${entry.id.replace(/\.mdx?$/, '')}`}
         icon={entry.data.icon}
         badge={entry.data.badge}
-        color={category.color}
         difficulty={entry.data.difficulty}
         repro={entry.data.repro}
         updated={entry.data.updated}
@@ -97,12 +98,10 @@ const entries = allProofs.filter(p => p.data.category === category.slug);
     ))}
     {Array.from({ length: 2 }).map((_, idx) => (
       <Card
-        key={idx}
         title="Coming Soon"
         description="ただいま準備中です"
         href="#"
         badge=""
-        color="var(--accent)"
         class="opacity-50 pointer-events-none"
       />
     ))}

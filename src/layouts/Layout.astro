@@ -58,15 +58,26 @@ const seo = generateMeta({
   mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
 </script>
   <!-- ページ固有コンテンツ -->
-  <!-- ここで px-4 に加え、スマホ大画面 (sm) で px-6、タブレット以上 (md) で px-8 を設定 -->
-  <main class:list={['flex-1', 'px-4', 'sm:px-6', 'md:px-8', 'py-8', className]}>
+  <!-- 全幅 w-full → 最大幅 max-w-4xl → 中央寄せ mx-auto -->
+  <main
+    class:list={[
+      'flex-1',
+      'w-full',        // ビューポート幅いっぱい（小画面用）
+      'max-w-4xl',     // 最大幅を 4xl に制限
+      'mx-auto',       // 左右自動マージンで中央寄せ
+      'px-4',          // 小画面時の左右パディング
+      'sm:px-6',       // sm 以上で左右パディングを増やす
+      'md:px-8',       // md 以上でさらにパディングを増やす
+      'py-8',
+      className
+    ]}
+  >
  <slot />
   </main>
 
   {Astro.slots.has('footer') && (
     <footer class="border-t border-border bg-bg-start">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8">
-          <script>document.body.classList.add('debug-css')</script>
         <slot name="footer" />
       </div>
     </footer>

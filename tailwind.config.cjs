@@ -79,5 +79,22 @@ module.exports = {
   ],
   plugins: [
     typography,   // ← require() ではなく ESM インポートした変数をそのまま渡す
+        require('@tailwindcss/typography'),
+    function ({ addComponents, theme }) {
+      addComponents({
+        '.card-base': {
+     '@apply bg-[var(--card-bg)] \
+             border-2 border-[var(--card-accent)] \
+             border-[var(--card-accent)] \
+             rounded-2xl \
+             shadow-md \
+             transform transition-all duration-200 \
+             hover:shadow-xl \
+             hover:-translate-y-1': {},
+
+          // 内側の余白は各カード側で p-4 / p-6 など好きに足す
+        },
+      });
+    },
   ],
 };

@@ -48,8 +48,7 @@ if (type === 'latest') {
 ---
 
 <section class={`mt-8 ${_class}`}>  
-  <!-- ３列グリッド、スマホは1列、タブレットは2列、デスクトップは3列 -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     {proofs.map((proof: CollectionEntry<'proofs'>) => (
       <SmallProofCard
         title={proof.data.title ?? proof.id.split('/')[1]}

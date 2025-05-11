@@ -9,7 +9,7 @@ import '@/styles/structure.css';
 <Layout class="page-background">
   <Hero title="Structure" subtitle="技術要素 × 証明プロジェクトを体系化" />
 
-  <section class="card-grid">
+  <section class="card-grid items-stretch">
     {categories.map((cat) => (
       <Card
         title={cat.title}
@@ -17,7 +17,6 @@ import '@/styles/structure.css';
         href={`/structure/${cat.slug}`}
         icon={cat.icon}
         badge={cat.badge}
-        color={cat.color}
       />
     ))}
   </section>
