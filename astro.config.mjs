@@ -1,5 +1,6 @@
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
+import path from 'path';
 import tailwind from '@astrojs/tailwind';
 import react    from '@astrojs/react';
 import mdx      from '@astrojs/mdx';
@@ -56,6 +57,7 @@ export default defineConfig(({ command }) => ({
   vite: {
     resolve: {
       alias: {
+        '@': path.resolve('.', 'src'),
         // Vercel OG 用ランタイムのエイリアス
         '@vercel/og/jsx-runtime': '@vercel/og',
       },
