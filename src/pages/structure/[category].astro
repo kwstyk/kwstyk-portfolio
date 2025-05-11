@@ -56,14 +56,17 @@ const entries: CollectionEntry<'proofs'>[] = allProofs.filter(
   siteName="KWSTYK Portfolio"
   pageTitle={`${category.title} | Structure`}
 >
-  <!-- ヘッダー -->
-  <header class="mb-6">
-    <h1 class="text-2xl font-bold flex items-center gap-2">
-      {category.icon && <span class="text-3xl">{category.icon}</span>}
-      {category.title}
-    </h1>
-    <p class="text-text/75 mt-1">{category.description}</p>
-  </header>
+<!-- ヘッダー -->
+<header class="mb-6">
+  <h1 class="text-2xl font-bold flex items-center gap-2">
+    {category.icon && <span class="text-3xl">{category.icon}</span>}
+    {category.title}
+  </h1>
+  <p class="text-text/75 mt-1">{category.description}</p>
+  <p class="text-sm text-gray-400 mt-2">
+    全 Proof: <span class="font-medium text-blue-400">{entries.length}</span> 件
+  </p>
+</header>
 
   <!-- Intro セクション -->
   {Intro && (
@@ -72,8 +75,35 @@ const entries: CollectionEntry<'proofs'>[] = allProofs.filter(
     </section>
   )}
 
-  <!-- 小カード一覧 -->
-  <ProofList categorySlug={category.slug} class="mt-12" />
+<!-- 最新の更新セクション -->
+<h3 class="text-lg font-semibold mt-8 mb-4">
+  最新の更新&nbsp;
+  <span class="font-medium text-blue-400">
+    {Math.min(5, entries.length)}
+  </span>
+  件
+</h3>
+  <ProofList
+    categorySlug={category.slug}
+    type="latest"
+    count={5}
+    class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+  />
+
+<!-- 人気のProofセクション -->
+<h3 class="text-lg font-semibold mt-10 mb-4">
+  人気のProof&nbsp;
+  <span class="font-medium text-green-400">
+    {Math.min(5, entries.length)}
+  </span>
+  件
+</h3>
+  <ProofList
+    categorySlug={category.slug}
+    type="popular"
+    count={5}
+    class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+  />
 
   <!-- 大カードグリッド -->
   <section class="card-grid">
@@ -94,7 +124,7 @@ const entries: CollectionEntry<'proofs'>[] = allProofs.filter(
     {/* 空きスペース用ダミーカード */}
     {Array.from({ length: 2 }).map((_, idx) => (
       <Card
-        key={idx}
+      
         title="Coming Soon"
         description="ただいま準備中です"
         href="#"

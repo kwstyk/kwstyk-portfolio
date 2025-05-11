@@ -1,0 +1,40 @@
+---
+// src/components/molecules/SmallProofCard.astro
+// 小カード用にデザイン調整
+
+interface Props {
+  title:      string;
+  href:       string;
+  updated?:   string;
+  difficulty?: string;
+  class?:     string;
+}
+const { title, href, updated, difficulty, class: className = '' } = Astro.props as Props;
+---
+<a
+  href={href}
+  class={`
+    card
+    snap-start
+    ${className}
+  `}
+>
+  <!-- タイトル -->
+  <h4 class="text-base font-medium text-gray-900 dark:text-gray-100 truncate mb-2">
+    {title}
+  </h4>
+
+  <!-- 難易度 -->
+  {difficulty && (
+    <p class="text-sm text-blue-600 dark:text-blue-400 mb-1">
+      難易度: {difficulty}
+    </p>
+  )}
+
+  <!-- 更新日 -->
+  {updated && (
+    <p class="text-xs text-gray-500 dark:text-gray-400">
+      更新: {new Date(updated).toLocaleDateString('ja-JP')}
+    </p>
+  )}
+</a>
