@@ -27,3 +27,6 @@ pnpm-debug.log*
 .eslintcache
 
 .vercel
+
+# pnpm のロックファイルは必ずコミットする
+!pnpm-lock.yaml
