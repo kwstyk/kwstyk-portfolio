@@ -1,25 +1,82 @@
 ---
 import '@/styles/navbar.css';
+// ナビ項目定義
 const links = [
   { href: '/structure', label: 'Structure' },
-  { href: '/proof',      label: 'Proof' },
-  { href: '/story',      label: 'Story' },
+  { href: '/proof',     label: 'Proof'     },
+  { href: '/story',     label: 'Story'     },
 ];
 ---
-<nav>
-  <ul class="flex gap-6 items-center">
-    {links.map(l => (
-      <li><a href={l.href} class="hover:underline">{l.label}</a></li>
-    ))}
-  </ul>
+
+<nav class="site-header">
+  <!-- Skip-to-Content -->
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <div class="navbar-inner">
+    <!-- ロゴ／サイト名 -->
+    <a href="/" class="logo">KWSTYK</a>
+
+    <!-- ハンバーガーボタン -->
+    <button id="nav-toggle" class="hamburger" aria-label="メニューを開閉" aria-expanded="false">
+      <!-- ハンバーガーアイコン -->
+      <svg id="icon-open" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+      </svg>
+      <!-- クローズアイコン -->
+      <svg id="icon-close" class="icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+
+    <!-- メニューリスト：常に折りたたみ -->
+    <ul id="nav-menu" class="navbar-links hidden">
+      {links.map(({ href, label }) => (
+        <li>
+          <a href={href} class="navbar-link">{label}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
 </nav>
 
-<script is:inline>
-  // 二重ヘッダーがあったら 2 個め以降を削除
+<script is:inline type="module">
   document.addEventListener('DOMContentLoaded', () => {
-    const headers = document.querySelectorAll('.site-header');
-    headers.forEach((el, idx) => {
-      if (idx > 0) el.remove();
+    const toggle    = document.getElementById('nav-toggle');
+    const menu      = document.getElementById('nav-menu');
+    const openIcon  = document.getElementById('icon-open');
+    const closeIcon = document.getElementById('icon-close');
+    if (!toggle || !menu || !openIcon || !closeIcon) return;
+
+    // 1. 開閉クリック
+    toggle.addEventListener('click', () => {
+      const isHidden = menu.classList.toggle('hidden');
+      toggle.setAttribute('aria-expanded', String(!isHidden));
+      openIcon.classList.toggle('hidden');
+      closeIcon.classList.toggle('hidden');
+    });
+
+    // 2. 現在ページリンク強調
+   /** @type {NodeListOf<HTMLAnchorElement>} */
+   const navLinks = document.querySelectorAll('.navbar-link');
+   navLinks.forEach((a) => {
+     if (a.getAttribute('href') === window.location.pathname) {
+       a.setAttribute('aria-current', 'page');
+     }
+  });
+
+    // 3. Escキーで閉じる
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+        toggle.setAttribute('aria-expanded', 'false');
+        openIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+        toggle.focus();
+      }
     });
   });
+  
 </script>
