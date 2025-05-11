@@ -14,8 +14,13 @@ interface Props {
 }
 const { title, difficulty, repro = [], stack = [], ci_status } = Astro.props as Props;
 ---
-<section class="mx-auto w-full max-w-4xl py-12 px-6 text-center space-y-8">
-  <Heading level={1}>{title}</Heading>
+<section class="mx-auto w-full max-w-3xl pt-8 pb-12 px-4 sm:px-6 lg:px-8 text-center space-y-6">
+  <Heading
+    level={1}
+    className ="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold"
+  >
+    {title}
+  </Heading>
   <div class="flex flex-wrap justify-center gap-2">
     <DifficultyBadge level={difficulty} />
     {repro.map(m => <ReproMethodBadge method={m} />)}
@@ -25,8 +30,9 @@ const { title, difficulty, repro = [], stack = [], ci_status } = Astro.props as 
       {stack.map(s => <StackChip name={s} />)}
     </div>
   )}
+
   {ci_status && (
-    <div class="flex flex-col items-center gap-2">
+    <div class="flex justify-center mt-4">
       <StatusBadge src={ci_status} />
     </div>
   )}
