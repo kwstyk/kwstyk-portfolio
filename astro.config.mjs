@@ -19,7 +19,9 @@ export default defineConfig(({ command }) => ({
   adapter: command === 'build' ? vercel() : undefined,
 
   integrations: [
-    tailwind(),
+    tailwind({
+      config: './tailwind.config.cjs'
+    }),
     react(),
     mdx({
       extension: '.mdx',

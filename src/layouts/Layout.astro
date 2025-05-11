@@ -1,6 +1,6 @@
 ---
 // src/layouts/Layout.astro
-import '@/styles/globals.css';
+import '../styles/globals.css';
 import Navbar from '@/components/molecules/Navbar.astro';
 import { generateMeta } from '@/utils/seo';
 
@@ -46,6 +46,7 @@ const seo = generateMeta({
   <meta name="twitter:card"       content="summary_large_image" />
 </head>
 <body class="bg-bg-start text-text flex flex-col min-h-screen">
+  
   <!-- ヘッダー -->
   <header class="sticky top-0 z-50 bg-bg-mid/90 backdrop-blur border-b border-border">
     <div class="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 md:px-8 py-4">
@@ -56,12 +57,13 @@ const seo = generateMeta({
   <!-- ページ固有コンテンツ -->
   <!-- ここで px-4 に加え、スマホ大画面 (sm) で px-6、タブレット以上 (md) で px-8 を設定 -->
   <main class:list={['flex-1', 'px-4', 'sm:px-6', 'md:px-8', 'py-8', className]}>
-    <slot />
+ <slot />
   </main>
 
   {Astro.slots.has('footer') && (
     <footer class="border-t border-border bg-bg-start">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8">
+          <script>document.body.classList.add('debug-css')</script>
         <slot name="footer" />
       </div>
     </footer>

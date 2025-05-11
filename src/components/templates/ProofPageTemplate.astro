@@ -1,38 +1,37 @@
 ---
+// src/components/templates/ProofPageTemplate.astro
 import Layout from '@/layouts/Layout.astro';
 import ProofHero from '@/components/organisms/ProofHero.astro';
 import ProofMetaCard from '@/components/organisms/ProofMetaCard.astro';
 
-// Props 型定義
 interface Props {
-  title:        string;                             // ページタイトル
-  difficulty?:  'easy' | 'medium' | 'hard' | 'expert'; // 難易度
-  repro:        ('docker' | 'terraform' | 'vagrant' | 'manual')[]; // 再現方法
-  stack:        string[];                           // 使用スタック
-  updated:      string;                             // 更新日 (YYYY-MM-DD)
-  ci_status?:   string;                             // CIバッジURL
-  tags?:        string[];                           // タグリスト
-  class?:       string;                             // 追加クラス
+  title:       string;
+  difficulty?: 'easy' | 'medium' | 'hard' | 'expert';
+  repro:       ('docker' | 'terraform' | 'vagrant' | 'manual')[];
+  stack:       string[];
+  updated:     string;
+  ci_status?:  string;
+  tags?:       string[];
+  class?:      string;
 }
 
-// frontmatter からのデータ受け取り
 const {
   title,
   difficulty,
   repro,
   stack,
-  ci_status: ciStatus,  // Frontmatter の ci_status を内部変数 ciStatus にリネーム
+  ci_status: ciStatus,
   updated,
-  tags = [],            // タグが無ければ空配列
-  class: className,     // class を className にリネーム
+  tags = [],
+  class: className = '',
 } = Astro.props as Props;
 ---
 
-<!-- Layout で共通ヘッダー/フッターをラップ -->
-<Layout siteName="KWSTYK Portfolio" pageTitle={`Proof | ${title}`} class={className}>
-  <!-- メインコンテンツ領域 -->
-  <section class="max-w-4xl mx-auto px-4 py-12 space-y-8">
-    <!-- ProofHero: タイトル／バッジ／CIステータス -->
+<Layout siteName="KWSTYK Portfolio" pageTitle={`Proof | ${title}`}>
+  <main class="flex-1 px-4 sm:px-6 lg:px-8 xl:px-16 py-8">
+  <!-- ヒーローセクション -->
+  <section class="container mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+    <div class="max-w-2xl mx-auto text-center">
     <ProofHero
       title={title}
       difficulty={difficulty}
@@ -40,16 +39,18 @@ const {
       stack={stack}
       ci_status={ciStatus}
     />
-
-    <!-- ProofMetaCard: 更新日／タグ -->
-    <ProofMetaCard updated={updated} tags={tags} />
-
-    <!-- Markdown 本文: remark/rehype の変換結果がスロット展開される -->
-    <article class="prose prose-invert mt-6" lang="ja">
-      <slot />
-    </article>
-
-    <!-- フッター領域: Story リンク等を挿入可能 -->
-    <slot name="footer" />
-  </section>
+    </div>
+    <!-- 本文＋メタ -->
+    <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr,250px] gap-8">
+        <article class="prose prose-invert" lang="ja">
+          <slot />
+        </article>
+        <slot name="footer" />
+      </div>
+      <aside class="space-y-6">
+        <ProofMetaCard updated={updated} tags={tags} />
+      </aside>
+    </div>
+  </main>
 </Layout>
