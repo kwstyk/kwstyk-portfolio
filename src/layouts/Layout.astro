@@ -53,7 +53,10 @@ const seo = generateMeta({
       <Navbar />
     </div>
   </header>
-
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+</script>
   <!-- ページ固有コンテンツ -->
   <!-- ここで px-4 に加え、スマホ大画面 (sm) で px-6、タブレット以上 (md) で px-8 を設定 -->
   <main class:list={['flex-1', 'px-4', 'sm:px-6', 'md:px-8', 'py-8', className]}>
@@ -68,5 +71,14 @@ const seo = generateMeta({
       </div>
     </footer>
   )}
+  <!-- Mermaid をクライアントで初期化 -->
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'neutral',
+      securityLevel: 'loose'
+    });
+  </script>
 </body>
 </html>

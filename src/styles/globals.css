@@ -93,6 +93,14 @@ body {
     object-fit: contain !important;
   }
 }
+
+/* Mermaid の図をレスポンシブ幅に */
+.mermaid {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
 /*
 .debug-css {
   background: hotpink !important;

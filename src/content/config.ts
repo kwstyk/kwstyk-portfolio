@@ -46,4 +46,17 @@ export const collections = {
       // 必要に応じてフィールドを追加
     }),
   }),
+
+    /* -------- Intro markdown -------- */
+  structureIntro: defineCollection({
+    type: 'content',
+    schema: z.object({
+      title:       z.string(),
+      description: z.string(),
+      updated:     z.string().optional(),
+    }),
+  }),
+  
 } as Record<string, ReturnType<typeof defineCollection>>;
+
+

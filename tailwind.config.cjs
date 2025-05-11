@@ -6,6 +6,48 @@ module.exports = {
   darkMode: 'media',
   theme: {
     extend: {
+          // ここから追加
+      typography: {
+        invert: {
+          css: {
+            // 見出しのマージンとスクロールマージン
+            'h1, h2, h3, h4, h5, h6': {
+              'scroll-margin-top': '4rem',
+              'margin-top': '1.25em',
+              'margin-bottom': '0.75em',
+            },
+            // 段落の行間
+            'p': {
+              'line-height': '1.7',
+            },
+            // コードブロックの背景と余白
+            'pre': {
+              backgroundColor: '#1e293b', /* slate-800 */
+              color: '#f1f5f9',          /* slate-100 */
+              padding: '1rem',
+              borderRadius: '0.5rem',
+            },
+            // インラインコード
+            'code': {
+              backgroundColor: '#334155', /* slate-700 */
+              padding: '0.2rem 0.4rem',
+              borderRadius: '0.25rem',
+            },
+            // リストマーカー
+            'ul > li::marker': {
+              color: '#2563eb', /* blue-600 */
+            },
+            // テーブル罫線
+            'table thead th': {
+              borderBottomColor: '#475569', /* slate-600 */
+            },
+            'table tbody td': {
+              borderBottomColor: '#475569',
+            },
+          },
+        },
+      },
+      // ここまで追加
       colors: {
         bg: {
           start: 'rgb(var(--bg-start))',
