@@ -53,7 +53,7 @@ const seo = generateMeta({
       <Navbar />
     </div>
   </header>
-<script type="module">
+<script type="module" is:inline>
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
   mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
 </script>
@@ -83,7 +83,7 @@ const seo = generateMeta({
     </footer>
   )}
   <!-- Mermaid をクライアントで初期化 -->
-  <script type="module">
+  <script type="module" is:inline>
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
     mermaid.initialize({
       startOnLoad: true,

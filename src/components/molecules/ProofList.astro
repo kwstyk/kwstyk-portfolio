@@ -27,9 +27,6 @@ const categoryProofs = allProofs.filter(
   (p: CollectionEntry<'proofs'>) => p.data.category === categorySlug
 );
 
-// 合計件数
-const totalCount = categoryProofs.length;
-
 // ソート & スライス
 let proofs: CollectionEntry<'proofs'>[];
 if (type === 'latest') {
