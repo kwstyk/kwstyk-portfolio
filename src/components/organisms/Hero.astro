@@ -32,18 +32,14 @@ const { title, subtitle, buttons = [] } = Astro.props;
       overflow-wrap: break-word;
     }
   }
-  
-  /* 改行ヒント用 wbr を入れているならこれでOK */
-  .hero-title wbr {
-    display: none; /* ブラウザにだけ効くヒントなので見えなくてOK */
-  }
 
 </style>
 <section class="hero">
   <div class="hero-inner">
-    <slot name="title" />
+    <slot name="title">
     <h1 class="hero-title heading-responsive">{title}</h1>
     </slot>
+
     <p class="hero-subtitle prose-responsive">{subtitle}</p>
 
     {buttons.length > 0 && (
