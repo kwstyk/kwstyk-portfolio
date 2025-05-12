@@ -2,7 +2,7 @@
 // src/layouts/Layout.astro
 import '../styles/globals.css';
 import Navbar from '@/components/molecules/Navbar.astro';
-import { generateMeta } from '@/utils/seo';
+import { generateSeo  } from '@/utils/seo';
 
 const {
   siteName = 'My Portfolio', 
@@ -20,11 +20,12 @@ const {
   ogImage?: string;
 };
 
-const seo = generateMeta({
-  title: pageTitle ?? siteName,
-  description,
-  pathname,
-  imagePath: ogImage,
+// generateSeo を使ってフルタイトル／デフォルト description／OGP URL を補完
+const seo = generateSeo({
+  title:       pageTitle ?? siteName,
+  description,              // ページごとの説明 or デフォルトにフォールバック
+  pathname,                 // 例: '/proof'
+  imagePath: ogImage,       // 例: '/api/og?title=Landing'
 });
 ---
 
@@ -47,49 +48,43 @@ const seo = generateMeta({
 </head>
 <body class="bg-bg-start text-text flex flex-col min-h-screen">
   
-  <!-- ヘッダー -->
-  <header class="sticky top-0 z-50 bg-bg-mid/90 backdrop-blur border-b border-border">
-    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 md:px-8 py-4">
-      <Navbar />
-    </div>
-  </header>
-<script type="module" is:inline>
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-</script>
-  <!-- ページ固有コンテンツ -->
-  <!-- 全幅 w-full → 最大幅 max-w-4xl → 中央寄せ mx-auto -->
-  <main
-    class:list={[
-      'flex-1',
-      'w-full',        // ビューポート幅いっぱい（小画面用）
-      'max-w-4xl',     // 最大幅を 4xl に制限
-      'mx-auto',       // 左右自動マージンで中央寄せ
-      'px-4',          // 小画面時の左右パディング
-      'sm:px-6',       // sm 以上で左右パディングを増やす
-      'md:px-8',       // md 以上でさらにパディングを増やす
-      'py-8',
-      className
-    ]}
-  >
- <slot />
-  </main>
-
-  {Astro.slots.has('footer') && (
-    <footer class="border-t border-border bg-bg-start">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8">
-        <slot name="footer" />
+    <!-- ヘッダー -->
+    <header class="sticky top-0 z-50 bg-bg-mid/90 backdrop-blur border-b border-border">
+      <div class="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 md:px-8 py-4">
+        <Navbar />
       </div>
-    </footer>
-  )}
-  <!-- Mermaid をクライアントで初期化 -->
-  <script type="module" is:inline>
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'neutral',
-      securityLevel: 'loose'
-    });
-  </script>
-</body>
+    </header>
+
+    <!-- Mermaid.js 初期化スクリプト -->
+    <script type="module" is:inline>
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+    </script>
+
+    <!-- ページ固有コンテンツ -->
+    <main
+      class:list={[
+        'flex-1',
+        'w-full',
+        'max-w-4xl',
+        'mx-auto',
+        'px-4',
+        'sm:px-6',
+        'md:px-8',
+        'py-8',
+        className
+      ]}
+    >
+      <slot />
+    </main>
+
+    <!-- フッターをスロットで分岐 -->
+    {Astro.slots.has('footer') && (
+      <footer class="border-t border-border bg-bg-start">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8">
+          <slot name="footer" />
+        </div>
+      </footer>
+    )}
+  </body>
 </html>

@@ -9,7 +9,7 @@ import Pagination from '@/components/molecules/Pagination.astro';
 
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { generateMeta } from '@/utils/seo';   // 追加
+import { generateSeo } from '@/utils/seo';   // 追加
 
 // Proof データ取得
 const allProofs = await getCollection('proofs');
@@ -23,7 +23,7 @@ const completionRate = totalCount
 const categories = Array.from(new Set(allProofs.map(p => p.slug.split('/')[0])));
 
 // generateMeta に渡すプロパティを用意
-const meta = generateMeta({
+const meta = generateSeo({
   title:    'Proof – KWSTYK Portfolio',
   description:
     'Docker から Terraform まで再現できる技術検証ラボをカテゴリ別・難易度別に公開',
