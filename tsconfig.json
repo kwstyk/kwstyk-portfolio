@@ -5,8 +5,10 @@
   "compilerOptions": {
     // JSX は使わないので特別な設定は不要ですが、
     // 万一 JSX を残す場合はこの２行を入れておくと安心です:
-    "jsx": "react-jsx",
-    "jsxImportSource": "@vercel/og",
+   /* "jsx": "react-jsx",
+    "jsxImportSource": "@vercel/og", */
+    "jsx": "preserve",
+   "jsxImportSource": "astro/jsx-runtime",
     "baseUrl": ".",
     "paths": { "@/*": ["./src/*"] },
     "moduleResolution": "node",  
