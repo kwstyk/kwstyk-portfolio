@@ -13,8 +13,29 @@ const reproMethods = ['docker','terraform','vagrant','manual'];
   }
   /* eslint-enable astro/no-unused-css-selector */
 
-  .filter-bar       { @apply mb-6 bg-[#112240] p-4 rounded flex flex-wrap gap-4; @apply max-w-screen-lg mx-auto;}
-  .filter-group     { @apply flex items-center gap-2; }
+    /* フィルターバー全体 */
+  .filter-bar {
+    @apply mb-6 bg-[#112240] p-4 rounded max-w-screen-lg mx-auto;
+    /* デフォルト（スマホ幅）: 縦積み */
+    @apply flex flex-col flex-wrap gap-4;
+  }
+  @media (min-width: 640px) {
+    .filter-bar {
+      /* タブレット以上: 横並び */
+      @apply flex-row items-center justify-start;
+    }
+  }
+    /* 各フィルターグループ */
+  .filter-group {
+    /* スマホ幅: ラベルの下にコントロール */
+    @apply flex flex-col gap-2;
+  }
+  @media (min-width: 640px) {
+    .filter-group {
+      /* タブ幅以上: ラベルとコントロールを横並び */
+      @apply flex-row items-center gap-2;
+    }
+  }
   .filter-group span,
   .filter-group label { @apply font-medium text-white; }
   .category-btn,

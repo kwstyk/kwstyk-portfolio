@@ -100,10 +100,17 @@ body {
   overflow-x: auto;
   margin: 1.5rem 0;
 }
-
-/*
-.debug-css {
-  background: hotpink !important;
+.title {
+  /* 日本語／英単語の途中で改行を禁止 */
+  word-break: keep-all;
+  /* 超長い英単語だけ必要なときに折り返す */
+  overflow-wrap: break-word;
 }
 
-*/
+/* モバイルでも同じルール */
+@media (max-width: 640px) {
+  .title {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+}

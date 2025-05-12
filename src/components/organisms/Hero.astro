@@ -2,9 +2,48 @@
 const { title, subtitle, buttons = [] } = Astro.props;
 ---
 
+<style lang="css">
+  /* 親要素から横スクロールが出ないように */
+  .hero {
+    overflow-x: hidden;
+  }
+
+  /* 内側コンテナ：最大幅＋左右パディング */
+  .hero-inner {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* タイトル：単語（文字）内で不自然に折り返さない */
+  .hero-title {
+    /* 日本語／英単語途中での改行を禁止 */
+    word-break: keep-all;
+    /* 超長英単語だけ必要な場合に折り返し許可 */
+    overflow-wrap: break-word;
+    /* 万が一はみ出したときも行を隠す */
+    max-width: 100%;
+  }
+
+  /* モバイルでも同じルールを継続 */
+  @media (max-width: 640px) {
+    .hero-title {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+  }
+  
+  /* 改行ヒント用 wbr を入れているならこれでOK */
+  .hero-title wbr {
+    display: none; /* ブラウザにだけ効くヒントなので見えなくてOK */
+  }
+
+</style>
 <section class="hero">
   <div class="hero-inner">
+    <slot name="title" />
     <h1 class="hero-title heading-responsive">{title}</h1>
+    </slot>
     <p class="hero-subtitle prose-responsive">{subtitle}</p>
 
     {buttons.length > 0 && (
