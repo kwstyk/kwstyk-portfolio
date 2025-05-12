@@ -81,6 +81,11 @@ const reproMethods = ['docker','terraform','vagrant','manual'];
   if (!keywordInput) return;
   const cards = Array.from(document.querySelectorAll('#cards .card')) as HTMLElement[];
 
+  // ——— URL から初期 q 値を取得して input にセット ———
+  const params = new URLSearchParams(window.location.search);
+  const initialQ = params.get('q') || '';
+  keywordInput.value = initialQ;
+
   // aria-pressed を切り替えるユーティリティ
   function togglePressed(btn: HTMLButtonElement) {
    const isPressed = btn.getAttribute('aria-pressed') === 'true';
@@ -114,7 +119,7 @@ const reproMethods = ['docker','terraform','vagrant','manual'];
       (card as HTMLElement).style.display = (okCat && okDiff && okRepro && okKeyword) ? '' : 'none';
     });
   }
-
+  // ——— URL sync: input 時に q を更新 ———
   catBtns.forEach(btn =>
     btn.addEventListener('click', () => { togglePressed(btn); applyFilters(); })
   );
@@ -122,6 +127,16 @@ const reproMethods = ['docker','terraform','vagrant','manual'];
     btn.addEventListener('click', () => { togglePressed(btn); applyFilters(); })
   );
   reproChks.forEach(chk => chk.addEventListener('change', applyFilters));
-  keywordInput.addEventListener('input', applyFilters);
+  keywordInput.addEventListener('input', () => {
+    // URL の q を書き換え（history.replaceState で履歴に残す）
+    const ps = new URLSearchParams(window.location.search);
+    if (keywordInput.value)      ps.set('q', keywordInput.value);
+    else                          ps.delete('q');
+    history.replaceState(null, '', `?${ps.toString()}`);
+    applyFilters();
+  });
+
++  // 最初のフィルタ適用（初期 q による絞り込み）
+  applyFilters();
 })();
 </script>
