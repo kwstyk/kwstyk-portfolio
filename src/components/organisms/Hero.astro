@@ -4,8 +4,8 @@ const { title, subtitle, buttons = [] } = Astro.props;
 
 <section class="hero">
   <div class="hero-inner">
-    <h1 class="hero-title">{title}</h1>
-    <p class="hero-subtitle">{subtitle}</p>
+    <h1 class="hero-title heading-responsive">{title}</h1>
+    <p class="hero-subtitle prose-responsive">{subtitle}</p>
 
     {buttons.length > 0 && (
       <div class="hero-buttons">

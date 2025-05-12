@@ -91,8 +91,35 @@ module.exports = {
              transform transition-all duration-200 \
              hover:shadow-xl \
              hover:-translate-y-1': {},
-
+              // 1) 見出しレスポンシブ
+        '.heading-responsive': {
+          fontSize: theme('fontSize.2xl'),       // デフォルト
+          '@screen sm': { fontSize: theme('fontSize.3xl') },
+          '@screen md': { fontSize: theme('fontSize.4xl') },
+          '@screen lg': { fontSize: theme('fontSize.5xl') },
+        },
+        // 2) 本文テキストのレスポンシブ
+        '.prose-responsive': {
+          '@apply text-base leading-relaxed': {},
+          '@apply sm:text-lg sm:leading-snug': {},
+          '@apply md:text-xl': {},
+        },
+        // 3) カード／セクション余白のレスポンシブ
+        '.card-responsive': {
+          '@apply p-4': {},
+          '@apply sm:p-6': {},
+          '@apply md:p-8': {},
+        },
           // 内側の余白は各カード側で p-4 / p-6 など好きに足す
+        /* ここから追加: フィルターバーのレスポンシブ */
+        '.filter-responsive': {
+          '@apply flex flex-col flex-wrap gap-4': {},
+          '@apply sm:flex-row sm:items-center sm:justify-start': {},
+        },
+        '.filter-group-responsive': {
+          '@apply flex flex-col gap-2': {},
+          '@apply sm:flex-row sm:items-center sm:gap-2': {},
+        },
         },
       });
     },

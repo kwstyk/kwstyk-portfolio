@@ -6,8 +6,6 @@ repro: ["manual"]
 updated: "2025-05-05"
 ---
 
-import ProofList from '@/components/molecules/ProofList.astro';
-
 # 概要
 
 ネットワークセキュリティカテゴリでは、企業ネットワークやクラウド環境における通信の安全性を確保する技術と手法を紹介します。このカテゴリのProofでは、パケットキャプチャ、ファイアウォール設定、侵入検知、VPN導入など、実務で頻出のシナリオを再現・解説します。

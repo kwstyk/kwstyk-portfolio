@@ -23,9 +23,9 @@ const reproMethods = ['docker','terraform','vagrant','manual'];
   .keyword-input    { @apply flex-1 bg-gray-700 p-2 rounded text-white; }
 </style>
 
-<div id="filter-bar" class="filter-bar">
+<div id="filter-bar" class="filter-bar filter-responsive">
   <!-- Category Filter -->
-  <div class="filter-group">
+  <div class="filter-group filter-group-responsive">
     <span>カテゴリ:</span>
     <!-- 横スクロール可能にして折り返しを防止 -->
     <div class="ml-2 flex space-x-2 overflow-x-auto pb-1">
@@ -43,7 +43,7 @@ const reproMethods = ['docker','terraform','vagrant','manual'];
   </div>
 
   <!-- Difficulty Filter -->
-  <div class="filter-group">
+  <div class="filter-group filter-group-responsive">
     <span>難易度:</span>
     {difficulties.map(d => (
       <button type="button" 
@@ -55,7 +55,7 @@ const reproMethods = ['docker','terraform','vagrant','manual'];
   </div>
 
   <!-- Repro Method Filter -->
-  <div class="filter-group">
+  <div class="filter-group filter-group-responsive">
     <span>再現方法:</span>
     {reproMethods.map(r => (
       <label class="flex items-center text-white">
