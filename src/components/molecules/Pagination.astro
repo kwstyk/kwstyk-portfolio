@@ -1,0 +1,47 @@
+---
+// src/components/molecules/Pagination.astro
+// ページネーションコンポーネント
+// Props:
+// - totalItems: 総アイテム数
+// - itemsPerPage: 1ページあたりのアイテム数
+export interface Props {
+  totalItems: number;
+  itemsPerPage: number;
+}
+const { totalItems, itemsPerPage } = Astro.props as Props;
+
+// 総ページ数を計算
+const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+// 現在のページを URL クエリから取得（デフォルト 1）
+const url = new URL(Astro.request.url);
+const currentPage = Number(url.searchParams.get('page') || '1');
+
+// リンク生成関数
+function buildHref(page: number) {
+  const params = new URLSearchParams(url.searchParams);
+  if (page <= 1) {
+    params.delete('page');
+  } else {
+    params.set('page', String(page));
+  }
+  const query = params.toString();
+  return url.pathname + (query ? `?${query}` : '');
+}
+---
+
+<nav aria-label="Pagination" class="mt-8 flex justify-center">
+  <ul class="inline-flex items-center space-x-2">
+    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+      <li>
+        <a
+          href={buildHref(page)}
+          class={`px-3 py-1 rounded ${page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'} hover:bg-blue-500`}
+          aria-current={page === currentPage ? 'page' : undefined}
+        >
+          {page}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

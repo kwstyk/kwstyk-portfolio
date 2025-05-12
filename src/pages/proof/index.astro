@@ -1,24 +1,56 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import Card from '@/components/molecules/Card.astro';
+import Hero from '@/components/organisms/Hero.astro';
+import StatsBar from '@/components/organisms/StatsBar.astro';
+import FilterBar from '@/components/molecules/FilterBar.astro';
+import ProofCardGrid from '@/components/organisms/ProofCardGrid.astro';
+import Pagination from '@/components/molecules/Pagination.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
-// proof コレクションから先頭 6 件だけ取得（任意）
+// Proof データ取得
 const allProofs = await getCollection('proofs');
-const sample: CollectionEntry<'proofs'>[] = allProofs.slice(0, 6);
+
+// サマリ集計
+const totalCount = allProofs.length;
+const completedCount = allProofs.filter(p => p.data.progress === 100).length;
+const completionRate = totalCount ? Math.round((completedCount / totalCount) * 100) : 0;
+const categories = Array.from(new Set(allProofs.map(p => p.slug.split('/')[0])));
+
+export interface ProofSummary {
+  slug: string;
+  category: string;
+  title: string;
+  difficulty: 'easy'|'medium'|'hard'|'expert';
+  repro: ('docker'|'terraform'|'vagrant'|'manual')[];
+  updated: string;
+  tags?: string[];
+}
 ---
-<Layout class="page-background">
-  <h1 class="text-2xl font-bold mb-6">Proof（証明集合）</h1>
-  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {sample.map((entry: CollectionEntry<'proofs'>) => (
-      <Card
-        title={entry.data.title}
-        description={entry.data.difficulty} 
-        href={`/proof/${entry.id.replace(/\.mdx?$/, '')}`}
-        icon="🔍"
-        badge={entry.data.difficulty}
-      />
-    ))}
-  </section>
+
+<Layout siteName="KWSTYK Portfolio" pageTitle="Proof – KWSTYK Portfolio">
+  <main class="bg-[var(--proof-bg)] text-white min-h-screen">
+    <!-- Hero Section -->
+    <section class="pt-12 pb-8">
+      <Hero title="Proof" subtitle="再現性のある技術検証ラボ">
+        <StatsBar total={totalCount} completionRate={completionRate} categoryCount={categories.length} />
+      </Hero>
+    </section>
+
+    <!-- FilterBar Section -->
+    <section class="container mx-auto px-4 mb-8">
+      <FilterBar />
+    </section>
+
+    <!-- Proof Cards Grid -->
+    <section class="container mx-auto px-4 mb-8">
+      <!-- ProofCardGrid コンポーネントに置き換え -->
+      <ProofCardGrid items={allProofs as CollectionEntry<'proofs'>[]} />
+    </section>
+
+    <!-- Pagination -->
+    <section class="container mx-auto px-4 py-8">
+      <Pagination totalItems={totalCount} itemsPerPage={12} />
+    </section>
+  </main>
 </Layout>

@@ -13,7 +13,12 @@ export default [
       parserOptions: { parser: tsParser, extraFileExtensions: ['.astro'] }
     },
     plugins: { astro },
-    rules: { 'astro/no-unused-css-selector': 'warn' }
+   rules: { 'astro/no-unused-css-selector': 'warn' }
+  },
+  // FilterBar.astro だけ警告をオフに
+  {
+    files: ['src/components/molecules/FilterBar.astro'],
+    rules: { 'astro/no-unused-css-selector': 'off' }
   },
   {
     files: ['**/*.{ts,js}'],

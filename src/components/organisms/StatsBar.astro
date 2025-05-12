@@ -1,0 +1,35 @@
+---
+// src/components/organisms/StatsBar.astro
+// 統計バーコンポーネント
+// Props:
+// - total: 総 Proof 件数
+// - completionRate: 完了率（%）
+// - categoryCount: カテゴリ数
+export interface Props {
+  total: number;
+  completionRate: number;
+  categoryCount: number;
+}
+
+const { total, completionRate, categoryCount } = Astro.props as Props;
+---
+
+<div class="flex items-center justify-around bg-[var(--proof-card)] border border-[var(--proof-border)] rounded-lg p-4 text-white">
+  <!-- 総件数 -->
+  <div class="text-center">
+    <div class="text-xl font-semibold">{total}</div>
+    <div class="text-sm">Proof 件数</div>
+  </div>
+
+  <!-- 完了率 -->
+  <div class="text-center">
+    <div class="text-xl font-semibold">{completionRate}%</div>
+    <div class="text-sm">完了率</div>
+  </div>
+
+  <!-- カテゴリ数 -->
+  <div class="text-center">
+    <div class="text-xl font-semibold">{categoryCount}</div>
+    <div class="text-sm">カテゴリ数</div>
+  </div>
+</div>

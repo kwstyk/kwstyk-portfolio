@@ -1,26 +1,127 @@
 ---
-interface Props {
-  tags: string[];
-  selectedTag?: string;
-}
-const { tags, selectedTag = '' } = Astro.props as Props;
+import { getCollection } from 'astro:content';
+const allProofs = await getCollection('proofs');
+const categories = Array.from(new Set(allProofs.map(p => p.slug.split('/')[0])));
+const difficulties = ['easy','medium','hard','expert'];
+const reproMethods = ['docker','terraform','vagrant','manual'];
 ---
+<style>
+  /* eslint-disable astro/no-unused-css-selector */
+  .category-btn[aria-pressed="true"],
+  .difficulty-btn[aria-pressed="true"] {
+    @apply bg-[var(--accent)] text-white ring-2 ring-[var(--accent-light)];
+  }
+  /* eslint-enable astro/no-unused-css-selector */
 
-<div class="mb-4">
-  <label for="filter-tag" class="sr-only">タグで絞り込み</label>
-  <select
-    id="filter-tag"
-    class="p-2 border rounded"
-    value={selectedTag}
-    onchange="location.search = new URLSearchParams({
-      ...Object.fromEntries(new URLSearchParams(location.search)),
-      tag: this.value,
-      page: '1'    /* タグ変更時は必ず 1 ページ目に戻す */
-    }).toString()"
-  >
-    <option value="">すべてのタグ</option>
-    {tags.map((t) => (
-      <option value={t}>{t}</option>
+  .filter-bar       { @apply mb-6 bg-[#112240] p-4 rounded flex flex-wrap gap-4; }
+  .filter-group     { @apply flex items-center gap-2; }
+  .filter-group span,
+  .filter-group label { @apply font-medium text-white; }
+  .category-btn,
+  .difficulty-btn   { @apply px-2 py-1 bg-gray-600 rounded text-white cursor-pointer; }
+  .repro-chk        { @apply mr-1 cursor-pointer; }
+  .keyword-input    { @apply flex-1 bg-gray-700 p-2 rounded text-white; }
+</style>
+
+<div id="filter-bar" class="filter-bar">
+  <!-- Category Filter -->
+  <div class="filter-group">
+    <span>カテゴリ:</span>
+    <!-- 横スクロール可能にして折り返しを防止 -->
+    <div class="ml-2 flex space-x-2 overflow-x-auto pb-1">
+      {categories.map(c => (
+        <button
+          type="button"
+          class="category-btn flex-shrink-0"
+          data-category={c}
+          aria-pressed="false" 
+       >
+         {c}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Difficulty Filter -->
+  <div class="filter-group">
+    <span>難易度:</span>
+    {difficulties.map(d => (
+      <button type="button" 
+      class="difficulty-btn" 
+      data-difficulty={d}
+      aria-pressed="false" 
+      >{d}</button>
     ))}
-  </select>
+  </div>
+
+  <!-- Repro Method Filter -->
+  <div class="filter-group">
+    <span>再現方法:</span>
+    {reproMethods.map(r => (
+      <label class="flex items-center text-white">
+        <input type="checkbox" 
+        class="repro-chk" 
+        value={r} />{r}
+      </label>
+    ))}
+  </div>
+
+  <!-- Keyword Search -->
+  <div class="flex-1 min-w-[150px]">
+    <input id="filter-keyword" type="text" placeholder="キーワード検索..." class="keyword-input" />
+  </div>
 </div>
+
+<script>
+(function() {
+  const catBtns = Array.from(document.querySelectorAll('button.category-btn')) as HTMLButtonElement[];
+  const diffBtns = Array.from(document.querySelectorAll('button.difficulty-btn')) as HTMLButtonElement[];
+  const reproChks = Array.from(document.querySelectorAll('input.repro-chk')) as HTMLInputElement[];
+  const keywordInput = document.getElementById('filter-keyword')! as HTMLInputElement;
+  if (!keywordInput) return;
+  const cards = Array.from(document.querySelectorAll('#cards .card')) as HTMLElement[];
+
+  // aria-pressed を切り替えるユーティリティ
+  function togglePressed(btn: HTMLButtonElement) {
+   const isPressed = btn.getAttribute('aria-pressed') === 'true';
+    btn.setAttribute('aria-pressed', (!isPressed).toString());
+  }
+
+  function applyFilters() {
+    const selCats = catBtns
+      .filter(b => b.getAttribute('aria-pressed') === 'true')
+      .map(b => b.dataset.category || '');
+    const selDiffs = diffBtns
+      .filter(b => b.getAttribute('aria-pressed') === 'true')
+      .map(b => b.dataset.difficulty || '');
+    const selRepros = reproChks
+      .filter(c => c.checked)
+      .map(c => c.value);
+    const keyword = keywordInput.value.trim().toLowerCase();
+
+    cards.forEach(card => {
+      const cat = card.dataset.category || '';
+      const diff = card.dataset.difficulty || '';
+      const repro = JSON.parse(card.dataset.repro || '[]') as string[];
+      const titleEl = card.querySelector('h3');
+      const title = titleEl?.textContent?.toLowerCase() || '';
+
+      const okCat = !selCats.length || selCats.includes(cat);
+      const okDiff = !selDiffs.length || selDiffs.includes(diff);
+      const okRepro = !selRepros.length || selRepros.some(r => repro.includes(r));
+      const okKeyword = !keyword || title.includes(keyword);
+
+      (card as HTMLElement).style.display = (okCat && okDiff && okRepro && okKeyword) ? '' : 'none';
+    });
+  }
+
+  catBtns.forEach(btn =>
+    btn.addEventListener('click', () => { togglePressed(btn); applyFilters(); })
+  );
+  diffBtns.forEach(btn =>
+    btn.addEventListener('click', () => { togglePressed(btn); applyFilters(); })
+  );
+  reproChks.forEach(chk => chk.addEventListener('change', applyFilters));
+  keywordInput.addEventListener('input', applyFilters);
+})();
+</script>

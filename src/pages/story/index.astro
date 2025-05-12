@@ -1,7 +1,8 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Hero from '@/components/organisms/Hero.astro';
-import FilterBar from '@/components/molecules/FilterBar.astro';
+import TagFilterBar from '@/components/molecules/TagFilterBar.astro';
+import Pagination from '@/components/molecules/Pagination.astro';
 import StoryCard from '@/components/molecules/StoryCard.astro';
 import storiesJson from '@/data/stories.json';
 
@@ -40,7 +41,10 @@ const allTags = Array.from(new Set(stories.flatMap((s) => s.tags ?? [])));
   <Hero title="Lab Notes" subtitle="～Proof から得た知見～" />
 
   <!-- タグ絞り込み -->
-  <FilterBar tags={allTags} selectedTag={selectedTag} />
+  <TagFilterBar
+    tags={allTags}
+    selectedTag={selectedTag}
+  />
 
   <!-- 記事グリッド（絞り込み＋ページネーション後の paged を使う） -->
   <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
@@ -56,28 +60,9 @@ const allTags = Array.from(new Set(stories.flatMap((s) => s.tags ?? [])));
     ))}
   </section>
 
-  <!-- Prev/Next ページャー -->
-  <div class="flex justify-between items-center mt-6">
-    {page > 1 ? (
-      <a
-        href={`?tag=${encodeURIComponent(selectedTag)}&page=${page - 1}`}
-        class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded"
-      >
-        ← 前のページ
-      </a>
-    ) : (
-      <span></span>
-    )}
-    <span>Page {page} / {totalPages}</span>
-    {page < totalPages ? (
-      <a
-        href={`?tag=${encodeURIComponent(selectedTag)}&page=${page + 1}`}
-        class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded"
-      >
-        次のページ →
-      </a>
-    ) : (
-      <span></span>
-    )}
-  </div>
+  <!-- ページネーションコンポーネント -->
+  <Pagination
+    totalItems={filtered.length}
+    itemsPerPage={perPage}
+  />
 </Layout>

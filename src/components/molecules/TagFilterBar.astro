@@ -1,0 +1,36 @@
+---
+// src/components/molecules/TagFilterBar.astro
+const { tags, selectedTag } = Astro.props as {
+  tags: string[];
+  selectedTag: string;
+};
+---
+<style>
+  .tag-filter-bar {
+    @apply mb-6 bg-[#112240] p-4 rounded flex items-center gap-2;
+  }
+  .tag-filter-bar select {
+    @apply bg-[#0D1117] text-white px-3 py-1 rounded;
+  }
+</style>
+
+<div class="tag-filter-bar">
+  <label for="tag-select" class="text-white">タグ絞り込み:</label>
+  <select id="tag-select">
+    <option value="" selected={selectedTag === ''}>全て</option>
+    {tags.map(tag => (
+      <option value={tag} selected={tag === selectedTag}>{tag}</option>
+    ))}
+  </select>
+</div>
+
+<script>
+  document.getElementById('tag-select')!.addEventListener('change', (e) => {
+    const tag = (e.target as HTMLSelectElement).value;
+    const url = new URL(location.href);
+    if (tag) url.searchParams.set('tag', tag);
+    else url.searchParams.delete('tag');
+    url.searchParams.set('page', '1');
+    location.href = url.toString();
+  });
+</script>
