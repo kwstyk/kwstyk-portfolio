@@ -1,6 +1,6 @@
 name: CI
 
-on: 
+on:
   push:
     branches: [main]
   pull_request:
@@ -33,3 +33,11 @@ jobs:
 
       - name: Run TypeCheck
         run: pnpm run typecheck
+
+      - name: Run Unit Tests
+        run: pnpm run test -- --coverage
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v9
+        with:
+          configPath: ./lighthouserc.js
