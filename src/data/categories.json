@@ -6,7 +6,7 @@
     "description": "安全な通信と監視体制を確立するための実践",
     "href": "/proof/network-security/",
     "icon": "🔐",
-    "badge": "重要",
+    "badge": "準備中",
     "color": "#0f766e"
   },
   {
@@ -16,7 +16,7 @@
     "description": "AWS基盤での脆弱性管理とIAM設計",
     "href": "/proof/cloud-security/",
     "icon": "☁️",
-    "badge": "執筆中",
+    "badge": "準備中",
     "color": "#2563eb"
   },
   {
@@ -26,7 +26,7 @@
     "description": "Linuxサーバをセキュリティベースラインに準拠設定",
     "href": "/proof/os-hardening/",
     "icon": "🐧",
-    "badge": "完了",
+    "badge": "準備中",
     "color": "#9333ea"
   },
   {
@@ -36,7 +36,7 @@
     "description": "STRIDE手法に基づくシステム脅威分析",
     "href": "/proof/threat-modeling/",
     "icon": "💣",
-    "badge": "検討中",
+    "badge": "準備中",
     "color": "#f43f5e"
   },
   {
@@ -46,7 +46,7 @@
     "description": "収集・検知・相関分析によるアラート対応",
     "href": "/proof/logs-siem/",
     "icon": "📊",
-    "badge": "PoCあり",
+    "badge": "準備中",
     "color": "#16a34a"
   },
   {
@@ -56,7 +56,7 @@
     "description": "スキャン・分析・リスク評価・対処プロセス構築",
     "href": "/proof/vuln-mgmt/",
     "icon": "🔍",
-    "badge": "重要",
+    "badge": "準備中",
     "color": "#dc2626"
   },
   {
@@ -66,7 +66,7 @@
     "description": "実際のアラートに基づく対応手順の設計",
     "href": "/proof/incident-response/",
     "icon": "🚨",
-    "badge": "実装中",
+    "badge": "準備中",
     "color": "#f59e0b"
   },
   {
@@ -86,7 +86,7 @@
     "description": "Active Directory構成に対する最小権限化・監査設定",
     "href": "/proof/ad-security/",
     "icon": "🏰",
-    "badge": "完了",
+    "badge": "準備中",
     "color": "#0ea5e9"
   }
 ]

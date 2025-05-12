@@ -47,7 +47,7 @@ export const collections = {
     }),
   }),
 
-    /* -------- Intro markdown -------- */
+    /* -------- Intro markdown -------- 
   structureIntro: defineCollection({
     type: 'content',
     schema: z.object({
@@ -55,7 +55,7 @@ export const collections = {
       description: z.string(),
       updated:     z.string().optional(),
     }),
-  }),
+  }),*/
   
 } as Record<string, ReturnType<typeof defineCollection>>;
 
