@@ -13,7 +13,8 @@ const reproMethods = ['docker','terraform','vagrant','manual'];
   }
   /* eslint-enable astro/no-unused-css-selector */
 
-  .filter-bar       { @apply mb-6 bg-[#112240] p-4 rounded flex flex-wrap gap-4; }
+  .filter-bar       { @apply mb-6 bg-[#112240] p-4 rounded flex flex-wrap gap-4; @apply max-w-screen-lg mx-auto;}
+  
   .filter-group     { @apply flex items-center gap-2; }
   .filter-group span,
   .filter-group label { @apply font-medium text-white; }
