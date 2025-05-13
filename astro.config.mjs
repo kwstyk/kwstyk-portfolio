@@ -1,66 +1,68 @@
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import path from 'path';
+import path     from 'path';
+
+// ─ Integrations ─
 import tailwind from '@astrojs/tailwind';
 import react    from '@astrojs/react';
 import mdx      from '@astrojs/mdx';
 import vercel   from '@astrojs/vercel';
 
-// カスタムプラグイン
-import remarkDirective        from 'remark-directive';
-import remarkGfm              from 'remark-gfm';
-import remarkKwstykCallout    from './plugins/remark-kwstyk-callout.js';
-import remarkInclude          from './plugins/remark-include.js';
-import rehypeCopyButton       from './plugins/rehype-copy-button.js';
-import rehypeExternalLinks    from 'rehype-external-links';
+// ─ remark / rehype ─
+import remarkDirective      from 'remark-directive';
+import remarkGfm            from 'remark-gfm';
+import remarkKwstykCallout  from './plugins/remark-kwstyk-callout.js';
+import remarkInclude        from './plugins/remark-include.js';
+import remarkMermaidJs      from 'remark-mermaidjs';
+import rehypeExternalLinks  from 'rehype-external-links';
+import rehypeCopyButton     from './plugins/rehype-copy-button.js';
 
 export default defineConfig(({ command }) => ({
-  // build 時だけ Vercel Adapter を有効化
-  adapter: command === 'build' ? vercel() : undefined,
-
-  integrations: [
-    tailwind({
-      config: './tailwind.config.cjs'
-    }),
-    react(),
-    mdx({
-      extension: '.mdx',
-      // MDX／Markdown 両方にプラグインを適用
-      remarkPlugins: [
-        remarkDirective,
-        remarkGfm,
-        remarkKwstykCallout,
-        remarkInclude,
-      ],
-      rehypePlugins: [
-        rehypeExternalLinks,  // 外部リンク自動 target="_blank"
-        rehypeCopyButton,     // Copy ボタン注入
-      ],
-    }),
-  ],
-
-  // Astro 組み込み Content Collections 設定
-  content: {
-    entryExtensions: ['.md', '.mdx'],
-    markdown: {
-      remarkPlugins: [
-        remarkDirective,
-        remarkGfm,
-        remarkKwstykCallout,
-        remarkInclude,
-      ],
-      rehypePlugins: [
-        rehypeExternalLinks,
-        rehypeCopyButton,
-      ],
+  /* ─────────────────────────────  Markdown (全 .md / .mdx 共通) */
+  markdown: {
+    // Shiki / Prism でハイライトするが、Mermaid だけ除外
+    syntaxHighlight: {
+      type: 'shiki',
+      excludeLangs: ['mermaid'],
     },
+    remarkPlugins: [
+      remarkDirective,
+      remarkGfm,
+      remarkKwstykCallout,
+      remarkInclude,
+      // ← Mermaid を Markdown AST 段階で SVG に変換
+      [remarkMermaidJs, { launchOptions: { headless: true } }],
+    ],
+    rehypePlugins: [
+      rehypeExternalLinks,
+      rehypeCopyButton,
+    ],
   },
 
+  /* ─────────────────────────────  Integrations */
+  integrations: [
+    tailwind({ config: './tailwind.config.cjs' }),
+    react(),
+
+    // .md と .mdx の両方を MDX pipeline へ流す
+    mdx({
+      extension: ['.md', '.mdx'],
+    }),
+
+    // build 時のみ Vercel adapter
+    command === 'build' && vercel(),
+  ],
+
+  /* ─────────────────────────────  Content Collections */
+  content: {
+    entryExtensions: ['.md', '.mdx'],
+  },
+
+  /* ─────────────────────────────  Vite resolve alias */
   vite: {
     resolve: {
       alias: {
         '@': path.resolve('.', 'src'),
-        // Vercel OG 用ランタイムのエイリアス
         '@vercel/og/jsx-runtime': '@vercel/og',
       },
     },

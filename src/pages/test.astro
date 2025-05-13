@@ -1,0 +1,11 @@
+---
+// フロントマターは ESM ブロック（export const）で書くこと
+import Layout from '@/layouts/Layout.astro';
+export const layout     = Layout;
+export const pageTitle  = 'テストページ';
+export const description= '日本語表示テスト';
+export const pathname   = '/test';
+export const ogImage    = '/api/og?title=テストページ';
+---
+
+<p>あいうえお　日本語テスト</p>
