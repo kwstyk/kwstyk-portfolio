@@ -15,7 +15,8 @@
     "summary": "RSSREEEDFGG",
     "url": "https://zenn.dev/mijucation/articles/0f2e203bca0551",
     "tags": [],
-    "published": "2025-05-14"
+    "published": "2025-05-14",
+    "hidden":"true"
   },
   {
     "id": "zenn-https://zenn.dev/mijucation/articles/6b74dd3c69a3a6",
@@ -24,7 +25,8 @@
     "summary": "Test",
     "url": "https://zenn.dev/mijucation/articles/6b74dd3c69a3a6",
     "tags": [],
-    "published": "2025-05-05"
+    "published": "2025-05-05",
+    "hidden":"true"
   },
   {
     "id": "note-https://note.com/ky1103/n/n1e47abb749a4",
@@ -42,7 +44,8 @@
     "summary": "ネタ帳なる書き方を見つけたので真似させてもらいます🌱\nここから増やしていきたいし、どんどん書いていきたいですね。\n気になるテーマがあればぜひ読んでください！\n\n\n\n続きをみる",
     "url": "https://note.com/ky1103/n/n0a7cccbc2801",
     "tags": [],
-    "published": "2025-01-24"
+    "published": "2025-01-24",
+    "hidden":"true"
   },
   {
     "id": "note-https://note.com/ky1103/n/ndb80d365e633",
@@ -50,8 +53,9 @@
     "title": "【自己紹介】文系未経験社内SE　はじめてのnote",
     "summary": "はじめまして。文系未経験社内SEの、み塾と申します！\nこのnoteを読みにきてくださりありがとうございます。\n\n続きをみる",
     "url": "https://note.com/ky1103/n/ndb80d365e633",
-    "tags": [],
-    "published": "2025-01-19"
+    "tags": ["test"],
+    "published": "2025-01-19",
+    "hidden":"true"
   },
   {
     "id": "note-https://note.com/ky1103/n/n53cac0c41327",
