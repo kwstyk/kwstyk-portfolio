@@ -1,10 +1,12 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import Hero from '@/components/organisms/Hero.astro';
-import TagFilterBar from '@/components/molecules/TagFilterBar.astro';
-import Pagination from '@/components/molecules/Pagination.astro';
-import StoryCard from '@/components/molecules/StoryCard.astro';
-import storiesJson from '@/data/stories.json';
+// src/pages/story/index.astro
+
+import Layout          from '@/layouts/Layout.astro';
+import Hero            from '@/components/organisms/Hero.astro';
+import StoryFilterBar  from '@/components/molecules/StoryFilterBar.astro';
+import StoryCard       from '@/components/molecules/StoryCard.astro';
+import Pagination      from '@/components/molecules/Pagination.astro';
+import storiesJson     from '@/data/stories.json';
 
 interface Story {
   id: string;
@@ -19,35 +21,38 @@ interface Story {
 const stories = (storiesJson as unknown) as Story[];
 
 // URL から tag／page を取得
-const url = new URL(Astro.url);
-const selectedTag = url.searchParams.get('tag') || '';
-const page = parseInt(url.searchParams.get('page') || '1', 10);
-const perPage = 6;
+const selectedTag = Astro.url.searchParams.get('tag') ?? '';
+const page        = Number(Astro.url.searchParams.get('page') ?? '1');
+const perPage     = 6;
 
-// ① hidden を除外＋タグ絞り込み
+// hidden を外してタグ絞り込み
 const filtered = stories.filter(
-  (s) => s.hidden !== true && (selectedTag === '' || (s.tags ?? []).includes(selectedTag))
+  s => !s.hidden && (selectedTag === '' || (s.tags ?? []).includes(selectedTag))
 );
 
-// ② ページネーション用 slice
-const totalPages = Math.ceil(filtered.length / perPage);
-const paged = filtered.slice((page - 1) * perPage, page * perPage);
+// ページャー用の集計
+const totalItems = filtered.length;
+const totalPages = Math.ceil(totalItems / perPage);
+const paged      = filtered.slice((page - 1) * perPage, page * perPage);
 
-// ドロップダウンの選択肢用に全タグをユニーク抽出
-const allTags = Array.from(new Set(stories.flatMap((s) => s.tags ?? [])));
+// ドロップダウン用の全タグリスト
+const allTags = Array.from(new Set(stories.flatMap(s => s.tags ?? [])));
 ---
 
 <Layout class="page-background">
   <Hero title="Lab Notes" subtitle="～Proof から得た知見～" />
 
-  <!-- タグ絞り込み -->
-  <TagFilterBar
+  <!-- StoryFilterBar を使ってタグ絞り込み -->
+  <StoryFilterBar
     tags={allTags}
     selectedTag={selectedTag}
   />
 
-  <!-- 記事グリッド（絞り込み＋ページネーション後の paged を使う） -->
-  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+  <!-- 記事グリッド -->
+  <section
+    id="story-cards"
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8"
+  >
     {paged.map((s) => (
       <StoryCard
         title={s.title}
@@ -55,14 +60,20 @@ const allTags = Array.from(new Set(stories.flatMap((s) => s.tags ?? [])));
         url={s.url}
         source={s.source}
         published={s.published}
-        tags={s.tags ?? []}
+        tags={s.tags}
       />
     ))}
   </section>
 
-  <!-- ページネーションコンポーネント -->
+  <!-- ページャー（タグ選択を引き継いでページ遷移） -->
   <Pagination
-    totalItems={filtered.length}
+    totalItems={totalItems}
     itemsPerPage={perPage}
+    currentPage={page}
+    totalPages={totalPages}
+    selectedTag={selectedTag}
+    getPageHref={(p: number) =>
+      `?tag=${encodeURIComponent(selectedTag)}&page=${p}`
+    }
   />
 </Layout>

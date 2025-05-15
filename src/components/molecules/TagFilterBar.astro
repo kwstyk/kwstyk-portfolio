@@ -1,36 +1,27 @@
 ---
-// src/components/molecules/TagFilterBar.astro
-const { tags, selectedTag } = Astro.props as {
+// TagFilterBar.astro
+interface Props {
   tags: string[];
   selectedTag: string;
-};
+}
+const { tags, selectedTag } = Astro.props as Props;
 ---
-<style>
-  .tag-filter-bar {
-    @apply mb-6 bg-[#112240] p-4 rounded flex items-center gap-2;
-  }
-  .tag-filter-bar select {
-    @apply bg-[#0D1117] text-white px-3 py-1 rounded;
-  }
-</style>
 
-<div class="tag-filter-bar">
-  <label for="tag-select" class="text-white">タグ絞り込み:</label>
-  <select id="tag-select">
-    <option value="" selected={selectedTag === ''}>全て</option>
-    {tags.map(tag => (
-      <option value={tag} selected={tag === selectedTag}>{tag}</option>
+<div class="filter-bar p-4 mb-6 bg-[#112240] rounded max-w-screen-lg mx-auto flex items-center gap-4">
+  <label for="tag-select" class="text-white font-medium">タグ絞り込み:</label>
+  <select
+    id="tag-select"
+    class="bg-gray-700 text-white p-2 rounded"
+    value={selectedTag} 
+    onchange="{
+      const v = this.value;
+      // 選択したらページは必ず1にリセットして再読込
+      location.href = `?tag=${encodeURIComponent(v)}&page=1`;
+    }"
+  >
+    <option value="">全て</option>
+    {tags.map(t => (
+      <option value={t}>{t}</option>
     ))}
   </select>
 </div>
-
-<script>
-  document.getElementById('tag-select')!.addEventListener('change', (e) => {
-    const tag = (e.target as HTMLSelectElement).value;
-    const url = new URL(location.href);
-    if (tag) url.searchParams.set('tag', tag);
-    else url.searchParams.delete('tag');
-    url.searchParams.set('page', '1');
-    location.href = url.toString();
-  });
-</script>

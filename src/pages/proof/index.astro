@@ -16,6 +16,9 @@ const allProofs = await getCollection('proofs');
 
 // サマリ集計
 const totalCount = allProofs.length;
+ // ページ数を計算
+ const page = Number(Astro.url.searchParams.get('page') ?? '1');
+const totalPages = Math.ceil(totalCount / 12);
 const completedCount = allProofs.filter(p => p.data.progress === 100).length;
 const completionRate = totalCount
   ? Math.round((completedCount / totalCount) * 100)
@@ -74,7 +77,13 @@ const meta = generateSeo({
 
     <!-- Pagination -->
     <section class="container mx-auto px-4 py-8">
-      <Pagination totalItems={totalCount} itemsPerPage={12} />
+       <Pagination
+   totalItems={totalCount}
+   itemsPerPage={12}
+  currentPage={page}
+  totalPages={totalPages}
+   getPageHref={(p: number) => `?page=${p}`}
+ />
     </section>
     </div>
   </main>

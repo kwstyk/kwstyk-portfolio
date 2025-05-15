@@ -1,47 +1,56 @@
 ---
-// src/components/molecules/Pagination.astro
-// ページネーションコンポーネント
-// Props:
-// - totalItems: 総アイテム数
-// - itemsPerPage: 1ページあたりのアイテム数
-export interface Props {
-  totalItems: number;
+interface Props {
+  totalItems:   number;
   itemsPerPage: number;
+  currentPage:  number;
+  totalPages:   number;
+  /** サーバーサイド絞り込み用に渡されたタグ */
+  selectedTag?: string;
+  /** （任意）ページリンクを生成する関数 */
+  getPageHref?: (page: number) => string;
 }
-const { totalItems, itemsPerPage } = Astro.props as Props;
 
-// 総ページ数を計算
-const totalPages = Math.ceil(totalItems / itemsPerPage);
+// Props を受け取る
+const {
+  totalItems,
+  itemsPerPage,
+  currentPage,
+  totalPages,
+  selectedTag = '',
+  getPageHref
+} = Astro.props as Props;
 
-// 現在のページを URL クエリから取得（デフォルト 1）
-const url = new URL(Astro.request.url);
-const currentPage = Number(url.searchParams.get('page') || '1');
-
-// リンク生成関数
-function buildHref(page: number) {
-  const params = new URLSearchParams(url.searchParams);
-  if (page <= 1) {
-    params.delete('page');
-  } else {
-    params.set('page', String(page));
+// ページ送り用 URL を組み立てるヘルパ
+function buildHref(page: number): string {
+  if (getPageHref) {
+    return getPageHref(page);
   }
-  const query = params.toString();
-  return url.pathname + (query ? `?${query}` : '');
+  // デフォルトは selectedTag を引き継ぐ
+  const base = selectedTag
+    ? `?tag=${encodeURIComponent(selectedTag)}`
+    : '?';
+  return `${base}&page=${page}`;
 }
 ---
 
-<nav aria-label="Pagination" class="mt-8 flex justify-center">
-  <ul class="inline-flex items-center space-x-2">
-    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-      <li>
-        <a
-          href={buildHref(page)}
-          class={`px-3 py-1 rounded ${page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'} hover:bg-blue-500`}
-          aria-current={page === currentPage ? 'page' : undefined}
-        >
-          {page}
-        </a>
-      </li>
-    ))}
-  </ul>
-</nav>
+<div class="flex justify-center mt-8">
+  {currentPage > 1 && (
+    <a
+      class="px-3 py-1 mr-2 bg-gray-700 rounded text-white"
+      href={buildHref(currentPage - 1)}
+    >
+      ← 前へ
+    </a>
+  )}
+  <span class="px-3 py-1 bg-blue-600 rounded text-white">
+    {currentPage} / {totalPages}
+  </span>
+  {currentPage < totalPages && (
+    <a
+      class="px-3 py-1 ml-2 bg-gray-700 rounded text-white"
+      href={buildHref(currentPage + 1)}
+    >
+      次へ →
+    </a>
+  )}
+</div>
