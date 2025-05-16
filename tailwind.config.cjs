@@ -1,7 +1,3 @@
-// tailwind.config.js
-const typography = require('@tailwindcss/typography')
-const lineClamp  = require('@tailwindcss/line-clamp')
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -68,8 +64,7 @@ module.exports = {
 
   plugins: [
     // Tailwind プラグイン
-    typography,
-    lineClamp,
+    require('@tailwindcss/typography'),
 
     // 自作コンポーネント群
     function ({ addComponents, theme }) {

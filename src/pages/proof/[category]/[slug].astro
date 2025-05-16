@@ -1,17 +1,17 @@
 ---
+// src/pages/proof/[category]/[slug].astro
+
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 import ProofPageTemplate from '@/components/templates/ProofPageTemplate.astro';
-
+import StoryCard from '@/components/molecules/StoryCard.astro';     // 追加
+import storiesJson from '@/data/stories.json';
 export const prerender = true;
 
-/**
- * getStaticPaths で proofs コレクションからカテゴリとスラッグを取得
- */
+/* getStaticPaths で proofs コレクションからカテゴリとスラッグを取得 */
 export async function getStaticPaths() {
   const proofs = await getCollection('proofs');
   return proofs.map((entry: CollectionEntry<'proofs'>) => {
-    // entry.id は "category/slug.md" 形式なので拡張子を除去
     const id = entry.id.replace(/\.mdx?$/, '');
     const [category, slug] = id.split('/');
     return {
@@ -28,6 +28,25 @@ interface Props {
 const { entry } = Astro.props as Props;
 const { Content } = await entry.render();
 const { data } = entry;
+
+// JSON から Story 型を再定義
+interface Story {
+  id: string;
+  source: string;
+  title: string;
+  summary: string;
+  url: string;
+  tags?: string[];
+  published: string;
+  hidden?: boolean;
+}
+const allStories = storiesJson as unknown as Story[];
+
+// frontmatter.stories 配列にある id で関連 Story を抽出
+const storyIds = (data.stories ?? []) as string[];
+const relatedStories = storyIds
+  .map((sid: string) => allStories.find((s) => s.id === sid))
+  .filter((s): s is Story => s !== undefined);
 ---
 
 <ProofPageTemplate
@@ -41,14 +60,21 @@ const { data } = entry;
 >
   <Content />
 
-  {data.stories && (
-    <div slot="footer">
-      <h2>関連ストーリー</h2>
-      <ul class="list-disc ml-6">
-        {data.stories.map((id: string) => (
-          <li><a href={`/story/${id}/`} class="underline">{id}</a></li>
+  {relatedStories.length > 0 && (
+    <div slot="footer" class="mt-12">
+      <h2 class="text-2xl font-bold mb-4">Related Stories</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {relatedStories.map((s) => (
+          <StoryCard
+            title={s.title}
+            summary={s.summary}
+            url={s.url}
+            source={s.source}
+            published={s.published}
+            tags={s.tags}
+          />
         ))}
-      </ul>
+      </div>
     </div>
   )}
 </ProofPageTemplate>

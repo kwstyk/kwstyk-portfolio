@@ -1,12 +1,13 @@
 ---
 // src/pages/story/index.astro
 
-import Layout          from '@/layouts/Layout.astro';
-import Hero            from '@/components/organisms/Hero.astro';
-import StoryFilterBar  from '@/components/molecules/StoryFilterBar.astro';
-import StoryCard       from '@/components/molecules/StoryCard.astro';
-import Pagination      from '@/components/molecules/Pagination.astro';
-import storiesJson     from '@/data/stories.json';
+import Layout         from '@/layouts/Layout.astro';
+import Hero           from '@/components/organisms/Hero.astro';
+import StoryFilterBar from '@/components/molecules/StoryFilterBar.astro';
+import StoryCard      from '@/components/molecules/StoryCard.astro';
+import Pagination     from '@/components/molecules/Pagination.astro';
+import storiesJson    from '@/data/stories.json';
+import { getCollection } from 'astro:content';
 
 interface Story {
   id: string;
@@ -18,6 +19,8 @@ interface Story {
   published: string;
   hidden?: boolean;
 }
+
+// JSON → 型変換
 const stories = (storiesJson as unknown) as Story[];
 
 // URL から tag／page を取得
@@ -25,7 +28,7 @@ const selectedTag = Astro.url.searchParams.get('tag') ?? '';
 const page        = Number(Astro.url.searchParams.get('page') ?? '1');
 const perPage     = 6;
 
-// hidden を外してタグ絞り込み
+// hidden を除外＋タグ絞り込み
 const filtered = stories.filter(
   s => !s.hidden && (selectedTag === '' || (s.tags ?? []).includes(selectedTag))
 );
@@ -33,16 +36,31 @@ const filtered = stories.filter(
 // ページャー用の集計
 const totalItems = filtered.length;
 const totalPages = Math.ceil(totalItems / perPage);
-const paged      = filtered.slice((page - 1) * perPage, page * perPage);
 
-// ドロップダウン用の全タグリスト
+// 今回画面に出す分だけ slice
+const paged = filtered.slice((page - 1) * perPage, page * perPage);
+
+// ドロップダウン用タグ一覧
 const allTags = Array.from(new Set(stories.flatMap(s => s.tags ?? [])));
+
+// Proof 側の frontmatter.stories で参照されているマップを作成
+const allProofs = await getCollection('proofs');
+const proofMap = new Map<string, { title: string; url: string }[]>();
+for (const proof of allProofs) {
+  for (const sid of proof.data.stories ?? []) {
+    if (!proofMap.has(sid)) proofMap.set(sid, []);
+    proofMap.get(sid)!.push({
+      title: proof.data.title,
+      url: `/proof/${proof.data.slug}`,
+    });
+  }
+}
 ---
 
 <Layout class="page-background">
-  <Hero title="Lab Notes" subtitle="～Proof から得た知見～" />
+  <Hero enableEffects={false} title="Lab Notes" subtitle="～Proof から得た知見～" />
 
-  <!-- StoryFilterBar を使ってタグ絞り込み -->
+  <!-- タグ絞り込みバー -->
   <StoryFilterBar
     tags={allTags}
     selectedTag={selectedTag}
@@ -54,14 +72,32 @@ const allTags = Array.from(new Set(stories.flatMap(s => s.tags ?? [])));
     class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8"
   >
     {paged.map((s) => (
-      <StoryCard
-        title={s.title}
-        summary={s.summary}
-        url={s.url}
-        source={s.source}
-        published={s.published}
-        tags={s.tags}
-      />
+      <>
+        <StoryCard
+          title={s.title}
+          summary={s.summary}
+          url={s.url}
+          source={s.source}
+          published={s.published}
+          tags={s.tags}
+        />
+
+        {/* Proof への相互リンクがあれば表示 */}
+        {proofMap.has(s.id) && (
+          <div class="ml-4 mb-6 text-sm">
+            <span class="font-medium">関連 Lab:</span>
+            {proofMap.get(s.id)!.map((p) => (
+              <a
+                href={p.url}
+                class="ml-2 text-accent hover:underline"
+                target="_blank"
+              >
+                {p.title}
+              </a>
+            ))}
+          </div>
+        )}
+      </>
     ))}
   </section>
 

@@ -14,6 +14,8 @@ tags:
   - pcap
   - wireshark
 ci_status: 'https://img.shields.io/badge/ci-passing-brightgreen.svg'
+stories:
+  - "zenn-https://zenn.dev/mijucation/articles/0f2e203bca0551"
 ---
 
 Docker ネットワーク上でシンプルな HTTP 通信を再現し、`tcpdump` と `Wireshark` でパケットを可視化する。
