@@ -7,6 +7,7 @@ ogImage: '/api/og?title=KWSTYK%20Portfolio'
 import Layout from '@/layouts/Layout.astro';
 import Button from '@/components/atoms/Button.astro';
 import Hero from '@/components/organisms/Hero.astro';
+import AboutCard from '@/components/organisms/AboutCard.astro';
 import '@/styles/landing.css';
 import '@/styles/accordion.css';
 import '@/styles/heading.css';
@@ -15,53 +16,67 @@ import '@/styles/hero.css';
 
 <Layout title="KWSTYK Portfolio">
   <main id="main-content">
-<Hero subtitle="セキュリティ × インフラ × 運用の全方位スキルに挑戦">
-  <h1 slot="title" class="hero-title heading-responsive">
-    成長と実績を証明する<wbr>ポートフォリオ
-  </h1>
-</Hero>
-  <div class="page-background">
+    <!-- Hero セクション -->
+    <Hero
+      subtitle="セキュリティ × インフラ × 運用の全方位スキルに挑戦"
+      typewriterTexts={['現場監督からセキュリティ監督へ']}
+    >
+      <h1 slot="title" class="hero-title heading-responsive">
+        成長と実績を証明する<wbr>ポートフォリオ
+      </h1>
+    </Hero>
 
-  
-     <h1 class="title heading-responsive">
-      KWSTYK<wbr> Portfolio
-     </h1>
-    <p class="catchcopy prose-responsive">
-      実証と成長の記録 — Proof-Based<wbr> Portfolio
-    </p>
+    <div class="page-background">
+      <!-- About と資格を縦に並べる -->
+      <div class="max-w-3xl mx-auto space-y-8 py-12">
+        <!-- About Me カード -->
+        <AboutCard
+          title="About Me"
+          intro={[
+            '建築現場の安全を守っていましたが、今は会社のサーバーを守っています。',
+            'インフラからセキュリティまで、安全と品質のこだわりをそのままにIT業界へ。',
+            '「止まらない」を再現可能にする仕組みを作り上げています。',
+          ]}
+          mission="会社の安全を、現場監督時代と同じ情熱で守る。"
+          socials={[
+            { href: 'https://github.com/yourname', label: 'GitHub', icon: '/icons/github.svg' },
+            { href: 'https://twitter.com/yourname', label: 'Twitter', icon: '/icons/twitter.svg' },
+          ]}
+        />
 
-    <section class="intro section-spacing card-responsive">
-      <h2>自己紹介</h2>
-      <p>セキュリティエンジニアを目指して、実践と学習を重ねています。</p>
-      <p>本サイトはその成長過程と実績を、具体的な証明（Proof）を通じて可視化するポートフォリオです。</p>
-    </section>
+        <!-- 保有資格 カード -->
+        <AboutCard title="保有資格">
+          <ul class="list-disc list-inside space-y-1">
+            <li>応用情報技術者</li>
+            <li>情報セキュリティマネジメント</li>
+            <li>ITパスポート</li>
+            <li>G検定</li>
+            <li>DX検定プロフェッショナル認定</li>
+          </ul>
 
-    <section class="intro section-spacing card-responsive">
-      <h2>保有資格</h2>
-      <ul class="qualification-list">
-        <li>情報処理安全確保支援士（受験予定）</li>
-        <li>応用情報技術者</li>
-        <li>ITパスポート</li>
-      </ul>
+          <input type="checkbox" id="toggle-other" class="accordion-toggle mt-2" />
+          <label for="toggle-other" class="accordion-label">その他の資格</label>
 
-      <input type="checkbox" id="toggle-other" class="accordion-toggle">
-      <label for="toggle-other" class="accordion-label">その他の資格</label>
-      <div class="accordion-content">
-        <ul class="qualification-list">
-          <li>宅地建物取引士</li>
-          <li>インテリアコーディネーター</li>
-          <li>2級建築施工管理技士補</li>
-          <li>ファイナンシャル・プランニング技能士3級</li>
-          <li>普通自動車免許</li>
-        </ul>
+          <div class="accordion-content">
+            <ul class="list-disc list-inside space-y-1">
+              <li>宅地建物取引士</li>
+              <li>インテリアコーディネーター</li>
+              <li>第一種衛生管理者</li>
+              <li>第二種電気工事士</li>
+              <li>2級建築施工管理技士補</li>
+              <li>ファイナンシャル・プランニング技能士3級</li>
+              <li>普通自動車免許</li>
+            </ul>
+          </div>
+        </AboutCard>
       </div>
-    </section>
 
-    <div class="button-group">
-      <Button variant="primary" href="/structure">Structureを見る</Button>
-      <Button variant="ghost" href="/proof">Proofを見る</Button>
-      <Button variant="ghost" href="/story">Storyを見る</Button>
+      <!-- ページ下部のボタン群 -->
+      <div class="button-group">
+        <Button variant="primary" href="/structure">Structureを見る</Button>
+        <Button variant="ghost" href="/proof">Proofを見る</Button>
+        <Button variant="ghost" href="/story">Storyを見る</Button>
+      </div>
     </div>
-  </div>
   </main>
 </Layout>

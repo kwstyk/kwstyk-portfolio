@@ -1,45 +1,42 @@
 ---
-interface Button { href: string; variant: string; text: string }
+/**
+ * Hero.astro – Landing 専用ヒーローセクション（ワード単位削除版）
+ *
+ * タイプライター効果：文字ごと表示 → ワードまるごと削除
+ * 星降る背景は変わらず動作します
+ *
+ * @version 2025-05-18 InstantClear Edition
+ */
+
+interface Button {
+  href: string
+  variant: string
+  text: string
+}
 interface Props {
   title?: string
   subtitle?: string
   buttons?: Button[]
+  /** 表示するワード群 */
   typewriterTexts?: string[]
   enableEffects?: boolean
 }
+
 const {
   title = "Growth Lab Portfolio",
   subtitle = "セキュリティ × インフラ × 再現性",
   buttons = [],
-  typewriterTexts = ["In-house SE","Cybersecurity Learner","Ex-Construction PM"],
+  typewriterTexts = ["現場監督からセキュリティ監督へ"],
   enableEffects = true,
 } = Astro.props as Props
 ---
 
 <style>
-  @keyframes bgShift {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  .hero {
-    background: linear-gradient(120deg, #0d1117, #1e2530, #0d1117);
-    background-size: 300% 300%;
-    animation: bgShift 20s ease infinite;
-  }
-  @keyframes textGlow {
-    0%,100% { text-shadow: 0 0 8px #60cdf9 }
-    50%     { text-shadow: 0 0 16px #38bdf8 }
-  }
-  .glow { animation: textGlow 3s ease-in-out infinite }
   @keyframes blink { 0%,100%{opacity:0} 50%{opacity:1} }
   .animate-blink { animation: blink 1s step-end infinite }
 </style>
 
-<section
-  class="hero relative overflow-x-hidden"
-  style="width:100vw; margin-left:calc(50% - 50vw)"
->
+<section class="hero relative overflow-x-hidden">
   {enableEffects && (
     <canvas
       id="starfield"
@@ -51,7 +48,7 @@ const {
 
   <div class="relative z-10 max-w-4xl mx-auto px-4 py-24 text-center">
     <slot name="title">
-      <h1 class="text-white text-4xl sm:text-6xl font-extrabold tracking-tight glow">
+      <h1 class="text-white text-4xl sm:text-6xl font-extrabold tracking-tight">
         {title}
       </h1>
     </slot>
@@ -84,38 +81,63 @@ const {
   {enableEffects && (
     <script type="module">
       document.addEventListener("DOMContentLoaded", () => {
+        // タイプライター：文字ごと表示 → ワードまとまって削除
         const cvs = document.getElementById("starfield");
+        const texts = cvs?.dataset.texts ? JSON.parse(cvs.dataset.texts) : [];
+        const typedEl = document.getElementById("typed");
+        const typingInterval = 150;   // 文字間隔
+        const pauseAfter = 1000;      // ワード全表示後の停止時間(ms)
+        let idx = 0;
+        let pos = 0;
+
+        function typeWord() {
+          if (!typedEl || texts.length === 0) return;
+          const word = texts[idx];
+          if (pos <= word.length) {
+            // 文字を1つずつ追加
+            typedEl.textContent = word.slice(0, pos++);
+            setTimeout(typeWord, typingInterval);
+          } else {
+            // ワード全文表示後に一気にクリア
+            setTimeout(() => {
+              typedEl.textContent = "";
+              idx = (idx + 1) % texts.length;
+              pos = 0;
+              typeWord();
+            }, pauseAfter);
+          }
+        }
+
+        typeWord();
+
+        // 星降る背景（変更なし）
         if (!(cvs instanceof HTMLCanvasElement)) return;
         const ctx = cvs.getContext("2d");
         if (!ctx) return;
-
-        // 星粒子
         let stars = [];
-        function init() {
+        function initStars() {
           const w = cvs.parentElement?.clientWidth || innerWidth;
           const h = cvs.parentElement?.clientHeight || innerHeight;
           cvs.width = w; cvs.height = h;
           stars = Array.from({ length: 60 }, () => ({
-            x: Math.random()*w,
-            y: Math.random()*h,
-            r: Math.random()*1.2+0.3,
-            v: Math.random()*0.15+0.05,
-            hue: Math.random()*360
+            x: Math.random() * w,
+            y: Math.random() * h,
+            r: Math.random() * 1.2 + 0.3,
+            v: Math.random() * 0.15 + 0.05,
+            hue: Math.random() * 360
           }));
         }
-
-        // 描画ループ
-        function render() {
+        function renderStars() {
           ctx.clearRect(0, 0, cvs.width, cvs.height);
-          // 通常の星
           stars.forEach(s => {
             ctx.beginPath();
-            ctx.arc(s.x, s.y, s.r, 0, 2*Math.PI);
+            ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
             ctx.fillStyle = `hsla(${s.hue},80%,75%,0.8)`;
             ctx.fill();
             s.y += s.v;
             if (s.y > cvs.height) {
-              s.y = 0; s.x = Math.random()*cvs.width; s.hue = Math.random()*360;
+              s.y = 0; s.x = Math.random() * cvs.width;
+              s.hue = Math.random() * 360;
             }
           });
           // 流れ星：確率 0.1
@@ -135,28 +157,12 @@ const {
               requestAnimationFrame(shoot);
             })();
           }
-
-          requestAnimationFrame(render);
+          requestAnimationFrame(renderStars);
         }
 
-        // タイプライター
-        const texts = cvs.dataset.texts ? JSON.parse(cvs.dataset.texts) : [];
-        const typedEl = document.getElementById("typed");
-        let idx=0, pos=0, del=false;
-        function typeLoop(){
-          if (typedEl && texts.length){
-            const w = texts[idx];
-            typedEl.textContent = del? w.slice(0,pos--): w.slice(0,pos++);
-            if (!del && pos===w.length+2) del=true;
-            if (del && pos===0) { del=false; idx=(idx+1)%texts.length; }
-          }
-          setTimeout(typeLoop,150);
-        }
-        typeLoop();
-
-        init();
-        window.addEventListener("resize", init);
-        render();
+        initStars();
+        window.addEventListener("resize", initStars);
+        renderStars();
       });
     </script>
   )}

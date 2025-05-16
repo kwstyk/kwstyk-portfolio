@@ -1,5 +1,6 @@
 ---
 import '@/styles/navbar.css';
+import { Home } from 'lucide-react'
 // ナビ項目定義
 const links = [
   { href: '/structure', label: 'Structure' },
@@ -14,8 +15,17 @@ const links = [
 
   <div class="navbar-inner">
     <!-- ロゴ／サイト名 -->
-    <a href="/" class="logo">KWSTYK</a>
-
+    <a href="/" class="logo flex items-center gap-3">
+      <!-- Home アイコン -->
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="w-8 h-8 text-[var(--accent)] hover:text-[var(--accent-light)] transition"
+           fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 12l9-9 9 9M4 10v10h6v-6h4v6h6V10" />
+      </svg>
+      <!-- テキストロゴ -->
+      <span class="font-bold text-lg text-white">KWSTYK</span>
+    </a>
     <!-- ハンバーガーボタン -->
     <button id="nav-toggle" class="hamburger" aria-label="メニューを開閉" aria-expanded="false">
       <!-- ハンバーガーアイコン -->
