@@ -1,9 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  // 1. dark モードを「class ベース」に切り替え
+  darkMode: 'class',
   content: [
     "./src/**/*.{astro,html,js,jsx,ts,tsx,md,mdx}",
   ],
-  darkMode: 'media',
   theme: {
     extend: {
       // prose のカスタマイズ例
@@ -60,6 +61,8 @@ module.exports = {
     'bg-red-500','text-white','bg-gray-500','bg-green-500',
     'bg-yellow-400','bg-blue-500','bg-indigo-500',
     'bg-purple-500','bg-gray-400',
+    // ダークモード用に動的に切り替える可能性のあるクラスを追加
+    'dark:bg-white','dark:bg-black','dark:text-white','dark:text-black',
   ],
 
   plugins: [

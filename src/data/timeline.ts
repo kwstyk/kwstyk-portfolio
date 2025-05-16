@@ -17,7 +17,7 @@ export const timeline: TimelineItem[] = [
   {
     year:    "2023",
     title:   "大阪に移住 オフィス空間構築会社へ転職",
-    details: "福岡の天神ビックバンプロジェクトの職長も経験",
+    details: "福岡の天神ビックバンプロジェクトの職長など経験",
   },
   {
     year:    "2024",
