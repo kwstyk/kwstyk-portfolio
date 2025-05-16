@@ -54,7 +54,10 @@ const {
     </slot>
 
     {enableEffects ? (
-      <p class="mt-4 text-2xl h-10">
+      <p
+        class="mt-4 text-2xl h-10 whitespace-nowrap overflow-x-auto"
+        aria-label="Typewriter text"
+      >
         <span id="typed" class="text-[var(--accent-light,#38bdf8)] font-semibold"></span>
         <span class="text-[var(--accent,#60cdf9)] animate-blink">|</span>
       </p>
@@ -79,7 +82,7 @@ const {
   </div>
 
   {enableEffects && (
-    <script type="module">
+     <script is:inline type="module">
       document.addEventListener("DOMContentLoaded", () => {
         // タイプライター：文字ごと表示 → ワードまとまって削除
         const cvs = document.getElementById("starfield");
@@ -93,10 +96,14 @@ const {
         function typeWord() {
           if (!typedEl || texts.length === 0) return;
           const word = texts[idx];
+          // ワード表示にかけたい合計時間（ms）
+          const totalDuration = 1500;
+          // 文字数に応じた表示間隔を算出
+          const interval = Math.max(20, totalDuration / word.length);
           if (pos <= word.length) {
             // 文字を1つずつ追加
             typedEl.textContent = word.slice(0, pos++);
-            setTimeout(typeWord, typingInterval);
+            setTimeout(typeWord, interval);
           } else {
             // ワード全文表示後に一気にクリア
             setTimeout(() => {
