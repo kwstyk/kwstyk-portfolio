@@ -1,64 +1,47 @@
 ---
-/**
- * AboutCard.astro – 汎用カード
- */
-
-interface SocialLink {
-  href:  string;
-  label: string;
-  icon:  string;
-}
+// src/components/organisms/AboutCard.astro
+interface SocialLink { href: string; label: string; icon: string }
 
 interface Props {
-  title:     string;
-  /** 自己紹介文（行ごとに分割した配列） */
-  intro?:    string[];
-  /** ミッション一文 */
-  mission?:  string;
-  /** SNSリンク */
-  socials?:  SocialLink[];
+  title:    string
+  intro?:   string[]
+  mission?: string
+  socials?: SocialLink[]
 }
 
-const {
-  title,
-  intro,
-  mission = "",
-  socials = [],
-} = Astro.props as Props;
+const { title, intro = [], mission = '', socials = [] } = Astro.props as Props
 ---
-
 <div class="card-base w-full p-8 flex flex-col gap-4">
   <!-- 見出し -->
-  <h2 class="text-2xl font-semibold text-[var(--accent)]">{title}</h2>
+<h2 id={title.toLowerCase().replace(/\s/g, '-')} class="text-2xl font-semibold text-[var(--accent)]">
+  {title}
+</h2>
 
-  <!-- intro があれば表示、なければスロット -->
-  {intro ? (
+  <!-- 自己紹介があれば表示 -->
+  {intro.length > 0 && (
     <div class="prose prose-invert space-y-2">
       {intro.map(line => <p>{line}</p>)}
     </div>
-  ) : (
-    <slot />
   )}
 
-  <!-- mission は任意 -->
+  <!-- ミッション -->
   {mission && (
-    <p class="italic text-[var(--accent-light)]">{mission}</p>
+    <p class="italic text-sm sm:text-base text-[var(--accent-light)] border-l-2 border-[var(--accent-light)] pl-3">
+      {mission}
+    </p>
   )}
 
-  <!-- SNS は任意 -->
+  <!-- SNS -->
   {socials.length > 0 && (
     <div class="flex gap-4 mt-auto">
       {socials.map(s => (
-        <a
-          href={s.href}
-          target="_blank"
-          rel="noopener"
-          aria-label={s.label}
-          class="hover:opacity-80"
-        >
+        <a href={s.href} target="_blank" rel="noopener" aria-label={s.label} class="hover:opacity-80">
           <img src={s.icon} alt={s.label} class="w-6 h-6" />
         </a>
       ))}
     </div>
   )}
+
+  <!-- ▼ ここに子要素を 1 回だけ描画 -->
+  <slot />
 </div>

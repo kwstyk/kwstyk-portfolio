@@ -1,6 +1,7 @@
 ---
 layout: '@/components/templates/ProofPageTemplate.astro'
 title: Packet Capture Lab
+description: 'Docker ネットワーク上でシンプルな HTTP 通信を再現し、`tcpdump` と `Wireshark` でパケットを可視化する。'
 category: network-security
 difficulty: easy
 repro:
@@ -17,9 +18,6 @@ ci_status: 'https://img.shields.io/badge/ci-passing-brightgreen.svg'
 stories:
   - "zenn-https://zenn.dev/mijucation/articles/0f2e203bca0551"
 ---
-
-Docker ネットワーク上でシンプルな HTTP 通信を再現し、`tcpdump` と `Wireshark` でパケットを可視化する。
-
 ## Design Rationale
 
 …
@@ -50,6 +48,6 @@ just up
 
 ## References
 
-- [TCP/IP 入門](https://example.com)
+- [TCP/IP 入門](https://amzn.asia/d/eon0oUv)
 
 

@@ -1,21 +1,28 @@
 ---
-import Layout         from '@/layouts/Layout.astro';
-import ProofHero      from '@/components/organisms/ProofHero.astro';
-import ProofMetaCard  from '@/components/organisms/ProofMetaCard.astro';
+import Layout from '@/layouts/Layout.astro'
+import ProofHero from '@/components/organisms/ProofHero.astro'
+import ProofMetaCard from '@/components/organisms/ProofMetaCard.astro'
+import SectionNav from '@/components/organisms/SectionNav.astro'
 
+/**
+ * Props: Proof詳細ページで使用されるメタ情報
+ */
 interface Props {
-  title:       string;
-  difficulty?: 'easy' | 'medium' | 'hard' | 'expert';
-  repro:       ('docker' | 'terraform' | 'vagrant' | 'manual')[];
-  stack:       string[];
-  updated:     string;
-  ci_status?:  string;
-  tags?:       string[];
-  class?:      string;
+  title:       string
+  description?: string
+  difficulty?: 'easy' | 'medium' | 'hard' | 'expert'
+  repro:       ('docker' | 'terraform' | 'vagrant' | 'manual')[]
+  stack:       string[]
+  updated:     string
+  ci_status?:  string
+  tags?:       string[]
+  class?:      string
 }
 
+// Props 分割代入（Fallbackあり）
 const {
   title,
+  description = '',
   difficulty,
   repro,
   stack,
@@ -23,17 +30,19 @@ const {
   updated,
   tags = [],
   class: className = '',
-} = Astro.props as Props;
+} = Astro.props as Props
 ---
 
+<!-- 全体レイアウトの共通適用 -->
 <Layout siteName="KWSTYK Portfolio" pageTitle={`Proof | ${title}`} class={className}>
   <main class="flex-1 px-4 sm:px-6 lg:px-8 xl:px-16 py-8">
 
-    <!-- ヒーローセクション -->
-    <section class="container mx-auto px-20 py-20 bg-slate-700/20">
+    <!-- ✅ Heroセクション（タイトル・再現手段・難易度など） -->
+    <section class="container mx-auto px-6 sm:px-10 py-20 bg-slate-700/20 rounded-2xl">
       <div class="max-w-2xl mx-auto text-center">
         <ProofHero
           title={title}
+          description={description}
           difficulty={difficulty}
           repro={repro}
           stack={stack}
@@ -42,30 +51,26 @@ const {
       </div>
     </section>
 
-    <!-- 本文＋メタ -->
-    <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- ✅ 本文＋メタ情報セクション -->
+    <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div class="grid grid-cols-1 lg:grid-cols-[1fr,250px] gap-8">
-        <!-- 本文側 -->
+
+        <!-- ▼ メイン本文：Markdownスロット -->
         <article class="prose prose-invert" lang="ja">
           <slot />
           <slot name="footer" />
         </article>
 
-        <!-- サイドバー -->
+        <!-- ▼ メタ情報：更新日・タグなど -->
         <aside class="space-y-6">
           <ProofMetaCard updated={updated} tags={tags} />
         </aside>
+
       </div>
     </section>
-    <!-- 他レイヤーへの誘導 -->
-<section class="mt-12 border-t border-gray-700 pt-8">
-  <h2 class="text-lg font-bold text-[var(--accent)] mb-4">他のセクションも見る</h2>
-  <div class="flex flex-wrap gap-4">
-    <a href="/structure" class="text-sm underline text-blue-400 hover:text-blue-200">Structure（体系）を見る</a>
-    <a href="/story" class="text-sm underline text-blue-400 hover:text-blue-200">Story（背景）を見る</a>
-    <a href="/proof" class="text-sm underline text-blue-400 hover:text-blue-200">他の Proof を見る</a>
-  </div>
-</section>
 
   </main>
+
+  <!-- ✅ ページ下部：他レイヤ導線ナビゲーション -->
+  <SectionNav />
 </Layout>

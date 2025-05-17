@@ -1,4 +1,6 @@
 ---
+// src/components/organisms/ProofHero.astro
+
 import DifficultyBadge  from '@/components/atoms/DifficultyBadge.astro';
 import ReproMethodBadge from '@/components/atoms/ReproMethodBadge.astro';
 import StackChip        from '@/components/molecules/StackChip.astro';
@@ -7,33 +9,58 @@ import Heading          from '@/components/atoms/Heading.astro';
 
 interface Props {
   title:      string;
-  difficulty?: string;
-  repro?:     string[];
+  description?: string;
+  difficulty?: 'easy' | 'medium' | 'hard' | 'expert';
+  repro?:     ('docker' | 'terraform' | 'vagrant' | 'manual')[];
   stack?:     string[];
   ci_status?: string;
 }
-const { title, difficulty, repro = [], stack = [], ci_status } = Astro.props as Props;
+const {
+  title,
+  description = '',
+  difficulty,
+  repro = [],
+  stack = [],
+  ci_status: ciStatus,
+} = Astro.props as Props;
 ---
 <section class="mx-auto w-full max-w-3xl pt-8 pb-12 px-4 sm:px-6 lg:px-8 text-center space-y-6">
+  <!-- タイトル -->
   <Heading
     level={1}
-    className ="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold"
+    className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold"
   >
     {title}
   </Heading>
+  
+
+  <!-- 難易度 + 再現方法 -->
   <div class="flex flex-wrap justify-center gap-2">
-    <DifficultyBadge level={difficulty} />
-    {repro.map(m => <ReproMethodBadge method={m} />)}
+    {difficulty && <DifficultyBadge level={difficulty} />}
+    {repro.map(method => (
+      <ReproMethodBadge method={method} />
+    ))}
   </div>
+
+  <!-- 技術スタック -->
   {stack.length > 0 && (
     <div class="flex flex-wrap justify-center gap-2">
-      {stack.map(s => <StackChip name={s} />)}
+      {stack.map(name => (
+        <StackChip name={name}/>
+      ))}
     </div>
   )}
 
-  {ci_status && (
+  <!-- CIステータス -->
+  {ciStatus && (
     <div class="flex justify-center mt-4">
-      <StatusBadge src={ci_status} />
+      <StatusBadge src={ciStatus} />
     </div>
+  )}
+  <!-- 説明文 -->
+    {description && (
+    <p class="mt-4 text-lg text-gray-300 max-w-xl mx-auto">
+      {description}
+    </p>
   )}
 </section>

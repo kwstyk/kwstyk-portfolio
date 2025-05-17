@@ -1,7 +1,29 @@
 ---
-interface Props { name: string }
-const { name } = Astro.props
+interface Props {
+  /** 技術名 */
+  name: string;
+}
+const { name } = Astro.props as Props;
+
+// スタックごとの色マッピング（キーは表示名を厳密に）
+const chipColorMap: Record<string, string> = {
+  "Astro":        "bg-purple-600 text-white",
+  "Vite":         "bg-green-500 text-white",
+  "Tailwind CSS": "bg-teal-400 text-black",
+  "TypeScript":   "bg-blue-600 text-white",
+  "Docker":       "bg-blue-500 text-white",
+  "GitHub":       "bg-gray-800 text-white",
+  "Zenn":         "bg-green-400 text-white",
+  "Note":         "bg-yellow-400 text-black",
+  "TryHackMe":    "bg-indigo-500 text-white",
+  // 必要に応じて別のスタックを追加…
+  "default":      "bg-gray-700 text-white",
+};
+
+// name とマッピングを照合
+const chipClass = chipColorMap[name] ?? chipColorMap.default;
 ---
-<span class="inline-block rounded-full bg-slate-700 text-white text-xs font-semibold px-3 py-1">
+
+<span class={`inline-block rounded-full ${chipClass} text-xs font-semibold px-3 py-1`}>
   {name}
 </span>
