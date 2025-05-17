@@ -7,6 +7,7 @@ import StoryFilterBar from '@/components/molecules/StoryFilterBar.astro';
 import StoryCard      from '@/components/molecules/StoryCard.astro';
 import Pagination     from '@/components/molecules/Pagination.astro';
 import storiesJson    from '@/data/stories.json';
+import SectionNav from '@/components/organisms/SectionNav.astro';
 import { getCollection } from 'astro:content';
 
 interface Story {
@@ -112,4 +113,5 @@ for (const proof of allProofs) {
       `?tag=${encodeURIComponent(selectedTag)}&page=${p}`
     }
   />
+  <SectionNav exclude="story" />
 </Layout>

@@ -6,6 +6,7 @@ import StatsBar from '@/components/organisms/StatsBar.astro';
 import FilterBar from '@/components/molecules/FilterBar.astro';
 import ProofCardGrid from '@/components/organisms/ProofCardGrid.astro';
 import Pagination from '@/components/molecules/Pagination.astro';
+import SectionNav from '@/components/organisms/SectionNav.astro';
 
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
@@ -87,4 +88,5 @@ const meta = generateSeo({
     </section>
     </div>
   </main>
+  <SectionNav exclude="proof" />
 </Layout>
