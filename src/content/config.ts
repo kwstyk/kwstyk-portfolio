@@ -36,6 +36,18 @@ export const collections = {
     }),
   }),
 
+// stories コレクションの定義
+stories: defineCollection({
+  type: 'content',
+  schema: z.object({
+    title:       z.string(),
+    date:        z.string(),            // または z.date() でもOK
+    description: z.string().optional(),
+    updated:     z.string().optional(), // 任意フィールド
+    tags:        z.array(z.string()).optional(),
+  }),
+}),
+
   // descriptions コレクションの定義（カテゴリ紹介用）
   descriptions: defineCollection({
     type: 'content',
@@ -46,16 +58,6 @@ export const collections = {
       // 必要に応じてフィールドを追加
     }),
   }),
-
-    /* -------- Intro markdown -------- 
-  structureIntro: defineCollection({
-    type: 'content',
-    schema: z.object({
-      title:       z.string(),
-      description: z.string(),
-      updated:     z.string().optional(),
-    }),
-  }),*/
   
 } as Record<string, ReturnType<typeof defineCollection>>;
 
