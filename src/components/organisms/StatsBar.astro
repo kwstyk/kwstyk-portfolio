@@ -30,7 +30,11 @@ const ciRate = proofCount === 0 ? 0 : Math.round((ciPassed / proofCount) * 100);
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
     const elements = document.querySelectorAll('.count');
-    elements.forEach(el => {
+
+    const animateCount = (el) => {
+      if (el.dataset.animating === 'true') return; // ★すでに実行中ならスキップ
+      el.dataset.animating = 'true';
+
       const target = parseInt(el.dataset.value);
       const duration = 1000;
       const steps = 30;
@@ -38,17 +42,37 @@ const ciRate = proofCount === 0 ? 0 : Math.round((ciPassed / proofCount) * 100);
       let count = 0;
       const increment = Math.ceil(target / steps);
 
+      el.classList.remove('text-green-500');
+      el.classList.add('text-[var(--accent)]');
+      el.textContent = '0';
+
       const timer = setInterval(() => {
         count += increment;
         if (count >= target) {
           el.textContent = target;
           el.classList.remove('text-[var(--accent)]');
-          el.classList.add('text-green-500'); // ✅ カウント終了後に色変更
+          el.classList.add('text-green-500');
+          el.dataset.animating = 'false'; // ★完了したらフラグ戻す
           clearInterval(timer);
         } else {
           el.textContent = count;
         }
       }, interval);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCount(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.6 // 60%以上見えたときに発火
     });
+
+    elements.forEach(el => observer.observe(el));
   });
 </script>
+
+
+
