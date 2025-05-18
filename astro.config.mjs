@@ -1,26 +1,31 @@
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import path     from 'path';
+import { fileURLToPath, URL } from 'node:url';
+import path from 'path';
 
-// ─ Integrations ─
 import tailwind from '@astrojs/tailwind';
 import react    from '@astrojs/react';
 import mdx      from '@astrojs/mdx';
 import vercel   from '@astrojs/vercel';
 
-// ─ remark / rehype ─
-import remarkDirective      from 'remark-directive';
-import remarkGfm            from 'remark-gfm';
-import remarkKwstykCallout  from './plugins/remark-kwstyk-callout.js';
-import remarkInclude        from './plugins/remark-include.js';
-import remarkMermaidJs      from 'remark-mermaidjs';
-import rehypeExternalLinks  from 'rehype-external-links';
-import rehypeCopyButton     from './plugins/rehype-copy-button.js';
+import remarkDirective     from 'remark-directive';
+import remarkGfm           from 'remark-gfm';
+import remarkKwstykCallout from './plugins/remark-kwstyk-callout.js';
+import remarkInclude       from './plugins/remark-include.js';
+import remarkMermaidJs     from 'remark-mermaidjs';
+import rehypeExternalLinks from 'rehype-external-links';
+import rehypeCopyButton    from './plugins/rehype-copy-button.js';
 
 export default defineConfig(({ command }) => ({
-  /* ─────────────────────────────  Markdown (全 .md / .mdx 共通) */
+  // ← ここで絶対パスを指定
+  /*
+  typescript: {
+    tsconfig: fileURLToPath(new URL('./tsconfig.json', import.meta.url)),
+  },
+*/
+  typescript: false,
+
   markdown: {
-    // Shiki / Prism でハイライトするが、Mermaid だけ除外
     syntaxHighlight: {
       type: 'shiki',
       excludeLangs: ['mermaid'],
@@ -30,7 +35,6 @@ export default defineConfig(({ command }) => ({
       remarkGfm,
       remarkKwstykCallout,
       remarkInclude,
-      // ← Mermaid を Markdown AST 段階で SVG に変換
       [remarkMermaidJs, { launchOptions: { headless: true } }],
     ],
     rehypePlugins: [
@@ -39,27 +43,25 @@ export default defineConfig(({ command }) => ({
     ],
   },
 
-  /* ─────────────────────────────  Integrations */
   integrations: [
     tailwind({ config: './tailwind.config.cjs' }),
     react(),
-
-    // .md と .mdx の両方を MDX pipeline へ流す
-    mdx({
-      extension: ['.md', '.mdx'],
-    }),
-
-    // build 時のみ Vercel adapter
+    mdx({ extension: ['.md', '.mdx'] }),
     command === 'build' && vercel(),
   ],
 
-  /* ─────────────────────────────  Content Collections */
   content: {
     entryExtensions: ['.md', '.mdx'],
   },
 
-  /* ─────────────────────────────  Vite resolve alias */
   vite: {
+    // ─── ここを追加 ───
+    esbuild: {
+      // 親ディレクトリをさかのぼって tsconfig.json を探しに行かない
+      tsconfigSearch: false,
+      // 空の tsconfig をその場で渡しておく（念のため）
+      tsconfigRaw: '{}',
+    },
     resolve: {
       alias: {
         '@': path.resolve('.', 'src'),

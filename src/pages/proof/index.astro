@@ -3,7 +3,7 @@
 import Layout from '@/layouts/Layout.astro'
 import Hero from '@/components/organisms/Hero.astro'
 import StatsBar from '@/components/organisms/StatsBar.astro'
-import FilterBar from '@/components/molecules/FilterBar.astro'
+import FilterBar from '@/components/molecules/FilterBar.astro';
 import ProofCardGrid from '@/components/organisms/ProofCardGrid.astro'
 import Pagination from '@/components/molecules/Pagination.astro'
 import SectionNav from '@/components/organisms/SectionNav.astro'
@@ -69,9 +69,9 @@ const meta = generateSeo({
       </section>
 
       <!-- フィルタバー：カテゴリ / 難易度 / 再現手段 / 検索 -->
-      <section class="mb-8">
-        <FilterBar client:load />
-      </section>
+    <section class="container mx-auto px-4 mb-8">
+      <FilterBar />
+    </section>
 
       <!-- Proof カードグリッド -->
       <section class="mb-8">

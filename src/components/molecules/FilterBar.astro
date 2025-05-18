@@ -1,9 +1,10 @@
 ---
+// src/components/molecules/FilterBar.astro
 import { getCollection } from 'astro:content';
 const allProofs = await getCollection('proofs');
 const categories = Array.from(new Set(allProofs.map(p => p.slug.split('/')[0])));
-const difficulties = ['easy','medium','hard','expert'];
-const reproMethods = ['docker','terraform','vagrant','manual'];
+const difficulties = ['easy', 'medium', 'hard', 'expert'];
+const reproMethods = ['docker', 'terraform', 'vagrant', 'manual'];
 ---
 <style>
   /* eslint-disable astro/no-unused-css-selector */
@@ -13,151 +14,155 @@ const reproMethods = ['docker','terraform','vagrant','manual'];
   }
   /* eslint-enable astro/no-unused-css-selector */
 
-    /* フィルターバー全体 */
   .filter-bar {
-    @apply mb-6 bg-[#112240] p-4 rounded max-w-screen-lg mx-auto;
-    /* デフォルト（スマホ幅）: 縦積み */
-    @apply flex flex-col flex-wrap gap-4;
+    @apply mb-6 bg-[#112240] p-4 rounded max-w-screen-lg mx-auto flex flex-col flex-wrap gap-4;
   }
   @media (min-width: 640px) {
     .filter-bar {
-      /* タブレット以上: 横並び */
       @apply flex-row items-center justify-start;
     }
   }
-    /* 各フィルターグループ */
   .filter-group {
-    /* スマホ幅: ラベルの下にコントロール */
     @apply flex flex-col gap-2;
   }
   @media (min-width: 640px) {
     .filter-group {
-      /* タブ幅以上: ラベルとコントロールを横並び */
       @apply flex-row items-center gap-2;
     }
   }
   .filter-group span,
-  .filter-group label { @apply font-medium text-white; }
+  .filter-group label {
+    @apply font-medium text-white;
+  }
   .category-btn,
-  .difficulty-btn   { @apply px-2 py-1 bg-gray-600 rounded text-white cursor-pointer; }
-  .repro-chk        { @apply mr-1 cursor-pointer; }
-  .keyword-input    { @apply flex-1 bg-gray-700 p-2 rounded text-white; }
+  .difficulty-btn {
+    @apply px-2 py-1 bg-gray-600 rounded text-white cursor-pointer;
+  }
+  .repro-chk {
+    @apply mr-1 cursor-pointer;
+  }
+  .keyword-input {
+    @apply flex-1 bg-gray-700 p-2 rounded text-white;
+  }
 </style>
 
-<div id="filter-bar" class="filter-bar filter-responsive">
+<div id="filter-bar" class="filter-bar">
   <!-- Category Filter -->
-  <div class="filter-group filter-group-responsive">
+  <div class="filter-group">
     <span>カテゴリ:</span>
-    <!-- 横スクロール可能にして折り返しを防止 -->
     <div class="ml-2 flex space-x-2 overflow-x-auto pb-1">
       {categories.map(c => (
         <button
           type="button"
           class="category-btn flex-shrink-0"
           data-category={c}
-          aria-pressed="false" 
-       >
-         {c}
+          aria-pressed="false"
+        >
+          {c}
         </button>
       ))}
     </div>
   </div>
 
   <!-- Difficulty Filter -->
-  <div class="filter-group filter-group-responsive">
+  <div class="filter-group">
     <span>難易度:</span>
     {difficulties.map(d => (
-      <button type="button" 
-      class="difficulty-btn" 
-      data-difficulty={d}
-      aria-pressed="false" 
-      >{d}</button>
+      <button
+        type="button"
+        class="difficulty-btn"
+        data-difficulty={d}
+        aria-pressed="false"
+      >
+        {d}
+      </button>
     ))}
   </div>
 
   <!-- Repro Method Filter -->
-  <div class="filter-group filter-group-responsive">
+  <div class="filter-group">
     <span>再現方法:</span>
     {reproMethods.map(r => (
       <label class="flex items-center text-white">
-        <input type="checkbox" 
-        class="repro-chk" 
-        value={r} />{r}
+        <input type="checkbox" class="repro-chk" value={r} />{r}
       </label>
     ))}
   </div>
 
   <!-- Keyword Search -->
   <div class="flex-1 min-w-[150px]">
-    <input id="filter-keyword" type="text" placeholder="キーワード検索..." class="keyword-input" />
+    <input
+      id="filter-keyword"
+      type="text"
+      placeholder="キーワード検索..."
+      class="keyword-input"
+    />
   </div>
 </div>
 
-<script>
-(function() {
-  const catBtns = Array.from(document.querySelectorAll('button.category-btn')) as HTMLButtonElement[];
-  const diffBtns = Array.from(document.querySelectorAll('button.difficulty-btn')) as HTMLButtonElement[];
-  const reproChks = Array.from(document.querySelectorAll('input.repro-chk')) as HTMLInputElement[];
-  const keywordInput = document.getElementById('filter-keyword')! as HTMLInputElement;
-  if (!keywordInput) return;
-  const cards = Array.from(document.querySelectorAll('#cards .card')) as HTMLElement[];
+<script is:inline>
+window.addEventListener('DOMContentLoaded', function() {
+  const catBtns = Array.from(document.querySelectorAll('button.category-btn'));
+  const diffBtns = Array.from(document.querySelectorAll('button.difficulty-btn'));
+  const reproChks = Array.from(document.querySelectorAll('input.repro-chk'));
+  const keywordInput = document.getElementById('filter-keyword');
+  const cardsContainer = document.getElementById('cards');
+  if (!keywordInput || !cardsContainer) return;
 
-  // ——— URL から初期 q 値を取得して input にセット ———
+  // 初期キーワードをセット
   const params = new URLSearchParams(window.location.search);
-  const initialQ = params.get('q') || '';
-  keywordInput.value = initialQ;
+  keywordInput.value = params.get('q') || '';
 
-  // aria-pressed を切り替えるユーティリティ
-  function togglePressed(btn: HTMLButtonElement) {
-   const isPressed = btn.getAttribute('aria-pressed') === 'true';
-    btn.setAttribute('aria-pressed', (!isPressed).toString());
+  function togglePressed(btn) {
+    const current = btn.getAttribute('aria-pressed') === 'true';
+    btn.setAttribute('aria-pressed', String(!current));
   }
 
   function applyFilters() {
-    const selCats = catBtns
-      .filter(b => b.getAttribute('aria-pressed') === 'true')
-      .map(b => b.dataset.category || '');
-    const selDiffs = diffBtns
-      .filter(b => b.getAttribute('aria-pressed') === 'true')
-      .map(b => b.dataset.difficulty || '');
-    const selRepros = reproChks
-      .filter(c => c.checked)
-      .map(c => c.value);
-    const keyword = keywordInput.value.trim().toLowerCase();
+    const selCats   = catBtns.filter(b => b.getAttribute('aria-pressed') === 'true')
+                            .map(b => b.dataset.category || '');
+    const selDiffs  = diffBtns.filter(b => b.getAttribute('aria-pressed') === 'true')
+                             .map(b => b.dataset.difficulty || '');
+    const selRepros = reproChks.filter(c => c.checked).map(c => c.value);
+    const keyword   = keywordInput.value.trim().toLowerCase();
+    const cards     = Array.from(cardsContainer.querySelectorAll('.card'));
 
     cards.forEach(card => {
-      const cat = card.dataset.category || '';
-      const diff = card.dataset.difficulty || '';
-      const repro = JSON.parse(card.dataset.repro || '[]') as string[];
-      const titleEl = card.querySelector('h3');
-      const title = titleEl?.textContent?.toLowerCase() || '';
+      const cat   = card.dataset.category || '';
+      const diff  = card.dataset.difficulty || '';
+      let repro   = [];
+      try {
+        repro = JSON.parse(card.dataset.repro || '[]');
+      } catch {}
+      const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
 
-      const okCat = !selCats.length || selCats.includes(cat);
-      const okDiff = !selDiffs.length || selDiffs.includes(diff);
-      const okRepro = !selRepros.length || selRepros.some(r => repro.includes(r));
-      const okKeyword = !keyword || title.includes(keyword);
+      const okCat     = !selCats.length    || selCats.includes(cat);
+      const okDiff    = !selDiffs.length   || selDiffs.includes(diff);
+      const okRepro   = !selRepros.length  || selRepros.some(r => repro.includes(r));
+      const okKeyword = !keyword           || title.includes(keyword);
 
-      (card as HTMLElement).style.display = (okCat && okDiff && okRepro && okKeyword) ? '' : 'none';
+      card.style.display = (okCat && okDiff && okRepro && okKeyword) ? '' : 'none';
     });
   }
-  // ——— URL sync: input 時に q を更新 ———
-  catBtns.forEach(btn =>
-    btn.addEventListener('click', () => { togglePressed(btn); applyFilters(); })
-  );
-  diffBtns.forEach(btn =>
-    btn.addEventListener('click', () => { togglePressed(btn); applyFilters(); })
-  );
+
+  catBtns.forEach(btn => btn.addEventListener('click', function() {
+    togglePressed(this);
+    applyFilters();
+  }));
+  diffBtns.forEach(btn => btn.addEventListener('click', function() {
+    togglePressed(this);
+    applyFilters();
+  }));
   reproChks.forEach(chk => chk.addEventListener('change', applyFilters));
-  keywordInput.addEventListener('input', () => {
-    // URL の q を書き換え（history.replaceState で履歴に残す）
+  keywordInput.addEventListener('input', function() {
     const ps = new URLSearchParams(window.location.search);
-    if (keywordInput.value)      ps.set('q', keywordInput.value);
-    else                          ps.delete('q');
-    history.replaceState(null, '', `?${ps.toString()}`);
+    if (this.value) ps.set('q', this.value);
+    else ps.delete('q');
+    history.replaceState(null, '', `?${ps}`);
     applyFilters();
   });
 
-+  // 最初のフィルタ適用（初期 q による絞り込み）
+  // 最初のフィルタ適用
   applyFilters();
-})();
+});
 </script>
