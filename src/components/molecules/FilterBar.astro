@@ -4,9 +4,9 @@ import { getCollection } from 'astro:content';
 
 // Proof の front-matter からカテゴリ一覧を取得
 const allProofs    = await getCollection('proofs');
-const categories   = Array.from(new Set(allProofs.map(p => p.slug.split('/')[0])));
+const categories   = Array.from(new Set(allProofs.map(p => p.slug.split('/')[0]))) .sort((a, b) => a.localeCompare(b));
 const difficulties = ['easy', 'medium', 'hard', 'expert'];
-const reproMethods = ['docker', 'terraform', 'vagrant', 'manual'];
+const reproMethods = ['docker', 'terraform', 'vagrant', 'manual'].sort((a, b) => a.localeCompare(b));
 ---
 <style>
   /* 全体：1列→2列→4列のグリッド */

@@ -56,11 +56,15 @@ module.exports = {
 
   safelist: [
     // 必要なクラスを列挙
+    'alert-info',
+    'alert-warn',
+    'alert-error',
     'border-4','border-red-500','p-4','mt-4',
     'grid','grid-cols-1','lg:grid-cols-2','gap-4','gap-8',
     'bg-red-500','text-white','bg-gray-500','bg-green-500',
     'bg-yellow-400','bg-blue-500','bg-indigo-500',
     'bg-purple-500','bg-gray-400',
+
     // ダークモード用に動的に切り替える可能性のあるクラスを追加
     'dark:bg-white','dark:bg-black','dark:text-white','dark:text-black',
   ],

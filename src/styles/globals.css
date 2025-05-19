@@ -107,6 +107,49 @@ body {
   overflow-wrap: break-word;
 }
 
+.alert {
+  @apply border-l-4 p-4 my-4 rounded;
+}
+.alert-info {
+  @apply bg-blue-50 border-blue-500 text-blue-900;
+}
+.alert-warn {
+  @apply bg-yellow-50 border-yellow-500 text-yellow-900;
+}
+.alert-error {
+  @apply bg-red-50 border-red-500 text-red-900;
+}
+.alert strong {
+  @apply underline font-semibold bg-yellow-100 text-black px-1 rounded-sm;
+}
+
+.alert em {
+  @apply italic underline bg-yellow-100 text-black px-1 rounded-sm;
+}
+
+.alert a {
+  @apply underline text-blue-700 hover:text-blue-900;
+}
+
+/* ▼ ブロックコードの背景は透明にする */
+.prose pre > code {
+  background-color: transparent !important;
+}
+
+/* ▼ 表の中や本文中の code は背景あり */
+.prose p > code,
+.prose li > code,
+.prose td > code,
+.prose th > code {
+  background-color: #cacbcc; /* 好きなグレー */
+  color: #1a202c;            /* 文字を読みやすく */
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-weight: 500;
+}
+
+
+
 /* モバイルでも同じルール */
 @media (max-width: 640px) {
   .title {
