@@ -93,9 +93,6 @@ importers:
       astro:
         specifier: ^5.7.13
         version: 5.7.13(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.2)(typescript@5.8.3)(yaml@2.7.1)
-      astro-component-tester:
-        specifier: ^0.8.0
-        version: 0.8.0(astro@5.7.13(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.2)(typescript@5.8.3)(yaml@2.7.1))
       astro-eslint-parser:
         specifier: ^1
         version: 1.2.2
@@ -1666,11 +1663,6 @@ packages:
   astring@1.9.0:
     resolution: {integrity: sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==}
     hasBin: true
-
-  astro-component-tester@0.8.0:
-    resolution: {integrity: sha512-dBwC/jm4FPin2JMa6B989uJ5UdBvKwpHRY7x5zSfPRpfLS+Jzw7hlCjao4cIYIP0Hx52MjxvA4oVW/t5PhaM5w==}
-    peerDependencies:
-      astro: ^4.0.0
 
   astro-eslint-parser@1.2.2:
     resolution: {integrity: sha512-JepyLROIad6f44uyqMF6HKE2QbunNzp3mYKRcPoDGt0QkxXmH222FAFC64WTyQu2Kg8NNEXHTN/sWuUId9sSxw==}
@@ -6275,10 +6267,6 @@ snapshots:
   assertion-error@2.0.1: {}
 
   astring@1.9.0: {}
-
-  astro-component-tester@0.8.0(astro@5.7.13(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.2)(typescript@5.8.3)(yaml@2.7.1)):
-    dependencies:
-      astro: 5.7.13(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.2)(typescript@5.8.3)(yaml@2.7.1)
 
   astro-eslint-parser@1.2.2:
     dependencies:
