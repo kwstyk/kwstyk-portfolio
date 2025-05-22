@@ -1,5 +1,5 @@
 ---
-layout: '@/components/templates/ProofPageTemplate.astro'
+
 title: "Packet Capture Lab"
 description: "Dockerネットワーク上で簡易HTTP通信を再現し、tcpdump + Wiresharkでパケット解析するラボ"
 category: network-security
@@ -20,12 +20,9 @@ stories:
   - "zenn-https://zenn.dev/mijucation/articles/0f2e203bca0551"
 why_md: "./why.md"
 ---
-
-
-
 ## Design Rationale
 
-<div class="alert alert">
+<div class="my-4 border-l-4 p-4 rounded bg-blue-800 border-blue-500 text-white">
 このラボは、ネットワークセキュリティの初学者が「実際のパケットを自分の手で見て理解する」ことを目的としています。  
 抽象的なTCP/IPの学習を、<strong>目に見えるかたち（pcapファイルやWireshark GUI）</strong>で体験させることに重きを置いています。
 </div>
@@ -60,7 +57,8 @@ just up
 - nginx のログが tcpdump によって記録されている
 
 ## Directory Structure
-```text
+<div class="my-6 p-4 bg-gray-800 text-white rounded font-mono text-sm overflow-x-auto">
+<pre>
 packet-capture/
 ├── docker-compose.yml
 ├── Dockerfile
@@ -69,8 +67,8 @@ packet-capture/
 │   └── capture.pcap （出力予定）
 └── scripts/
     └── setup.sh （任意：tcpdumpやnginx設定用）
-```
-
+</pre>
+</div>
 
 ## Troubleshoot
 

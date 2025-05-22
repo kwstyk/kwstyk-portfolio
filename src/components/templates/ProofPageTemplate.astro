@@ -1,76 +1,90 @@
 ---
-import Layout from '@/layouts/Layout.astro'
-import ProofHero from '@/components/organisms/ProofHero.astro'
+// /src/components/templates/ProofPageTemplate.astro
+import Layout        from '@/layouts/Layout.astro'
+import ProofHero     from '@/components/organisms/ProofHero.astro'
 import ProofMetaCard from '@/components/organisms/ProofMetaCard.astro'
-import SectionNav from '@/components/organisms/SectionNav.astro'
+import SectionNav    from '@/components/organisms/SectionNav.astro'
 
-/**
- * Props: Proof詳細ページで使用されるメタ情報
- */
 interface Props {
-  title:       string
-  description?: string
-  difficulty?: 'easy' | 'medium' | 'hard' | 'expert'
-  repro:       ('docker' | 'terraform' | 'vagrant' | 'manual')[]
-  stack:       string[]
-  updated:     string
-  ci_status?:  string
-  tags?:       string[]
-  class?:      string
+  children?: any;
+  title:       string;
+  description?: string;
+  /** Structure 用ナビゲーションに使うので受け取る */
+  category?:    string;
+  /** Proof の進捗表示に使うので受け取る */
+  progress:    number;
+  difficulty?: 'easy' | 'medium' | 'hard' | 'expert';
+  repro:       ('docker' | 'terraform' | 'vagrant' | 'manual')[];
+  stack:       string[];
+  updated:     string;
+  /** バッジ画像 URL */
+  ci_status?:  string;
+  tags?:       string[];
+  /** 関連 Story へのリンク一覧 */
+  stories?:    string[];
+  /** why.md へのパス */
+  why_md?:     string;
+  class?:      string;
 }
 
-// Props 分割代入（Fallbackあり）
 const {
   title,
   description = '',
+  category,
+  progress,
   difficulty,
   repro,
   stack,
-  ci_status: ciStatus,
   updated,
+  ci_status: ci_status,
   tags = [],
+  stories = [],
+  why_md,
   class: className = '',
 } = Astro.props as Props
 ---
+<Layout pageTitle={`Proof | ${title}`} class={className}>
+  <main class="px-4 lg:px-8 py-8">
+    <ProofHero
+      title={title}
+      description={description}
+      difficulty={difficulty}
+      repro={repro}
+      stack={stack}
+      ci_status={ci_status}
+    />
 
-<!-- 全体レイアウトの共通適用 -->
-<Layout siteName="KWSTYK Portfolio" pageTitle={`Proof | ${title}`} class={className}>
-  <main class="flex-1 px-4 sm:px-6 lg:px-8 xl:px-16 py-8">
+    <!-- コードブロックにコピー用ボタンを追加するため、相対配置を指定 -->
+<article class="prose prose-invert mt-12 relative [&_h2]:border-b [&_h2]:border-gray-600 [&_h2]:pb-2 [&_h2]:mb-4">
+  <slot />
+  <slot name="footer" />
 
-    <!-- ✅ Heroセクション（タイトル・再現手段・難易度など） -->
-    <section class="container mx-auto px-6 sm:px-10 py-20 bg-slate-700/20 rounded-2xl">
-      <div class="max-w-2xl mx-auto text-center">
-        <ProofHero
-          title={title}
-          description={description}
-          difficulty={difficulty}
-          repro={repro}
-          stack={stack}
-          ci_status={ciStatus}
-        />
-      </div>
-    </section>
+  <!-- コピー機能スクリプト -->
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('article pre code').forEach(codeElem => {
+        const pre = codeElem.parentElement;
+        if (!pre || pre.querySelector('.copy-button')) return;
+        pre.style.position = 'relative';
+        const btn = document.createElement('button');
+        btn.innerText = 'Copy';
+        btn.className = 'copy-button absolute top-2 right-2 text-xs px-2 py-1 bg-gray-700 text-white rounded';
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(codeElem.innerText.trim());
+            btn.innerText = 'Copied!';
+            setTimeout(() => (btn.innerText = 'Copy'), 2000);
+          } catch {
+            btn.innerText = 'Failed';
+          }
+        });
+        pre.appendChild(btn);
+      });
+    });
+  </script>
+</article>
 
-    <!-- ✅ 本文＋メタ情報セクション -->
-    <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr,250px] gap-8">
-
-        <!-- ▼ メイン本文：Markdownスロット -->
-        <article class="prose prose-invert" lang="ja">
-          <slot />
-          <slot name="footer" />
-        </article>
-
-        <!-- ▼ メタ情報：更新日・タグなど -->
-        <aside class="space-y-6">
-          <ProofMetaCard updated={updated} tags={tags} />
-        </aside>
-
-      </div>
-    </section>
-
+<ProofMetaCard updated={updated} tags={tags} class="mt-10" />
+<SectionNav />
   </main>
-
-  <!-- ✅ ページ下部：他レイヤ導線ナビゲーション -->
-  <SectionNav />
 </Layout>

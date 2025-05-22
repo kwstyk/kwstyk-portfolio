@@ -48,6 +48,9 @@ importers:
       '@astrojs/check':
         specifier: ^0.9.4
         version: 0.9.4(prettier@3.5.3)(typescript@5.8.3)
+      '@astrojs/markdown-component':
+        specifier: ^1.0.5
+        version: 1.0.5
       '@astrojs/mdx':
         specifier: ^4.2.6
         version: 4.2.6(astro@5.7.13(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.2)(typescript@5.8.3)(yaml@2.7.1))
@@ -156,6 +159,9 @@ importers:
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
+      unified:
+        specifier: ^11.0.5
+        version: 11.0.5
       unist-util-visit:
         specifier: ^5.0.0
         version: 5.0.0
@@ -211,6 +217,9 @@ packages:
         optional: true
       prettier-plugin-astro:
         optional: true
+
+  '@astrojs/markdown-component@1.0.5':
+    resolution: {integrity: sha512-e7pzVfEZmjyZMmKGwLbfds36idAt9Yi8c0N0VQw2cVEgK8QdQecZLc07JvUSugoZxINtoVA0Afpm8EcIP52Ncw==}
 
   '@astrojs/markdown-remark@6.3.1':
     resolution: {integrity: sha512-c5F5gGrkczUaTVgmMW9g1YMJGzOtRvjjhw6IfGuxarM6ct09MpwysP10US729dy07gg8y+ofVifezvP3BNsWZg==}
@@ -4753,6 +4762,8 @@ snapshots:
       prettier: 3.5.3
     transitivePeerDependencies:
       - typescript
+
+  '@astrojs/markdown-component@1.0.5': {}
 
   '@astrojs/markdown-remark@6.3.1':
     dependencies:

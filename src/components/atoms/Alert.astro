@@ -1,12 +1,22 @@
 ---
-interface Props { type?: 'info'|'warn'|'error' }
-const { type = 'info' } = Astro.props as Props;
+interface Props {
+  /** info|warn|error の３種。省略時は info */
+  type?: 'info' | 'warn' | 'error';
+  /** 任意のクラスを追加できるように */
+  class?: string;
+}
+
+const {
+  type = 'info',
+  class: extraClass = '',
+} = Astro.props as Props;
+
 const color = {
   info:  'bg-blue-800 border-blue-500',
   warn:  'bg-yellow-800 border-yellow-500',
   error: 'bg-red-800 border-red-500',
 }[type];
 ---
-<div class={`my-4 border-l-4 p-4 rounded ${color}`}>
+<div class={`my-4 border-l-4 p-4 rounded ${color} ${extraClass}`}>
   <slot/>
 </div>

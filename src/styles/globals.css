@@ -148,6 +148,29 @@ body {
   font-weight: 500;
 }
 
+/* コードブロックにボタンを絶対配置 */
+pre {
+  position: relative;
+}
+
+/* コピーボタンのスタイル */
+.copy-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* ホバー時の視認性アップ */
+.copy-button:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
 
 
 /* モバイルでも同じルール */

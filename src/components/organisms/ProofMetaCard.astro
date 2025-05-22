@@ -3,10 +3,15 @@
 interface Props {
   updated: string;
   tags?: string[];
+  class?: string;
 }
-const { updated, tags = [] } = Astro.props as Props;
+const {
+  updated,
+  tags = [],
+  class: extraClass = '',
+} = Astro.props as Props;
 ---
-<div class="bg-slate-800/50 rounded-lg p-6 space-y-4 text-sm">
+<div class={`${extraClass} bg-slate-800/50 rounded-lg p-6 space-y-4 text-sm`}>
   <div class="flex items-center gap-2">
     <!-- Heroicons Clock Icon -->
     <svg

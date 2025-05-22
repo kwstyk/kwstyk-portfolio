@@ -3,7 +3,7 @@
 
 interface Props {
   /** 再現方法のキー (docker|terraform|vagrant|manual) */
-  method?: 'docker' | 'terraform' | 'vagrant' | 'manual';
+  method?: string;
 }
 const { method = '' } = Astro.props as Props;
 

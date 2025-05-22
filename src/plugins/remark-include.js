@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { visit } from 'unist-util-visit';
 
-export default function remarkInclude(options = {}) {
+export default function remarkInclude() {
   return async function transformer(tree, file) {
     const dir = path.dirname(file.path);
     const includes = [];
@@ -23,7 +23,7 @@ export default function remarkInclude(options = {}) {
         delete node.children;
         delete node.name;
         delete node.attributes;
-      } catch (e) {
+      } catch {
         node.type = 'paragraph';
         node.children = [{ type: 'text', value: `<!-- Include failed: ${src} -->` }];
       }

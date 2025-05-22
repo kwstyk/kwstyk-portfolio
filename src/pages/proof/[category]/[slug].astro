@@ -1,35 +1,38 @@
 ---
-// src/pages/proof/[category]/[slug].astro
-
-import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+import Alert         from '@/components/atoms/Alert.astro';
+import CopyBlock     from '@/components/molecules/CopyBlock.astro';
+import DirectoryTree from '@/components/molecules/DirectoryTree.astro';
 import ProofPageTemplate from '@/components/templates/ProofPageTemplate.astro';
-import StoryCard from '@/components/molecules/StoryCard.astro';     // 追加
-import storiesJson from '@/data/stories.json';
+import StoryCard     from '@/components/molecules/StoryCard.astro';
+import storiesJson   from '@/data/stories.json';
+
 export const prerender = true;
 
-/* getStaticPaths で proofs コレクションからカテゴリとスラッグを取得 */
+/* ---------- getStaticPaths ---------- */
 export async function getStaticPaths() {
   const proofs = await getCollection('proofs');
-  return proofs.map((entry: CollectionEntry<'proofs'>) => {
-    const id = entry.id.replace(/\.mdx?$/, '');
-    const [category, slug] = id.split('/');
+
+  return proofs.map((entry) => {
+    const [category, slug] = entry.id.replace(/\.mdx?$/, '').split('/');
     return {
       params: { category, slug },
-      props:  { entry },
+      props : { entry },
     };
   });
 }
 
-interface Props {
-  entry: CollectionEntry<'proofs'>;
-}
+/* ---------- ページ本体 ---------- */
+type ProofEntry = CollectionEntry<'proofs'>;
+interface Props { entry: ProofEntry }
 
 const { entry } = Astro.props as Props;
-const { Content } = await entry.render();
-const { data } = entry;
+const { Content, headings } = await entry.render();
+const front = entry.data;
 
-// JSON から Story 型を再定義
+/* Story 紐付け */
 interface Story {
   id: string;
   source: string;
@@ -40,26 +43,28 @@ interface Story {
   published: string;
   hidden?: boolean;
 }
-const allStories = storiesJson as unknown as Story[];
+const allStories = storiesJson as Story[];
 
-// frontmatter.stories 配列にある id で関連 Story を抽出
-const storyIds = (data.stories ?? []) as string[];
-const relatedStories = storyIds
-  .map((sid: string) => allStories.find((s) => s.id === sid))
-  .filter((s): s is Story => s !== undefined);
+const relatedStories: Story[] = (front.stories ?? [])
+  .map((sid: string) => allStories.find((s) => s?.id === sid))
+  .filter(Boolean) as Story[];
 ---
 
 <ProofPageTemplate
-  title={data.title}
-  difficulty={data.difficulty}
-  repro={data.repro}
-  stack={data.stack}
-  updated={data.updated}
-  ci_status={data.ci_status ?? ''}
-  tags={data.tags ?? []}
-  description={data.description}
+  title       ={front.title}
+  description ={front.description}
+  category    ={front.category}
+  difficulty  ={front.difficulty}
+  repro       ={front.repro}
+  stack       ={front.stack}
+  updated     ={front.updated}
+  progress    ={front.progress}
+  tags        ={front.tags}
+  ci_status   ={front.ci_status}
+  why_md      ={front.why_md} 
 >
-  <Content />
+  <!-- Markdown 本文 -->
+  <Content components={{ Alert, CopyBlock, DirectoryTree }} />
 
   {relatedStories.length > 0 && (
     <div slot="footer" class="mt-12">
@@ -67,12 +72,12 @@ const relatedStories = storyIds
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {relatedStories.map((s) => (
           <StoryCard
-            title={s.title}
-            summary={s.summary}
-            url={s.url}
-            source={s.source}
-            published={s.published}
-            tags={s.tags}
+            title     ={s.title}
+            summary   ={s.summary}
+            url       ={s.url}
+            source    ={s.source}
+            published ={s.published}
+            tags      ={s.tags}
           />
         ))}
       </div>

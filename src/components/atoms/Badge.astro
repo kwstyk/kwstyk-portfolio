@@ -1,29 +1,26 @@
 ---
+// ファイル: src/components/atoms/Badge.astro
 interface Props {
-  type?: 'success' | 'warn' | 'info';
+  type?: 'info'|'warn'|'error'|'easy'|'medium'|'hard'|'expert'
   class?: string;
 }
+const { type = 'info', class: extraClass = '' } = Astro.props as Props;
 
-const { 
-  type = 'info',
-  class: className,
-  ...rest
-} = Astro.props;
-
-const styles = {
-  success: 'bg-success/10 text-success',
-  warn: 'bg-yellow-500/10 text-yellow-400',
-  info: 'bg-accent-0/10 text-accent-0'
-};
+// info/warn/error と easy/medium/hard/expert を同一コンポーネントで扱う
+const colorMap: Record<string,string> = {
+  // alert
+  info:   'bg-blue-800 border-blue-500',
+  warn:   'bg-yellow-800 border-yellow-500',
+  error:  'bg-red-800 border-red-500',
+  // difficulty
+  easy:   'bg-green-600 text-white',
+  medium: 'bg-yellow-600 text-black',
+  hard:   'bg-orange-600 text-white',
+  expert: 'bg-red-600 text-white',
+}
+const color = colorMap[type] || colorMap['info']
 ---
 
-<span
-  class:list={[
-    'px-2 py-1 text-sm rounded-full font-medium',
-    styles[type],
-    className
-  ]}
-  {...rest}
->
-  <slot />
-</span> 
+<div class={`inline-block px-2 py-1 text-xs font-medium rounded border ${color} ${extraClass}`}>
+  <slot/>
+</div>
