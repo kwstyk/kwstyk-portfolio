@@ -1,0 +1,41 @@
+name: Build & Deploy Pages
+on:
+  push:
+    branches: [ main ]       # 本番公開したいブランチ
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-path: ${{ steps.upload-artifact.outputs.artifact-path }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install & Build
+        run: |
+          pnpm install
+          pnpm astro sync
+          pnpm build
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload Pages Artifact
+        id: upload-artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./dist      # Astro の出力ディレクトリ
+          
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v2
+        with:
+          artifact-path: ${{ needs.build.outputs.artifact-path }}
