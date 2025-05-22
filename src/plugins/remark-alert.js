@@ -1,6 +1,3 @@
-// src/plugins/remark-alert.js の先頭に追加
-console.log('[remark-alert] 🔥 plugin running');
-
 // plugins/remark-alert.js
 import { visit } from 'unist-util-visit';
 

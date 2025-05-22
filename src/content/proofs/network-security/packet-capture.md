@@ -27,11 +27,11 @@ why_md: "./why.md"
 抽象的なTCP/IPの学習を、<strong>目に見えるかたち（pcapファイルやWireshark GUI）</strong>で体験させることに重きを置いています。
 </div>
 
-シンプルなDocker構成（nginx + tcpdump）で再現性を最大化
+- シンプルなDocker構成（nginx + tcpdump）で再現性を最大化
 
-環境構築不要 → just up で即起動
+- 環境構築不要 → just up で即起動
 
-“なぜこの構成か” は why.md に記載
+- “なぜこの構成か” は why.md に記載
 
 ## Prerequisites
 
