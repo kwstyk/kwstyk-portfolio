@@ -1,0 +1,13 @@
+# proofs/network-security/packet-capture/justfile
+
+# 環境を起動
+up:
+	docker-compose up -d
+
+# 環境を停止
+down:
+	docker-compose down
+
+# ログをフォロー
+logs:
+	docker-compose logs -f web
