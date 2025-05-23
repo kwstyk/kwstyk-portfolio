@@ -30,3 +30,6 @@ pnpm-debug.log*
 
 # pnpm のロックファイルは必ずコミットする
 !pnpm-lock.yaml
+
+/src/content/proofs/network-security/packet-capture/capture/*.pcap
+
