@@ -42,11 +42,29 @@ why_md: "./why.md"
 
 ## How to Reproduce
 
+
+- このコマンドで GitHub からソースをローカルにクローンし、Packet Capture Lab のディレクトリに移動します。
 ```bash
 git clone https://github.com/kwstyk/kwstyk-portfolio.git
-cd proofs/network-security/packet-capture
-just up
+cd kwstyk-portfolio/src/content/proofs/network-security/packet-capture
 ```
+
+- Dockerfile に従って、nginx＋tcpdump コンテナのイメージを作成します。 
+```bash
+docker compose build
+```
+
+- バックグラウンドでコンテナを起動します。起動後は `http://localhost:8080` で nginx のウェルカムページが表示されます。
+```bash
+docker compose up -d
+```
+
+- コンテナを停止・削除したあと、`capture/` フォルダ内に `capture.pcap` が生成されていることを確認します。
+```bash
+docker compose down 
+ls capture/ 
+```
+
 - 起動後、コンテナ内部の tcpdump が capture/capture.pcap に通信ログを書き出します。
 
 ## Expected Outcome
