@@ -14,8 +14,9 @@ RUN sed -i 's/listen 80;/listen 8080;/' /etc/nginx/sites-available/default
 
 # エントリポイントスクリプトをコピー
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
+RUN sed -i 's/\r$//' /entrypoint.sh \
+    && chmod +x /entrypoint.sh
+    
 # ポート公開
 EXPOSE 8080
 
