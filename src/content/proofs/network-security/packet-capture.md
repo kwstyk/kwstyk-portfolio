@@ -1,7 +1,7 @@
 ---
 
 title: "Packet Capture Lab"
-description: "Dockerネットワーク上で簡易HTTP通信を再現し、tcpdump + Wiresharkでパケット解析するラボ"
+description: "Dockerネットワーク上で簡易HTTP通信を再現し、'tcpdump + Wiresharkでパケット解析するラボ"
 category: network-security
 difficulty: easy
 repro:
@@ -29,8 +29,6 @@ why_md: "./why.md"
 
 - シンプルなDocker構成（nginx + tcpdump）で再現性を最大化
 
-- 環境構築不要 → just up で即起動
-
 - “なぜこの構成か” は why.md に記載
 
 ## Prerequisites
@@ -42,23 +40,24 @@ why_md: "./why.md"
 
 ## How to Reproduce
 
-
+### 1. リポジトリをクローン＆移動
 - このコマンドで GitHub からソースをローカルにクローンし、Packet Capture Lab のディレクトリに移動します。
 ```bash
 git clone https://github.com/kwstyk/kwstyk-portfolio.git
 cd kwstyk-portfolio/src/content/proofs/network-security/packet-capture
 ```
 
+### 2. 画像と tcpdump コンテナをビルド
 - Dockerfile に従って、nginx＋tcpdump コンテナのイメージを作成します。 
 ```bash
 docker compose build
 ```
-
-- バックグラウンドでコンテナを起動します。起動後は `http://localhost:8080` で nginx のウェルカムページが表示されます。
+### 3. バックグラウンドで起動
+- バックグラウンドでコンテナを起動します。起動後は <strong>http://localhost:8080</strong> で nginx のウェルカムページが表示されます。
 ```bash
 docker compose up -d
 ```
-
+### 4. 実行結果を確認・停止
 - コンテナを停止・削除したあと、`capture/` フォルダ内に `capture.pcap` が生成されていることを確認します。
 ```bash
 docker compose down 
@@ -81,10 +80,8 @@ packet-capture/
 ├── docker-compose.yml
 ├── Dockerfile
 ├── justfile
-├── capture/
-│   └── capture.pcap （出力予定）
-└── scripts/
-    └── setup.sh （任意：tcpdumpやnginx設定用）
+└── capture/
+    └── capture.pcap （出力予定）
 </pre>
 </div>
 
@@ -94,7 +91,6 @@ packet-capture/
 | ------------------------ | -------------------------------------- |
 | Wireshark でパケットが見えない     | `capture/capture.pcap` を直接開く           |
 | `eth0` デバイスが見つからない（WSL2） | `tcpdump -i any` または `-i eth0` を明示的に指定 |
-| `just` が動作しない            | `just` コマンドが未導入 → `cargo install just` |
 | port 8080 にアクセスできない      | Docker コンテナが起動しているか確認 (`docker ps`)    |
 
 

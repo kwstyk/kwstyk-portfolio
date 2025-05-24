@@ -61,7 +61,14 @@ const entries = allProofs.filter(p => p.data.category === category.slug)
 
   <!-- ✅ Mermaid付きイントロ説明 -->
   {Intro && (
-    <section class="mb-12 prose prose-invert">
+    <section
+      class="
+        mb-12
+        prose dark:prose-invert
+        [&_h2]:border-b [&_h2]:border-gray-200 [&_h2]:pb-2 [&_h2]:mb-4
+        dark:[&_h2]:border-gray-600
+      "
+    >
       <Intro />
     </section>
   )}

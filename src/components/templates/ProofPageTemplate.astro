@@ -55,7 +55,18 @@ const {
     />
 
     <!-- コードブロックにコピー用ボタンを追加するため、相対配置を指定 -->
-<article class="prose prose-invert mt-12 relative [&_h2]:border-b [&_h2]:border-gray-600 [&_h2]:pb-2 [&_h2]:mb-4">
+<article
+  class="
+    prose mt-12 relative
+    [&_h2]:border-b            /* 全モードで下線 */
+    [&_h2]:pb-2 [&_h2]:mb-4     /* 下線まわりの余白 */
+    [&_h2]:border-gray-200      /* ライトモード線色 */
+    dark:[&_h2]:border-gray-600 /* ダークモード線色 */
+    dark:prose-invert           /* 必要なら文字色も反転 */
+    [&_code]:bg-gray-100 [&_code]:text-blue-600 [&_code]:px-1 [&_code]:py-[2px] [&_code]:rounded
+    dark:[&_code]:bg-gray-700 dark:[&_code]:text-blue-400
+  "
+>
   <slot />
   <slot name="footer" />
 

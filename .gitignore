@@ -33,3 +33,5 @@ pnpm-debug.log*
 
 /src/content/proofs/network-security/packet-capture/capture/*.pcap
 
+src/data/stories.json
+
