@@ -5,7 +5,8 @@ import { getCollection } from 'astro:content';
 const proofs = await getCollection('proofs');
 const proofCount = proofs.length;
 // ✅ Story数カウント（hidden !== true）
-const storyCount = stories.filter(s => s.hidden !== true).length;
+const storyCount = stories.filter((s: { hidden?: boolean }) => s.hidden !== true).length
+;
 
 // ✅ CI成功率の計算
 const ciPassed = proofs.filter(p => p.data.ci_status?.includes('passing')).length;
