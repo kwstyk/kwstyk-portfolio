@@ -1,22 +1,29 @@
 ---
+/** Alert.astro — 情報ボックス（info / warn / error）を表示する汎用コンポーネント */
+
 interface Props {
-  /** info|warn|error の３種。省略時は info */
+  /** ボックスの種類。'info'（既定） / 'warn' / 'error' */
   type?: 'info' | 'warn' | 'error';
-  /** 任意のクラスを追加できるように */
+
+  /** 追加クラス（レイアウト微調整やアニメーション用） */
   class?: string;
 }
 
+// ▼ Props の分解とデフォルト
 const {
   type = 'info',
   class: extraClass = '',
 } = Astro.props as Props;
 
+// ▼ 種類に応じた Tailwind の色クラスを割り当て
 const color = {
   info:  'bg-blue-800 border-blue-500',
   warn:  'bg-yellow-800 border-yellow-500',
   error: 'bg-red-800 border-red-500',
 }[type];
 ---
+
+<!-- ▼ アラートボックス本体 -->
 <div class={`my-4 border-l-4 p-4 rounded ${color} ${extraClass}`}>
-  <slot/>
+  <slot />
 </div>

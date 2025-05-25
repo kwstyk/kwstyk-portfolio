@@ -1,29 +1,41 @@
+# .github/workflows/deploy.yml
+# 目的：Astro サイトを GitHub Pages に自動デプロイ
+
 name: Deploy Astro site to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main]  # main ブランチへの push をトリガーに実行
 
 permissions:
-  contents: write  # ← readからwriteに変更（重要！）
-  pages: write
-  id-token: write
+  contents: write     # ✅ Pages ブランチに push するために write が必要
+  pages: write        # ✅ GitHub Pages にデプロイ可能にする
+  id-token: write     # ✅ OIDC（OpenID Connect）認証に必要
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  group: "pages"            # 同時実行を防ぐ（並列ビルドの競合を防止）
+  cancel-in-progress: true  # 古いジョブをキャンセル（効率向上）
 
 jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
+      # ▼ ソースコードをチェックアウト
       - uses: actions/checkout@v4
+
+      # ▼ Node.js 環境セットアップ（v20）
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+
+      # ▼ 依存関係のインストール（package-lock.json 反映）
       - run: npm ci
+
+      # ▼ Astro 静的ビルド（/dist に出力）
       - run: npm run build
+
+      # ▼ GitHub Pages 用に dist をアップロード
       - uses: actions/upload-artifact@v4
         with:
           name: github-pages
@@ -35,7 +47,9 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
+
     steps:
+      # ▼ アップロード済み dist を GitHub Pages にデプロイ
       - uses: actions/deploy-pages@v2
         id: deploy
         with:

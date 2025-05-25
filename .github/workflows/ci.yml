@@ -1,43 +1,56 @@
+# .github/workflows/ci.yml
+# 目的：Astro プロジェクトの CI チェック（Lint / 型 / 単体テスト / Lighthouse）
+
 name: CI
 
 on:
   push:
-    branches: [main]
-  pull_request:
+    branches: [main]        # main ブランチに push 時実行
+  pull_request:             # PR 作成／更新時にも実行
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
+      # ▼ リポジトリをチェックアウト
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # ▼ Node.js 環境のセットアップ（v20）
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # ▼ pnpm セットアップ（v8系使用）
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
           version: 8
 
+      # ▼ 依存パッケージインストール
       - name: Install dependencies
         run: pnpm install
 
+      # ▼ Astroの content コレクション同期
       - name: Run astro sync
         run: pnpm astro sync
 
+      # ▼ ESLint チェック（.astro, .ts, .js）
       - name: Run Lint
         run: pnpm run lint
 
+      # ▼ TypeScript / Astro の型チェック
       - name: Run TypeCheck
         run: pnpm run typecheck
 
+      # ▼ ユニットテスト（Vitest + Coverage）
       - name: Run Unit Tests
         run: pnpm run test -- --coverage
 
+      # ▼ パフォーマンス / SEO / A11y チェック（CI用Lighthouse）
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v9
         with:
-          configPath: ./lighthouserc.cjs
+          configPath: ./lighthouserc.cjs   # ← JSON形式（コメントなし）である必要あり

@@ -1,40 +1,53 @@
+# .github/workflows/deploy-pages.yml
+# 目的：Astro サイトを GitHub Pages にビルド & 自動デプロイ
+
 name: Build & Deploy Pages
+
 on:
   push:
-    branches: [ main ]       # 本番公開したいブランチ
+    branches: [main]  # 本番に公開したいブランチを指定
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    # ▼ 次のジョブに dist のパスを渡す（明示的に outputs に設定）
     outputs:
       artifact-path: ${{ steps.upload-artifact.outputs.artifact-path }}
+
     steps:
+      # ▼ ソースコードをチェックアウト
       - uses: actions/checkout@v3
 
+      # ▼ pnpm v8 をセットアップ（Astro互換）
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
 
+      # ▼ 依存インストール＋content sync＋ビルド
       - name: Install & Build
         run: |
           pnpm install
           pnpm astro sync
           pnpm build
 
+      # ▼ GitHub Pages の公開ブランチ設定（gh-pages）
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v3
 
+      # ▼ Astro の出力ディレクトリ（dist）を artifact としてアップロード
       - name: Upload Pages Artifact
         id: upload-artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ./dist      # Astro の出力ディレクトリ
-          
+          path: ./dist
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      # ▼ アップロード済み dist を GitHub Pages にデプロイ
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
         with:
