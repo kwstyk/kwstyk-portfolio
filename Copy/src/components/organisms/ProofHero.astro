@@ -1,0 +1,66 @@
+---
+// src/components/organisms/ProofHero.astro
+
+import DifficultyBadge  from '@/components/atoms/DifficultyBadge.astro';
+import ReproMethodBadge from '@/components/atoms/ReproMethodBadge.astro';
+import StackChip        from '@/components/molecules/StackChip.astro';
+import StatusBadge      from '@/components/atoms/StatusBadge.astro';
+import Heading          from '@/components/atoms/Heading.astro';
+
+interface Props {
+  title:      string;
+  description?: string;
+  difficulty?: 'easy' | 'medium' | 'hard' | 'expert';
+  repro?:     string[];
+  stack?:     string[];
+  ci_status?:  string;
+}
+const {
+  title,
+  description = '',
+  difficulty,
+  repro = [],
+  stack = [],
+  ci_status,
+} = Astro.props as Props;
+---
+<section class="mx-auto w-full max-w-3xl pt-8 pb-12 px-4 sm:px-6 lg:px-8 text-center space-y-6">
+  <!-- タイトル -->
+  <Heading
+    level={1}
+    className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold"
+  >
+    {title}
+  </Heading>
+  
+
+  <!-- 難易度 + 再現方法 -->
+  <div class="flex flex-wrap justify-center gap-2">
+    {difficulty && <DifficultyBadge level={difficulty} />}
+    {repro.map(method => (
+      <ReproMethodBadge method={method} />
+    ))}
+  </div>
+
+  <!-- 技術スタック -->
+  {stack.length > 0 && (
+    <div class="flex flex-wrap justify-center gap-2">
+      {stack.map(name => (
+        <StackChip name={name}/>
+      ))}
+    </div>
+  )}
+
+  <!-- CIステータス -->
+  {ci_status && (
+    <div class="flex justify-center mt-4">
+      <StatusBadge src={ci_status} />
+    </div>
+  )}
+  <!-- 説明文 -->
+    {description && (
+    <p class="mt-4 text-lg text-gray-300 max-w-xl mx-auto">
+      {description}
+    </p>
+  )}
+</section>

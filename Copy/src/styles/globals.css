@@ -1,0 +1,182 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── 1. リセット & ボックスモデル基準 ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-start: #0d1b2a;        /* 13 27 42 */
+  --bg-mid: #162d46;          /* 22 45 70 */
+  --bg-end: #0a2540;          /* 10 37 64 */
+
+  --text: #e0e7ff;            /* 224 231 255 */
+  --accent: #61dafb;          /* 97 218 251 */
+
+  --proof-bg-start: #f0f4f8;  /* 240 244 248 */
+  --proof-bg-end: #ffffff;    /* 255 255 255 */
+  --proof-title-start: #007cf0; /* 0 124 240 */
+  --proof-title-end: #00dfd8; /* 0 223 216 */
+
+  --card-bg: #112240;         /* 17 34 64 */
+  --card-bg-light: #ffffff;   /* 255 255 255 */
+  --card-accent: #64ffda;     /* 100 255 218 */
+
+  --border: #233554;          /* 35 53 84 */
+
+/* ── 3. ベースタイポグラフィ ── */
+body {
+  font-family: sans-serif;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg-start);
+  min-height: 100vh;
+}
+
+  a {
+    color: var(--text);
+    text-decoration: none; /* 必要なら下線も消す */
+  }
+  
+  a:hover {
+    color: var(--accent); /* ホバー時に色変えたいなら */
+  }
+
+}
+
+/* ── 5. 全ページ共通のメディアクエリ（例） ── */
+/* タブレット以上 */
+@media (min-width: 600px) {
+  body {
+    /* 例：フォントサイズを少し大きく */
+    font-size: 1.05rem;
+  }
+}
+/* PC以上 */
+@media (min-width: 900px) {
+  body {
+    font-size: 1.1rem;
+  }
+}
+
+/* もしヘッダーが 2 個以上出たら、2 個め以降を非表示にする */
+.site-header + .site-header {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Markdown 内の <img> と <svg> に高さ制限 */
+@layer utilities {
+  .prose img,
+  .prose-invert img,
+  .prose svg,
+  .prose-invert svg {
+    max-height: 16rem !important;
+    width: auto !important;
+    object-fit: contain !important;
+  }
+}
+
+/* Mermaid の図をレスポンシブ幅に */
+.mermaid {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.title {
+  /* 日本語／英単語の途中で改行を禁止 */
+  word-break: keep-all;
+  /* 超長い英単語だけ必要なときに折り返す */
+  overflow-wrap: break-word;
+}
+
+.alert {
+  @apply border-l-4 p-4 my-4 rounded;
+}
+.alert-info {
+  @apply bg-blue-50 border-blue-500 text-blue-900;
+}
+.alert-warn {
+  @apply bg-yellow-50 border-yellow-500 text-yellow-900;
+}
+.alert-error {
+  @apply bg-red-50 border-red-500 text-red-900;
+}
+.alert strong {
+  @apply underline font-semibold bg-yellow-100 text-black px-1 rounded-sm;
+}
+
+.alert em {
+  @apply italic underline bg-yellow-100 text-black px-1 rounded-sm;
+}
+
+.alert a {
+  @apply underline text-blue-700 hover:text-blue-900;
+}
+
+/* ▼ ブロックコードの背景は透明にする */
+.prose pre > code {
+  background-color: transparent !important;
+}
+
+/* ▼ 表の中や本文中の code は背景あり */
+.prose p > code,
+.prose li > code,
+.prose td > code,
+.prose th > code {
+  background-color: #cacbcc; /* 好きなグレー */
+  color: #1a202c;            /* 文字を読みやすく */
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-weight: 500;
+}
+
+/* コードブロックにボタンを絶対配置 */
+pre {
+  position: relative;
+}
+
+/* コピーボタンのスタイル */
+.copy-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* ホバー時の視認性アップ */
+.copy-button:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+/* モバイルでも同じルール */
+@media (max-width: 640px) {
+  .title {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+}

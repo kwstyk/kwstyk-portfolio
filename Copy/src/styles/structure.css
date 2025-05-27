@@ -1,0 +1,39 @@
+/* src/styles/structure.css */
+
+/* ── ページ全体背景 ── */
+.page-background {
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  background-color: var(--bg-start);
+  color: var(--text);
+}
+
+/* ── カードグリッド ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+  align-items: stretch;
+}
+
+/* ── グリッド内のカードをフルハイト化 ── */
+.card-grid > a {
+  height: 100%;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+
+/* （必要なら）レスポンシブでパディング調整 */
+@media (min-width: 600px) {
+  .page-background {
+    padding: 4rem 3rem;
+  }
+}
+@media (min-width: 900px) {
+  .page-background {
+    padding: 4rem 4rem;
+  }
+}

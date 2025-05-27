@@ -1,0 +1,87 @@
+---
+interface Props {
+  title:       string; 
+  description?: string;
+  href:        string;
+  icon?:       string; 
+  badge?:      string; 
+  difficulty?: string; 
+  repro?:      string[]; 
+  updated?:     string; 
+  class?:       string;
+}
+const {
+  title,
+  description,
+  href,
+  icon,
+  badge,
+  difficulty,
+  repro,
+  updated,
+  class: className = '',
+} = Astro.props as Props;
+
+// バッジ色設定（badgeClass はそのまま）
+const badgeColor: Record<string,string> = {
+  '重要':'bg-red-500 text-white',
+  '完了':'bg-green-500 text-white',
+  '執筆中':'bg-gray-500 text-white',
+  '検討中':'bg-yellow-400 text-black',
+  'PoCあり':'bg-blue-500 text-white',
+  '実装中':'bg-indigo-500 text-white',
+  '準備中':'bg-purple-500 text-white',
+};
+const badgeClass = badge ? badgeColor[badge] ?? 'bg-gray-400 text-white' : '';
+---
+
+<a
+  href={href}
+  class={[
+    'card-base',       /* 共通背景・ボーダー・影・角丸 */
+    'w-full',          /* グリッド幅いっぱい */
+    'p-8',             /* 大カードは内側余白を大きめに */
+    'flex',                  /* ← 必須 */
+    'flex-col',              /* ← 必須：縦方向レイアウト */
+    'justify-between',  // ← これで上下を詰める
+    'h-full',           // ← 高さをグリッドの行いっぱいにする
+    'gap-4',           /* 要素間の余白 */
+    className,
+  ].join(' ')}
+>
+  <!-- アイコン＋タイトル -->
+  <div class="flex items-center gap-3">
+    {icon && <span class="text-3xl">{icon}</span>}
+    <h3 class="font-extrabold text-2xl text-white leading-snug">
+      {title}
+    </h3>
+  </div>
+
+  <!-- 説明文 -->
+  {description && (
+    <p class="text-base text-gray-200 leading-relaxed">
+      {description}
+    </p>
+  )}
+
+ <!-- ↓ ここからラッパー -->
+ <div class="mt-auto flex flex-col gap-2">
+   {/* バッジ */}
+   {badge && (
+     <span class={[
+       badgeClass,
+       'inline-block px-3 py-1 rounded-full text-sm font-semibold',
+     ].join(' ')}>
+       {badge}
+     </span>
+   )}
+
+   {/* メタ情報 */}
+   <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm text-gray-300">
+     {difficulty && (<><dt>難易度</dt><dd class="font-medium">{difficulty}</dd></>)}
+     {repro      && (<><dt>再現方法</dt><dd class="font-medium">{repro.join(', ')}</dd></>)}
+     {updated    && (<><dt>更新日</dt><dd class="font-medium">{updated}</dd></>)}
+   </dl>
+ </div>
+ <!-- ↑ ラッパーここまで -->
+</a>

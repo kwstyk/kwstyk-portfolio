@@ -1,0 +1,39 @@
+---
+// src/components/atoms/CertificationBadge.astro
+
+interface Props {
+  name:    string;
+  src:     string;
+  href?:   string;
+  /** Tailwind の w-? h-? クラスを渡せます */
+  size?:   string;
+}
+const {
+  name,
+  src,
+  href,
+  size = 'w-12 h-12'  // デフォルトは 3rem × 3rem
+} = Astro.props as Props;
+---
+
+{href ? (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener"
+    aria-label={name}
+    class="inline-block"
+  >
+    <img
+      src={src}
+      alt={name}
+      class={`block ${size}`}
+    />
+  </a>
+) : (
+  <img
+    src={src}
+    alt={name}
+    class={`inline-block ${size}`}
+  />
+)}

@@ -1,0 +1,135 @@
+---
+/* ─ Front-matter ─ */
+export const layout      = '@/layouts/Layout.astro'
+export const title       = 'KWSTYK Portfolio'
+export const description = '現役エンジニアが作る自己紹介&ラボ環境の静的ポートフォリオ'
+export const pathname    = '/'
+export const ogImage     = '/api/og?title=KWSTYK%20Portfolio'
+
+/* ─ Components ─ */
+import Layout               from '@/layouts/Layout.astro'
+import Hero                 from '@/components/organisms/Hero.astro'
+import StatsBar             from '@/components/organisms/StatsBar.astro'
+import AboutCard            from '@/components/organisms/AboutCard.astro'
+import TechStackGrid        from '@/components/organisms/TechStackGrid.astro'
+import Timeline             from '@/components/organisms/Timeline.astro'
+import ContactSection       from '@/components/organisms/ContactSection.astro'
+import CertificationBadge   from '@/components/atoms/CertificationBadge.astro'
+import Button               from '@/components/atoms/Button.astro'
+
+/* ─ Global CSS ─ */
+import '@/styles/landing.css'
+import '@/styles/accordion.css'
+import '@/styles/heading.css'
+import '@/styles/hero.css'
+---
+<Layout title="KWSTYK Portfolio">
+  <main id="main-content">
+    <!-- ───── Hero ───── -->
+    <Hero
+      subtitle="セキュリティ × インフラ × 運用の全方位スキルに挑戦"
+      typewriterTexts={[
+        '現場監督からセキュリティ監督へ',
+        '図面もコードも描けます',
+        'Infrastructure × Security × Automation',
+      ]}
+    >
+      <h1 slot="title" class="hero-title heading-responsive">
+        成長と実績を証明する<wbr />ポートフォリオ
+      </h1>
+    </Hero>
+
+    <!-- ───── Stats Bar ───── -->
+    <StatsBar />
+
+    <!-- ───── Main Cards ───── -->
+    <div class="page-background">
+      <div class="max-w-3xl mx-auto space-y-12 py-12">
+        <!-- About -->
+        <AboutCard
+          title="About Me"
+          intro={[
+            '建築現場の安全を守っていましたが、今は会社のサーバーを守っています。',
+            'インフラからセキュリティまで、安全と品質のこだわりをそのままにIT業界へ。',
+            '「止まらない」を再現可能にする仕組みを作り上げています。',
+          ]}
+          mission="会社の安全を、現場監督時代と同じ情熱で守る。"
+        />
+
+        <!-- 技術スタック -->
+        <AboutCard title="使用技術">
+          <TechStackGrid />
+        </AboutCard>
+
+        <!-- 保有資格 -->
+        <AboutCard title="qualification">
+          <!-- 基本資格 -->
+          <ul class="list-disc list-inside space-y-1 mb-4">
+            <li>応用情報技術者</li>
+            <li>情報セキュリティマネジメント</li>
+            <li>ITパスポート</li>
+            <li>G検定</li>
+            <li>DX検定プロフェッショナル認定</li>
+          </ul>
+
+          <!-- Accordion：その他の資格 -->
+          <input type="checkbox" id="toggle-other" class="accordion-toggle mt-2" />
+          <label for="toggle-other" class="accordion-label">その他の資格</label>
+          <div class="accordion-content">
+            <ul class="list-disc list-inside space-y-1">
+              <li>宅地建物取引士</li>
+              <li>インテリアコーディネーター</li>
+              <li>統計検定3級</li>
+              <li>第一種衛生管理者</li>
+              <li>第二種電気工事士</li>
+              <li>2級建築施工管理技士補</li>
+              <li>ファイナンシャル・プランニング技能士3級</li>
+              <li>普通自動車免許</li>
+            </ul>
+          </div>
+
+          <!-- Open Badges -->
+          <h4 class="text-sm font-semibold text-white mt-6 mb-2">Open Badges</h4>
+          <div class="flex items-center gap-4">
+            <CertificationBadge
+              name="G検定"
+              src="/badges/g-test-openbadge.png"
+              size="w-16 h-16"
+            />
+            <CertificationBadge
+              name="DX検定 プロフェッショナル認定"
+              src="/badges/dx-test-openbadge.png"
+              size="w-16 h-16"
+            />
+            <CertificationBadge
+              name="統計検定3級"
+              src="/badges/Toke3rank.png"
+              size="w-16 h-16"
+            />
+          </div>
+        </AboutCard>
+
+        <!-- Career Timeline -->
+        <Timeline />
+
+        <!-- Contact -->
+        <AboutCard title="Contact">
+          <ContactSection
+            email="mijucation@gmail.com"
+            socials={[
+              { href: 'https://twitter.com/mijucation_', label: 'X',      icon: '/icons/x.svg'      },
+              { href: 'https://github.com/kwstyk',       label: 'GitHub', icon: '/icons/github.svg' },
+            ]}
+          />
+        </AboutCard>
+      </div>
+
+      <!-- フッター CTA -->
+      <div class="button-group">
+        <Button variant="primary" href="/structure">Structureを見る</Button>
+        <Button variant="ghost"   href="/proof">Proofを見る</Button>
+        <Button variant="ghost"   href="/story">Storyを見る</Button>
+      </div>
+    </div>
+  </main>
+</Layout>

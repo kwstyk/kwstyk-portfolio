@@ -1,0 +1,42 @@
+---
+interface Props {
+  title: string;
+  summary: string;
+  url: string;
+  source: string;
+  published: string;
+  tags?: string[];
+}
+const { title, summary, url, source, published, tags = [] } = Astro.props as Props;
+
+// ① RSS に含まれている「続きをみる」「続きを読む」以降を丸ごと削除
+const cleanSummary = summary.replace(/…?続(き|きを)(みる|読む).*/, '');
+const colorMap: Record<string,string> = {
+  zenn: 'bg-sky-500',
+  note: 'bg-yellow-500',
+}
+// ② Tailwind line-clamp を使うなら行数制限クラス（3行まで）
+//    または、ここで文字数 slice しても OK
+---
+<a href={url} target="_blank" class="card block p-4 border rounded-lg hover:shadow-lg"data-tags={tags.join(',')} >
+  <div class={`inline-block px-2 py-1 text-xs text-white ${colorMap[source] ?? 'bg-gray-500'}`}>
+    {source}
+  </div>
+  <h3 class="mt-2 font-bold">{title}</h3>
+
+  <!-- クリーニングした要約だけを表示 -->
+  <p class="text-sm opacity-80 line-clamp-3">{cleanSummary}</p>
+
+  <!-- ここでだけ「続きを読む→」を出す -->
+  <div class="mt-2 flex justify-between items-center">
+    <div class="flex flex-wrap gap-1">
+      <span class="text-xs text-gray-400">Published: {published}</span>
+ {tags.map(tag => (
+   <span class="text-xs bg-gray-200 text-gray-800 px-2 py-0.5 rounded-full">
+     {tag}
+   </span>
+ ))}
+    </div>
+    <span class="text-sm text-accent hover:underline">続きを読む →</span>
+  </div>
+</a>

@@ -1,0 +1,27 @@
+---
+// ファイル: src/components/CopyBlock.astro
+
+interface Props {
+  /** ハイライト言語 */
+  lang?: string;
+  /** 外側 div に渡すクラス */
+  class?: string;
+}
+const { lang = 'bash', class: extraClass = '' } = Astro.props as Props;
+---
+
+<div class={`relative ${extraClass}`}>
+  <!-- Hydration は使う側で <CopyBlock client:load> -->
+  <button
+    type="button"
+    onclick="navigator.clipboard.writeText(this.nextElementSibling.querySelector('code').innerText.trim())"
+    class="absolute top-2 right-2 px-2 py-1 rounded bg-gray-700 hover:bg-gray-600 text-white text-xs"
+    aria-label="Copy code to clipboard"
+  >
+    Copy
+  </button>
+
+  <pre class="overflow-x-auto rounded bg-slate-800 p-4 text-sm">
+    <code class={`language-${lang}`}><slot/></code>
+  </pre>
+</div>

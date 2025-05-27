@@ -1,0 +1,45 @@
+---
+/** Badge.astro — タグやラベルを表す小さなカラーボックス
+ * 用途：
+ *  - Alert 種（info / warn / error）
+ *  - 難易度バッジ（easy / medium / hard / expert）
+ */
+
+interface Props {
+  /** 種別。Alert系 or 難易度ラベル */
+  type?: 'info' | 'warn' | 'error' | 'easy' | 'medium' | 'hard' | 'expert';
+
+  /** 追加クラス（余白や配置調整用） */
+  class?: string;
+}
+
+// ▼ Props 分解とデフォルト設定
+const {
+  type = 'info',
+  class: extraClass = '',
+} = Astro.props as Props;
+
+// ▼ タイプ別カラー定義（Tailwind）
+const colorMap: Record<string, string> = {
+  // Alert 系
+  info:   'bg-blue-800 border-blue-500',
+  warn:   'bg-yellow-800 border-yellow-500',
+  error:  'bg-red-800 border-red-500',
+
+  // 難易度系
+  easy:   'bg-green-600 text-white',
+  medium: 'bg-yellow-600 text-black',
+  hard:   'bg-orange-600 text-white',
+  expert: 'bg-red-600 text-white',
+};
+
+// ▼ 未定義の場合は info をフォールバック
+const color = colorMap[type] ?? colorMap['info'];
+---
+
+<!-- ▼ バッジ描画本体 -->
+<div
+  class={`inline-block px-2 py-1 text-xs font-medium rounded border ${color} ${extraClass}`}
+>
+  <slot />
+</div>

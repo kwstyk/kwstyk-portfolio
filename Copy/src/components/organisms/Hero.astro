@@ -1,0 +1,176 @@
+---
+/**
+ * Hero.astro – Landing 専用ヒーローセクション（ワード単位削除版）
+ *
+ * タイプライター効果：文字ごと表示 → ワードまるごと削除
+ * 星降る背景は変わらず動作します
+ *
+ * @version 2025-05-18 InstantClear Edition
+ */
+
+interface Button {
+  href: string
+  variant: string
+  text: string
+}
+interface Props {
+  title?: string
+  subtitle?: string
+  buttons?: Button[]
+  /** 表示するワード群 */
+  typewriterTexts?: string[]
+  enableEffects?: boolean
+}
+
+const {
+  title = "Growth Lab Portfolio",
+  subtitle = "セキュリティ × インフラ × 再現性",
+  buttons = [],
+  typewriterTexts = ["現場監督からセキュリティ監督へ"],
+  enableEffects = true,
+} = Astro.props as Props
+---
+
+<style>
+  @keyframes blink { 0%,100%{opacity:0} 50%{opacity:1} }
+  .animate-blink { animation: blink 1s step-end infinite }
+</style>
+
+<section class="hero relative overflow-x-hidden">
+  {enableEffects && (
+    <canvas
+      id="starfield"
+      class="absolute inset-0 w-full h-full"
+      aria-hidden="true"
+      data-texts={JSON.stringify(typewriterTexts)}
+    ></canvas>
+  )}
+
+  <div class="relative z-10 max-w-4xl mx-auto px-4 py-24 text-center">
+    <slot name="title">
+      <h1 class="text-white text-4xl sm:text-6xl font-extrabold tracking-tight">
+        {title}
+      </h1>
+    </slot>
+
+    {enableEffects ? (
+      <p
+        class="mt-4 text-2xl h-10 whitespace-nowrap overflow-x-auto"
+        aria-label="Typewriter text"
+      >
+        <span id="typed" class="text-[var(--accent-light,#38bdf8)] font-semibold"></span>
+        <span class="text-[var(--accent,#60cdf9)] animate-blink">|</span>
+      </p>
+    ) : (
+      <div class="h-10"></div>
+    )}
+
+    <p class="mt-4 text-lg text-gray-300">{subtitle}</p>
+
+    {buttons.length > 0 && (
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        {buttons.map(btn => (
+          <a
+            href={btn.href}
+            class={`rounded-md px-5 py-3 font-medium shadow-lg transition ${btn.variant}`}
+          >
+            {btn.text}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+
+  {enableEffects && (
+     <script is:inline type="module">
+      document.addEventListener("DOMContentLoaded", () => {
+        // タイプライター：文字ごと表示 → ワードまとまって削除
+        const cvs = document.getElementById("starfield");
+        const texts = cvs?.dataset.texts ? JSON.parse(cvs.dataset.texts) : [];
+        const typedEl = document.getElementById("typed");
+        //const typingInterval = 150;   // 文字間隔
+        const pauseAfter = 1000;      // ワード全表示後の停止時間(ms)
+        let idx = 0;
+        let pos = 0;
+
+        function typeWord() {
+          if (!typedEl || texts.length === 0) return;
+          const word = texts[idx];
+          // ワード表示にかけたい合計時間（ms）
+          const totalDuration = 1500;
+          // 文字数に応じた表示間隔を算出
+          const interval = Math.max(20, totalDuration / word.length);
+          if (pos <= word.length) {
+            // 文字を1つずつ追加
+            typedEl.textContent = word.slice(0, pos++);
+            setTimeout(typeWord, interval);
+          } else {
+            // ワード全文表示後に一気にクリア
+            setTimeout(() => {
+              typedEl.textContent = "";
+              idx = (idx + 1) % texts.length;
+              pos = 0;
+              typeWord();
+            }, pauseAfter);
+          }
+        }
+
+        typeWord();
+
+        // 星降る背景（変更なし）
+        if (!(cvs instanceof HTMLCanvasElement)) return;
+        const ctx = cvs.getContext("2d");
+        if (!ctx) return;
+        let stars = [];
+        function initStars() {
+          const w = cvs.parentElement?.clientWidth || innerWidth;
+          const h = cvs.parentElement?.clientHeight || innerHeight;
+          cvs.width = w; cvs.height = h;
+          stars = Array.from({ length: 60 }, () => ({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            r: Math.random() * 1.2 + 0.3,
+            v: Math.random() * 0.15 + 0.05,
+            hue: Math.random() * 360
+          }));
+        }
+        function renderStars() {
+          ctx.clearRect(0, 0, cvs.width, cvs.height);
+          stars.forEach(s => {
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
+            ctx.fillStyle = `hsla(${s.hue},80%,75%,0.8)`;
+            ctx.fill();
+            s.y += s.v;
+            if (s.y > cvs.height) {
+              s.y = 0; s.x = Math.random() * cvs.width;
+              s.hue = Math.random() * 360;
+            }
+          });
+          // 流れ星：確率 0.1
+          if (Math.random() < 0.1) {
+            const sx = Math.random()*cvs.width, sy = 0;
+            const len = 200 + Math.random()*100, speed = 8 + Math.random()*4;
+            let t = 0;
+            (function shoot(){
+              if (t > len) return;
+              ctx.strokeStyle = '#ffffffee';
+              ctx.lineWidth = 2;
+              ctx.beginPath();
+              ctx.moveTo(sx, sy + t);
+              ctx.lineTo(sx + t/4, sy + t);
+              ctx.stroke();
+              t += speed;
+              requestAnimationFrame(shoot);
+            })();
+          }
+          requestAnimationFrame(renderStars);
+        }
+
+        initStars();
+        window.addEventListener("resize", initStars);
+        renderStars();
+      });
+    </script>
+  )}
+</section>

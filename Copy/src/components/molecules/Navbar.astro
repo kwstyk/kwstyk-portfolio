@@ -1,0 +1,83 @@
+---
+import '@/styles/navbar.css';
+import ThemeToggle from '@/components/atoms/ThemeToggle.astro';
+
+const links = [
+  { href: '/structure', label: 'Structure' },
+  { href: '/proof',     label: 'Proof'     },
+  { href: '/story',     label: 'Story'     },
+];
+---
+
+<nav class="site-header bg-[var(--bg-alt)] text-[var(--text)] transition-colors">
+  <div class="navbar-inner flex items-center">
+    <!-- 左：ロゴ -->
+    <a href="/" class="logo flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="w-8 h-8 text-[var(--accent)] hover:text-[var(--accent-light)] transition"
+           fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 12l9-9 9 9M4 10v10h6v-6h4v6h6V10" />
+      </svg>
+      <span class="font-bold text-lg">*</span>
+    </a>
+
+    <!-- 右：トグル + ハンバーガー -->
+    <div class="ml-auto flex items-center gap-4">
+      <ThemeToggle />
+
+      <button
+        id="nav-toggle"
+        class="hamburger p-2"
+        aria-label="メニューを開閉"
+        aria-expanded="false"
+      >
+        <svg id="icon-open" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+        <svg id="icon-close" class="icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- 常にハンバーガーで開くメニュー -->
+    <ul
+      id="nav-menu"
+      class="
+        navbar-links
+        hidden
+        absolute top-full right-0
+        mt-2 w-48
+        bg-[var(--bg-alt)] text-[var(--text)]
+        rounded-md shadow-lg py-2
+      "
+    >
+      {links.map(({ href, label }) => (
+        <li>
+          <a href={href} class="navbar-link block px-4 py-2">{label}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<script is:inline type="module">
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle    = document.getElementById('nav-toggle');
+    const menu      = document.getElementById('nav-menu');
+    const openIcon  = document.getElementById('icon-open');
+    const closeIcon = document.getElementById('icon-close');
+    if (!toggle || !menu || !openIcon || !closeIcon) return;
+
+    toggle.addEventListener('click', () => {
+      const isHidden = menu.classList.toggle('hidden');
+      toggle.setAttribute('aria-expanded', String(!isHidden));
+      openIcon .classList.toggle('hidden');
+      closeIcon.classList.toggle('hidden');
+    });
+  });
+</script>

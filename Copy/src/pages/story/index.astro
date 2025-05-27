@@ -1,0 +1,132 @@
+---
+// src/pages/story/index.astro
+// 目的 : Zenn/Note 等から同期した Story 一覧をタグ＋ページネーション付きで表示
+//        ＋ 該当する Proof がある場合は相互リンクで補足情報を提供
+
+import Layout         from '@/layouts/Layout.astro';
+import Hero           from '@/components/organisms/Hero.astro';
+import StoryFilterBar from '@/components/molecules/StoryFilterBar.astro';
+import StoryCard      from '@/components/molecules/StoryCard.astro';
+import Pagination     from '@/components/molecules/Pagination.astro';
+import SectionNav     from '@/components/organisms/SectionNav.astro';
+
+import storiesJson    from '@/data/stories.json';
+import { getCollection } from 'astro:content';
+
+
+// ▼ 1. 型定義（Story JSON との整合を担保）
+interface Story {
+  id: string;
+  source: string;
+  title: string;
+  summary: string;
+  url: string;
+  tags?: string[];
+  published: string;
+  hidden?: boolean;
+}
+
+// ▼ 2. データ読み込み・変換
+const stories = storiesJson as Story[];
+
+// ▼ 3. クエリパラメータ取得（タグ絞り込み／ページ）
+const selectedTag = Astro.url.searchParams.get('tag') ?? '';
+const page        = Number(Astro.url.searchParams.get('page') ?? '1');
+const perPage     = 6;
+
+// ▼ 4. 表示対象フィルタリング（非公開 + タグ未一致を除外）
+const filtered = stories.filter(
+  s => !s.hidden && (selectedTag === '' || (s.tags ?? []).includes(selectedTag))
+);
+
+// ▼ 5. ページネーション用の総数集計
+const totalItems = filtered.length;
+const totalPages = Math.ceil(totalItems / perPage);
+
+// ▼ 6. 表示分の抽出（1ページ分だけ切り出し）
+const paged = filtered.slice((page - 1) * perPage, page * perPage);
+
+// ▼ 7. タグ一覧の生成（重複排除）
+const allTags = Array.from(new Set(stories.flatMap(s => s.tags ?? [])));
+
+// ▼ 8. Proof → Story の相互参照マップを作成（frontmatter.stories）
+const allProofs = await getCollection('proofs');
+const proofMap = new Map<string, { title: string; url: string }[]>();
+
+for (const proof of allProofs) {
+  for (const sid of proof.data.stories ?? []) {
+    if (!proofMap.has(sid)) proofMap.set(sid, []);
+    proofMap.get(sid)!.push({
+      title: proof.data.title,
+      url: `/proof/${proof.data.slug}`,
+    });
+  }
+}
+---
+
+
+<!-- ▼ ページレイアウト全体 -->
+<Layout class="page-background">
+  <!-- Heroセクション（トップ見出し） -->
+  <Hero
+    enableEffects={false}
+    title="Lab Notes"
+    subtitle="～Proof から得た知見～"
+  />
+
+  <!-- タグフィルター（一覧） -->
+  <StoryFilterBar
+    tags={allTags}
+    selectedTag={selectedTag}
+  />
+
+  <!-- Story一覧カード（タグ＆ページで絞り込み後の出力） -->
+  <section
+    id="story-cards"
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8"
+  >
+    {paged.map((story) => (
+      <>
+        <StoryCard
+          title={story.title}
+          summary={story.summary}
+          url={story.url}
+          source={story.source}
+          published={story.published}
+          tags={story.tags}
+        />
+
+        {/* Proof 側に紐付いたLabがあれば相互リンクを表示 */}
+        {proofMap.has(story.id) && (
+          <div class="ml-4 mb-6 text-sm">
+            <span class="font-medium">関連 Lab:</span>
+            {proofMap.get(story.id)!.map((p) => (
+              <a
+                href={p.url}
+                class="ml-2 text-accent hover:underline"
+                target="_blank"
+              >
+                {p.title}
+              </a>
+            ))}
+          </div>
+        )}
+      </>
+    ))}
+  </section>
+
+  <!-- ページネーション（タグ選択状態を引き継ぐ） -->
+  <Pagination
+    totalItems={totalItems}
+    itemsPerPage={perPage}
+    currentPage={page}
+    totalPages={totalPages}
+    selectedTag={selectedTag}
+    getPageHref={(p: number) =>
+      `?tag=${encodeURIComponent(selectedTag)}&page=${p}`
+    }
+  />
+
+  <!-- フッター導線（Story除くナビ） -->
+  <SectionNav exclude="story" />
+</Layout>

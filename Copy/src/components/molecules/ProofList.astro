@@ -1,0 +1,59 @@
+---
+// src/components/molecules/ProofList.astro
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import SmallProofCard from './SmallProofCard.astro';
+
+export interface Props {
+  /** 対象カテゴリのスラッグ */
+  categorySlug: string;
+  /** 'latest' 最新順, 'popular' 人気順 */
+  type?: 'latest' | 'popular';
+  /** 表示件数 */
+  count?: number;
+  /** 追加のCSSクラス */
+  class?: string;
+}
+const {
+  categorySlug,
+  type = 'latest',
+  count = 5,
+  class: _class = ''
+} = Astro.props as Props;
+
+// コレクション取得＆カテゴリ絞り込み
+const allProofs: CollectionEntry<'proofs'>[] = await getCollection('proofs');
+const categoryProofs = allProofs.filter(
+  (p: CollectionEntry<'proofs'>) => p.data.category === categorySlug
+);
+
+// ソート & スライス
+let proofs: CollectionEntry<'proofs'>[];
+if (type === 'latest') {
+  proofs = categoryProofs
+    .sort((a: CollectionEntry<'proofs'>, b: CollectionEntry<'proofs'>) =>
+      new Date(b.data.updated).getTime() - new Date(a.data.updated).getTime()
+    )
+    .slice(0, count);
+} else {
+  proofs = categoryProofs
+    .sort((a: CollectionEntry<'proofs'>, b: CollectionEntry<'proofs'>) =>
+      (b.data.views || 0) - (a.data.views || 0)
+    )
+    .slice(0, count);
+}
+---
+
+<section class={`mt-8 ${_class}`}>  
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {proofs.map((proof: CollectionEntry<'proofs'>) => (
+      <SmallProofCard
+        title={proof.data.title ?? proof.id.split('/')[1]}
+        href={`/proof/${proof.id.replace(/\.mdx?$/, '')}`}
+        updated={proof.data.updated}
+        difficulty={proof.data.difficulty}
+        class=""
+      />
+    ))}
+  </div>
+</section>

@@ -1,0 +1,41 @@
+---
+/* ▼ Astroコンポーネント / データの読み込み */
+import Layout from '@/layouts/Layout.astro'
+import Hero from '@/components/organisms/Hero.astro'
+import Card from '@/components/molecules/Card.astro'
+import SectionNav from '@/components/organisms/SectionNav.astro'
+
+/* ▼ Structureカテゴリデータ（JSON） */
+import categories from '@/data/categories.json'
+
+/* ▼ スタイル */
+import '@/styles/structure.css'
+---
+
+<!-- ✅ Structure レイヤ全体レイアウト -->
+<Layout class="page-background">
+
+  <!-- ✅ Heroセクション：概要と目的を伝えるタイトル -->
+  <Hero
+    enableEffects={false}
+    title="Structure"
+    subtitle="技術要素 × 証明プロジェクトを体系化"
+  />
+
+  <!-- ✅ カテゴリカードグリッド：JSONから自動生成 -->
+  <section class="card-grid items-stretch">
+    {categories.map((cat) => (
+      <Card
+        title={cat.title}
+        description={cat.description}
+        href={`/structure/${cat.slug}`}
+        icon={cat.icon}
+        badge={cat.badge}
+      />
+    ))}
+  </section>
+
+  <!-- ✅ 下部ナビゲーション：Structure以外への導線提供 -->
+  <SectionNav exclude="structure" />
+
+</Layout>

@@ -23,7 +23,7 @@ interface Props {
   /** 関連 Story へのリンク一覧 */
   stories?:    string[];
   /** why.md へのパス */
-  why_md?:     string;
+  whyContent?: string;
   class?:      string;
 }
 
@@ -39,12 +39,13 @@ const {
   ci_status: ci_status,
   tags = [],
   stories = [],
-  why_md,
+  whyContent,
   class: className = '',
 } = Astro.props as Props
+
 ---
 <Layout pageTitle={`Proof | ${title}`} class={className}>
-  <main class="px-4 lg:px-8 py-8">
+  <main class="px-4 lg:px-16 py-8 mx-auto max-w-screen-xl">
     <ProofHero
       title={title}
       description={description}
@@ -57,7 +58,7 @@ const {
     <!-- コードブロックにコピー用ボタンを追加するため、相対配置を指定 -->
 <article
   class="
-    prose mt-12 relative
+    prose lg:prose-lg max-w-none mt-12 relative
     [&_h2]:border-b            /* 全モードで下線 */
     [&_h2]:pb-2 [&_h2]:mb-4     /* 下線まわりの余白 */
     [&_h2]:border-gray-200      /* ライトモード線色 */
@@ -70,6 +71,19 @@ const {
   <slot />
   <slot name="footer" />
 
+  <!-- ─── Why.md 折りたたみセクション ─────────────────────────── -->
+{whyContent && (
+  <details class="mt-8 rounded border border-slate-600 [&_summary]:cursor-pointer">
+    <summary class="py-2 px-4 bg-slate-700/40 font-semibold">
+      🧐 Why — 設計理由を開く
+    </summary>
+        <article
+          class="prose prose-invert p-4 max-w-none lg:prose-lg"
+          set:html={whyContent}
+        />
+  </details>
+)}
+  
   <!-- コピー機能スクリプト -->
   <script is:inline>
     document.addEventListener('DOMContentLoaded', () => {

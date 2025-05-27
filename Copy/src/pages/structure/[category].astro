@@ -1,0 +1,127 @@
+---
+/* ▼ Style / コンポーネント / データの読み込み */
+import '@/styles/structure.css'
+import Layout from '@/layouts/Layout.astro'
+import Card from '@/components/molecules/Card.astro'
+import ProofList from '@/components/molecules/ProofList.astro'
+import categories from '@/data/categories.json'
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+
+export const prerender = true
+
+/* ▼ ルーティング生成: /structure/[slug] */
+export async function getStaticPaths() {
+  return categories.map((cat) => ({
+    params: { category: cat.slug },
+    props:  { category: cat },
+  }))
+}
+
+/* ▼ Props型定義（categories.jsonから） */
+interface Props {
+  category: {
+    slug:        string
+    title:       string
+    description: string
+    icon?:       string
+    color?:      string
+  }
+}
+const { category } = Astro.props as Props
+
+/* ▼ descriptions/structure/<slug>/intro.md を取得 */
+const descEntries = await getCollection('descriptions')
+const introEntry = descEntries.find(
+  (e) => e.id.endsWith(`structure/${category.slug}/intro.md`)
+)
+const { Content: Intro } = introEntry
+  ? await introEntry.render()
+  : { Content: null }
+
+/* ▼ 該当カテゴリの Proof 一覧取得 */
+const allProofs: CollectionEntry<'proofs'>[] = await getCollection('proofs')
+const entries = allProofs.filter(p => p.data.category === category.slug)
+---
+
+<!-- ✅ Structureカテゴリ詳細レイアウト -->
+<Layout siteName="KWSTYK Portfolio" pageTitle={`${category.title} | Structure`}>
+
+  <!-- ✅ カテゴリ ヘッダー -->
+  <header class="mb-8">
+    <h1 class="text-2xl font-bold flex items-center gap-2 whitespace-nowrap">
+      {category.icon && <span class="text-3xl">{category.icon}</span>}
+      {category.title}
+    </h1>
+    <p class="text-text/75 mt-1">{category.description}</p>
+    <p class="text-sm text-gray-400 mt-2">
+      全 Proof: <span class="font-medium text-blue-400">{entries.length}</span> 件
+    </p>
+  </header>
+
+  <!-- ✅ Mermaid付きイントロ説明 -->
+  {Intro && (
+    <section
+      class="
+        mb-12
+        prose dark:prose-invert
+        [&_h2]:border-b [&_h2]:border-gray-200 [&_h2]:pb-2 [&_h2]:mb-4
+        dark:[&_h2]:border-gray-600
+      "
+    >
+      <Intro />
+    </section>
+  )}
+
+  <!-- ✅ 最新 Proof 5 件（更新日順） -->
+  <section class="mt-12">
+    <h3 class="text-lg font-semibold mb-4">
+      最新の更新
+      <span class="font-medium text-blue-400">&nbsp;{Math.min(5, entries.length)}</span> 件
+    </h3>
+    <ProofList categorySlug={category.slug} type="latest" count={5} />
+  </section>
+
+  <!-- ✅ 人気 Proof 5 件（views順） -->
+  <section class="mt-12">
+    <h3 class="text-lg font-semibold mb-4">
+      人気のProof
+      <span class="font-medium text-green-400">&nbsp;{Math.min(5, entries.length)}</span> 件
+    </h3>
+    <ProofList categorySlug={category.slug} type="popular" count={5} />
+  </section>
+
+  <!-- ✅ 全 Proof 一覧 -->
+  <section class="mt-12">
+    <h3 class="text-lg font-semibold mb-4">
+      全Proof:
+      <span class="font-medium text-red-400">&nbsp;{entries.length}</span> 件
+    </h3>
+
+    <div class="card-grid items-stretch">
+      {entries.map(entry => (
+        <Card
+          title={entry.data.title}
+          description={entry.data.description}
+          href={`/proof/${entry.id.replace(/\.mdx?$/, '')}`}
+          icon={entry.data.icon}
+          badge={entry.data.badge}
+          difficulty={entry.data.difficulty}
+          repro={entry.data.repro}
+          updated={entry.data.updated}
+        />
+      ))}
+
+      <!-- ✅ 未実装用プレースホルダ（2件） -->
+      {Array.from({ length: 2 }).map((_, i) => (
+        <Card
+          title="Coming Soon"
+          description="ただいま準備中です"
+          href="#"
+          badge=""
+          class="opacity-50 pointer-events-none"
+        />
+      ))}
+    </div>
+  </section>
+</Layout>

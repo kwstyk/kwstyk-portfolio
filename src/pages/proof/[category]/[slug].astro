@@ -2,51 +2,48 @@
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
-import Alert         from '@/components/atoms/Alert.astro';
-import CopyBlock     from '@/components/molecules/CopyBlock.astro';
-import DirectoryTree from '@/components/molecules/DirectoryTree.astro';
+import Alert             from '@/components/atoms/Alert.astro';
+import CopyBlock         from '@/components/molecules/CopyBlock.astro';
+import DirectoryTree     from '@/components/molecules/DirectoryTree.astro';
 import ProofPageTemplate from '@/components/templates/ProofPageTemplate.astro';
-import StoryCard     from '@/components/molecules/StoryCard.astro';
-import storiesJson   from '@/data/stories.json';
+import { marked }        from 'marked';
+import StoryCard         from '@/components/molecules/StoryCard.astro';
+import storiesJson       from '@/data/stories.json';
 
 export const prerender = true;
 
-/* ---------- getStaticPaths ---------- */
 export async function getStaticPaths() {
   const proofs = await getCollection('proofs');
-
   return proofs.map((entry) => {
     const [category, slug] = entry.id.replace(/\.mdx?$/, '').split('/');
-    return {
-      params: { category, slug },
-      props : { entry },
-    };
+    return { params: { category, slug }, props: { entry } };
   });
 }
 
-/* ---------- ページ本体 ---------- */
 type ProofEntry = CollectionEntry<'proofs'>;
 interface Props { entry: ProofEntry }
 
 const { entry } = Astro.props as Props;
-const { Content, headings } = await entry.render();
+const { Content } = await entry.render();
 const front = entry.data;
+const whyModules = import.meta.glob<string>(
+  '/src/why/**/*.md',
+  { eager: true, import: 'default', query: '?raw' }
+);
 
-/* Story 紐付け */
-interface Story {
-  id: string;
-  source: string;
-  title: string;
-  summary: string;
-  url: string;
-  tags?: string[];
-  published: string;
-  hidden?: boolean;
+let whyContent: string | undefined;
+if (front.why_md) {
+  // front.why_md は "/src/why/network-security/packet-capture.md"
+  const raw = (whyModules as Record<string,string>)[front.why_md];
+  if (raw) {
+    whyContent = await marked.parse(raw);
+  }
 }
-const allStories = storiesJson as Story[];
 
-const relatedStories: Story[] = (front.stories ?? [])
-  .map((sid: string) => allStories.find((s) => s?.id === sid))
+interface Story { id: string; [key: string]: any }
+const allStories = storiesJson as Story[];
+const relatedStories = (front.stories ?? [])
+  .map((sid: string) => allStories.find((s) => s.id === sid))
   .filter(Boolean) as Story[];
 ---
 
@@ -61,9 +58,8 @@ const relatedStories: Story[] = (front.stories ?? [])
   progress    ={front.progress}
   tags        ={front.tags}
   ci_status   ={front.ci_status}
-  why_md      ={front.why_md} 
+  whyContent  ={whyContent}
 >
-  <!-- Markdown 本文 -->
   <Content components={{ Alert, CopyBlock, DirectoryTree }} />
 
   {relatedStories.length > 0 && (
@@ -72,12 +68,12 @@ const relatedStories: Story[] = (front.stories ?? [])
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {relatedStories.map((s) => (
           <StoryCard
-            title     ={s.title}
-            summary   ={s.summary}
-            url       ={s.url}
-            source    ={s.source}
-            published ={s.published}
-            tags      ={s.tags}
+            title={s.title}
+            summary={s.summary}
+            url={s.url}
+            source={s.source}
+            published={s.published}
+            {...s}
           />
         ))}
       </div>

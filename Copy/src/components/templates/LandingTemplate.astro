@@ -1,0 +1,30 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Hero from '@/components/organisms/Hero.astro';
+import Navbar from '@/components/molecules/Navbar.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<Layout>
+  <Navbar slot="header">
+    <slot name="nav-left" slot="left" />
+    <slot name="nav-right" slot="right" />
+  </Navbar>
+
+  <main class:list={className}>
+    <Hero
+      title="Portfolio"
+      subtitle="セキュリティエンジニアのポートフォリオサイト"
+    >
+      <slot name="hero-cta" />
+    </Hero>
+    <slot />
+  </main>
+
+  <slot name="footer" slot="footer" />
+</Layout> 

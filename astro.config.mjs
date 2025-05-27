@@ -7,7 +7,6 @@ import tailwind from '@astrojs/tailwind';   // TailwindCSS
 import react from '@astrojs/react';         // React Island
 import mdx from '@astrojs/mdx';             // MDX (.md は除外)
 import vercel from '@astrojs/vercel';       // Vercel 向けデプロイ
-
 /* ────────────── remark / rehype plugins ────────────── */
 import remarkDirective from 'remark-directive';               // :::directive
 import remarkDirectiveRehype from 'remark-directive-rehype'; // mdast→hast変換（最後に必須）

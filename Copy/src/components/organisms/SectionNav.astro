@@ -1,0 +1,24 @@
+---
+// src/components/organisms/SectionNav.astro
+import Button from '@/components/atoms/Button.astro';
+
+interface Props {
+  exclude?: 'proof' | 'structure' | 'story';
+}
+const { exclude } = Astro.props;
+---
+
+<section class="mt-12 border-t border-gray-700 pt-10 text-center">
+  <h2 class="text-lg font-bold text-[var(--accent)] mb-6 tracking-wide">他のセクションも見る</h2>
+  <div class="flex flex-col sm:flex-row justify-center gap-4">
+    {exclude !== 'structure' && (
+      <Button variant="primary" href="/structure">Structure（体系）</Button>
+    )}
+    {exclude !== 'proof' && (
+      <Button variant="ghost" href="/proof">Proof（実証）</Button>
+    )}
+    {exclude !== 'story' && (
+      <Button variant="ghost" href="/story">Story（背景）</Button>
+    )}
+  </div>
+</section>

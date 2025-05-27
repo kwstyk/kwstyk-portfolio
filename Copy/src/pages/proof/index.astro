@@ -1,0 +1,97 @@
+---
+/* ▼ データ & コンポーネント読み込み */
+import Layout from '@/layouts/Layout.astro'
+import Hero from '@/components/organisms/Hero.astro'
+import StatsBar from '@/components/organisms/StatsBar.astro'
+import FilterBar from '@/components/molecules/FilterBar.astro';
+import ProofCardGrid from '@/components/organisms/ProofCardGrid.astro'
+import Pagination from '@/components/molecules/Pagination.astro'
+import SectionNav from '@/components/organisms/SectionNav.astro'
+
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+import { generateSeo } from '@/utils/seo'
+
+/* ▼ Proof 一覧を取得 */
+const allProofs = await getCollection('proofs')
+
+/* ▼ ページネーション設定 */
+const page = Number(Astro.url.searchParams.get('page') ?? '1')
+const itemsPerPage = 12
+const totalCount = allProofs.length
+const totalPages = Math.ceil(totalCount / itemsPerPage)
+
+/* ▼ 完了率 / カテゴリ数を算出 */
+const completedCount = allProofs.filter(p => p.data.progress === 100).length
+const completionRate = totalCount
+  ? Math.round((completedCount / totalCount) * 100)
+  : 0
+const categories = Array.from(new Set(allProofs.map(p => p.slug.split('/')[0])))
+
+/* ▼ SEO メタ情報生成 */
+const meta = generateSeo({
+  title: 'Proof – KWSTYK Portfolio',
+  description: 'Docker から Terraform まで再現できる技術検証ラボをカテゴリ別・難易度別に公開',
+  pathname: '/proof',
+  imagePath: '/og/proof.png',
+})
+---
+<Layout {meta}>
+
+  <!-- ✅ JSON-LD を <head> に埋め込む -->
+  <head slot="head">
+    <script type="application/ld+json">
+      {JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        itemListElement: allProofs.slice(0, 100).map((p, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          url: `${meta.url}/${p.slug.replace(/\.mdx?$/, '')}/`,
+        })),
+      })}
+    </script>
+  </head>
+
+  <!-- ✅ メインエリア -->
+  <main class="bg-[var(--proof-bg)] text-white min-h-screen">
+    <div class="container mx-auto px-4">
+
+      <!-- Hero セクション -->
+      <section class="pt-12 pb-8">
+        <Hero enableEffects={false} title="Proof" subtitle="再現性のある技術検証ラボ">
+          <StatsBar
+            total={totalCount}
+            completionRate={completionRate}
+            categoryCount={categories.length}
+          />
+        </Hero>
+      </section>
+
+      <!-- フィルタバー：カテゴリ / 難易度 / 再現手段 / 検索 -->
+    <section class="container mx-auto px-4 mb-8">
+      <FilterBar />
+    </section>
+
+      <!-- Proof カードグリッド -->
+      <section class="mb-8">
+        <ProofCardGrid items={allProofs as CollectionEntry<'proofs'>[]} />
+      </section>
+
+      <!-- ページネーション -->
+      <section class="py-8">
+        <Pagination
+          totalItems={totalCount}
+          itemsPerPage={itemsPerPage}
+          currentPage={page}
+          totalPages={totalPages}
+          getPageHref={(p: number) => `?page=${p}`}
+        />
+      </section>
+
+    </div>
+  </main>
+
+  <!-- 下部ナビゲーション：他レイヤへの導線 -->
+  <SectionNav exclude="proof" />
+</Layout>

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    // ▼ ルートパスの基準をプロジェクトルートに設定
+    "baseUrl": ".",
+
+    // ▼ パスエイリアスを定義（例：@/components → src/components）
+    "paths": {
+      "@/*": ["src/*"]
+    }
+
+  }
+}

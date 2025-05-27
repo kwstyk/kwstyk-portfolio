@@ -1,0 +1,86 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+import Alert         from '@/components/atoms/Alert.astro';
+import CopyBlock     from '@/components/molecules/CopyBlock.astro';
+import DirectoryTree from '@/components/molecules/DirectoryTree.astro';
+import ProofPageTemplate from '@/components/templates/ProofPageTemplate.astro';
+import StoryCard     from '@/components/molecules/StoryCard.astro';
+import storiesJson   from '@/data/stories.json';
+
+export const prerender = true;
+
+/* ---------- getStaticPaths ---------- */
+export async function getStaticPaths() {
+  const proofs = await getCollection('proofs');
+
+  return proofs.map((entry) => {
+    const [category, slug] = entry.id.replace(/\.mdx?$/, '').split('/');
+    return {
+      params: { category, slug },
+      props : { entry },
+    };
+  });
+}
+
+/* ---------- ページ本体 ---------- */
+type ProofEntry = CollectionEntry<'proofs'>;
+interface Props { entry: ProofEntry }
+
+const { entry } = Astro.props as Props;
+const { Content, headings } = await entry.render();
+const front = entry.data;
+
+/* Story 紐付け */
+interface Story {
+  id: string;
+  source: string;
+  title: string;
+  summary: string;
+  url: string;
+  tags?: string[];
+  published: string;
+  hidden?: boolean;
+}
+const allStories = storiesJson as Story[];
+
+const relatedStories: Story[] = (front.stories ?? [])
+  .map((sid: string) => allStories.find((s) => s?.id === sid))
+  .filter(Boolean) as Story[];
+---
+
+<ProofPageTemplate
+  title       ={front.title}
+  description ={front.description}
+  category    ={front.category}
+  difficulty  ={front.difficulty}
+  repro       ={front.repro}
+  stack       ={front.stack}
+  updated     ={front.updated}
+  progress    ={front.progress}
+  tags        ={front.tags}
+  ci_status   ={front.ci_status}
+  why_md      ={front.why_md} 
+>
+  <!-- Markdown 本文 -->
+  <Content components={{ Alert, CopyBlock, DirectoryTree }} />
+
+  {relatedStories.length > 0 && (
+    <div slot="footer" class="mt-12">
+      <h2 class="text-2xl font-bold mb-4">Related Stories</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {relatedStories.map((s) => (
+          <StoryCard
+            title     ={s.title}
+            summary   ={s.summary}
+            url       ={s.url}
+            source    ={s.source}
+            published ={s.published}
+            tags      ={s.tags}
+          />
+        ))}
+      </div>
+    </div>
+  )}
+</ProofPageTemplate>
