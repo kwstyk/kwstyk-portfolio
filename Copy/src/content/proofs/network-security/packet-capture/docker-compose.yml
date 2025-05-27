@@ -1,9 +1,0 @@
-version: '3.8'
-services:
-  web:
-    build: .
-    volumes:
-      - ./capture:/capture          # ローカル capture フォルダをマウント
-    ports:
-      - "8080:80"                # ホスト 8080 → コンテナ 8080
-    restart: unless-stopped
