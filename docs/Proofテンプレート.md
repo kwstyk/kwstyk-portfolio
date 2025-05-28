@@ -17,14 +17,16 @@ tags:                      # 関連タグ（複数可）
 ci_status: "<CIステータスバッジのURL>" # オプション
 stories:                   # 関連する外部記事へのリンク（オプション）
   - "<source>-<URL>"       # 例：zenn-https://zenn.dev/...
-why_md: "./why.md"         # Whyファイルへのパス（オプション）
+why_md: "/src/why/[category]/[slug].md"         # Whyファイルへのパス（オプション）
 ---
 
-## 📌 Design Rationale（設計の背景・意図）
+## Design Rationale
+
+<div class="my-4 border-l-4 p-4 rounded bg-blue-800 border-blue-500 text-white">
 
 > このProofを作成した動機、必要となる背景、対象とする技術や概念を簡潔に説明します。  
 > なぜこれが重要なのかを理解できるようにします。
-
+</div>
 ---
 
 ## 🛠️ Prerequisites（事前準備）
@@ -42,16 +44,48 @@ why_md: "./why.md"         # Whyファイルへのパス（オプション）
 
 ---
 
-## 🚀 How to Reproduce（再現手順）
+## How to Reproduce
 
-以下の手順を順番に実行してください。
-
+### 1. リポジトリをクローン＆移動
+- このコマンドで GitHub からソースをローカルにクローンし、Packet Capture Lab のディレクトリに移動します。
 ```bash
-# リポジトリのクローン
-git clone https://github.com/<your-repo>/<portfolio>.git
+git clone https://github.com/kwstyk/kwstyk-portfolio.git
+cd kwstyk-portfolio/src/content/proofs/network-security/packet-capture
+```
 
-# Proofのディレクトリに移動
-cd proofs/<category>/<proof-name>
+### 2. 画像と tcpdump コンテナをビルド
+- Dockerfile に従って、nginx＋tcpdump コンテナのイメージを作成します。 
+```bash
+docker compose build
+```
+### 3. バックグラウンドで起動
+- バックグラウンドでコンテナを起動します。起動後は <strong>http://localhost:8080</strong> で nginx のウェルカムページが表示されます。
+```bash
+docker compose up -d
+```
+### 4. 実行結果を確認・停止
+- コンテナを停止・削除したあと、`capture/` フォルダ内に `capture.pcap` が生成されていることを確認します。
+```bash
+docker compose down 
+ls capture/ 
+```
 
-# 実行コマンド
-just up
+- 起動後、コンテナ内部の tcpdump が capture/capture.pcap に通信ログを書き出します。
+
+## Expected Outcome
+
+
+## Directory Structure
+<div class="my-6 p-4 bg-gray-800 text-white rounded font-mono text-sm overflow-x-auto">
+<pre>
+
+
+</pre>
+</div>
+
+## Troubleshoot
+
+| 症状                       | 解決策                                    |
+| ------------------------ | -------------------------------------- |
+
+## References
