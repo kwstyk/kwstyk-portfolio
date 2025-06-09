@@ -1,0 +1,50 @@
+services:
+  # ① テスト対象サーバ
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: linux-secure-baseline_base
+    ports:
+      - "2222:22"      # SSH 外出し
+    tty: true
+    privileged: true
+
+  # ② コントローラ & 監査ランナー
+  controller:
+    build:
+      context: .
+      dockerfile: Dockerfile.controller
+    volumes:
+      - .:/work
+    working_dir: /work
+    depends_on:
+      - base
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        set -e
+
+        echo '📝 Pre-audit'
+        sshpass -p root ssh -o StrictHostKeyChecking=no root@base \
+          lynis audit system --quiet --auditor pre --logfile /var/log/lynis-pre.log
+
+        # ← ここで“改善前”スコアを取得
+        echo -e '\n=== Hardening index (before) ==='
+        sshpass -p root ssh -o StrictHostKeyChecking=no root@base \
+          "grep -m1 'Hardening index' /var/log/lynis-pre.log" || true
+
+        echo -e '\n🚀 Applying hardening via Ansible'
+        ansible-playbook -i ansible/inventory ansible/playbook.yml
+
+        echo -e '\n📝 Post-audit'
+        sshpass -p root ssh -o StrictHostKeyChecking=no root@base \
+          lynis audit system --quiet --auditor post --logfile /var/log/lynis-post.log
+        
+        # ← そして“改善後”スコアを再取得
+        echo -e '\n=== Hardening index (after) ==='
+        sshpass -p root ssh -o StrictHostKeyChecking=no root@base \
+          "grep -m1 'Hardening index' /var/log/lynis-post.log" || true
+
+        exit 0

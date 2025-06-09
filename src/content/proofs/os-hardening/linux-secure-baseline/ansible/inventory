@@ -1,0 +1,3 @@
+# linux-secure-baseline/ansible/inventory
+[all]
+base ansible_host=base ansible_user=root ansible_password=root ansible_port=22 ansible_python_interpreter=/usr/bin/python3 ansible_ssh_common_args='-o StrictHostKeyChecking=no'

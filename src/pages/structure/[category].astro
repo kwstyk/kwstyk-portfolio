@@ -103,7 +103,7 @@ const entries = allProofs.filter(p => p.data.category === category.slug)
         <Card
           title={entry.data.title}
           description={entry.data.description}
-          href={`/proof/${entry.id.replace(/\.mdx?$/, '')}`}
+          href={`/proof/${entry.slug.replace(/\/index$/, '')}`} 
           icon={entry.data.icon}
           badge={entry.data.badge}
           difficulty={entry.data.difficulty}

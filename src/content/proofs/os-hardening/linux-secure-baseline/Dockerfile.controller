@@ -1,0 +1,11 @@
+# Controller イメージ: Ansible + sshpass が入っただけの最小構成
+FROM python:3.11-slim
+
+# 必要ツールを入れる
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends openssh-client sshpass git \
+ && pip install --no-cache-dir ansible \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /work

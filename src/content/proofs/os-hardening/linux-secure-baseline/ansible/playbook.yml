@@ -1,0 +1,6 @@
+---
+- name: Apply CIS Benchmark Hardening
+  hosts: all
+  become: true
+  roles:
+    - cis

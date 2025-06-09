@@ -1,0 +1,9 @@
+# linux-secure-baseline/justfile
+
+apply-hardening:
+    ansible-playbook -i ansible/inventory ansible/playbook.yml
+
+diff-report:
+    @echo "=== Pre-Audit Score ==="; lynis show report reports/lynis-pre.html | grep "Hardening index"; \
+    echo; \
+    echo "=== Post-Audit Score ==="; lynis show report reports/lynis-post.html | grep "Hardening index"

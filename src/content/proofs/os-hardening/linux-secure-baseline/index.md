@@ -10,12 +10,13 @@ stack:
   - "docker"
   - "ansible"
   - "lynis"
-updated: "2025-05-28"
-progress: 0
+updated: "2025-06-09"
+progress: 100
 tags:
   - "cis-benchmark"
   - "ansible"
   - "lynis"
+  - "docker"
 ci_status: "https://img.shields.io/badge/ci-passing-brightgreen.svg"
 stories: []
 why_md: "/src/why/os-hardening/linux-secure-baseline.md"
@@ -55,13 +56,13 @@ cd kwstyk-portfolio/src/content/proofs/os-hardening/linux-secure-baseline
 
 ```bash
 docker compose up -d base
-docker compose exec base lynis audit system --quick --quiet --auditor "pre"
+docker compose exec base lynis audit system --quick --auditor "pre"
 ```
 
 ### 3. Ansible で CIS 主要項目を適用
 - Playbook を 1 コマンド適用
 ```bash
-just apply-hardening
+docker compose run --rm controller ansible-playbook -i ansible/inventory ansible/playbook.yml
 ```
 
 ### 4. 再監査 & スコア比較
@@ -81,7 +82,7 @@ docker compose down -v
 
 ## Expected Outcome
 
-- Lynis スコアが **70 → 85** 付近へ向上  
+- Lynis スコアが **50±5 → 65±5** 付近へ向上  
 - `/etc/ssh/sshd_config` に *PermitRootLogin no* が反映  
 - `ufw` が有効化され、無応答ポートが DROP
 

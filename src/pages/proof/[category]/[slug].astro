@@ -14,9 +14,16 @@ export const prerender = true;
 
 export async function getStaticPaths() {
   const proofs = await getCollection('proofs');
+
   return proofs.map((entry) => {
-    const [category, slug] = entry.id.replace(/\.mdx?$/, '').split('/');
-    return { params: { category, slug }, props: { entry } };
+    const cleaned = entry.slug.replace(/\/index$/, '');
+    // entry.slug 例: "os-hardening/linux-secure-baseline"
+    const [category, slug] = cleaned.split('/');
+
+    return {
+      params: { category, slug }, // ← ファイル名の動的セグメントと一致！
+      props : { entry },
+    };
   });
 }
 

@@ -49,7 +49,10 @@ if (type === 'latest') {
     {proofs.map((proof: CollectionEntry<'proofs'>) => (
       <SmallProofCard
         title={proof.data.title ?? proof.id.split('/')[1]}
-        href={`/proof/${proof.id.replace(/\.mdx?$/, '')}`}
+        href={`/proof/${proof.id            // 例: os-hardening/linux-secure-baseline/index.mdx
+        .replace(/\/index\.mdx?$/,  '')   /* /index.mdx -> '' */
+        .replace(/\.mdx?$/,         '')   /* 念のため拡張子だけの場合も対応 */
+        }`}
         updated={proof.data.updated}
         difficulty={proof.data.difficulty}
         class=""

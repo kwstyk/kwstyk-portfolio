@@ -1,0 +1,134 @@
+---
+# roles/cis/tasks/main.yml
+# 主要 10 コントロール（CIS Benchmarks Priority-1）
+
+########################################
+# 1. パスワード関連
+########################################
+- name: Ensure password expiration is 90 days or less
+  command: chage -M 90 root
+  changed_when: true
+
+- name: Ensure minimum days between password changes is 7 days
+  command: chage -m 7 root
+  changed_when: true
+
+- name: Ensure password reuse is limited to 5
+  lineinfile:
+    path: /etc/pam.d/common-password
+    regexp: '^password\s+requisite\s+pam_unix.so'
+    line: 'password requisite pam_unix.so obscure sha512 remember=5'
+    backrefs: yes
+
+########################################
+# 2. SSH 強化
+########################################
+- name: Disable SSH root login
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    line: 'PermitRootLogin no'
+    backrefs: yes
+
+- name: Ensure SSH protocol is set to 2
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^Protocol'
+    line: 'Protocol 2'
+    backrefs: yes
+
+- name: Disable SSH X11 forwarding
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^X11Forwarding'
+    line: 'X11Forwarding no'
+    backrefs: yes
+
+########################################
+# 3. UFW ファイアウォール
+########################################
+- name: Install UFW
+  apt:
+    name: ufw
+    state: present
+
+- name: Set default UFW policies (deny incoming, allow outgoing)
+  shell: |
+    ufw default deny incoming
+    ufw default allow outgoing
+  become: true
+
+- name: Allow SSH through UFW
+  shell: ufw allow 22/tcp
+  become: true
+
+- name: Enable UFW
+  shell: ufw --force enable
+  become: true
+
+########################################
+# 4. 追加パッケージ
+########################################
+- name: Install auditd
+  apt:
+    name: auditd
+    state: present
+
+- name: Install unattended-upgrades
+  apt:
+    name: unattended-upgrades
+    state: present
+
+########################################
+# 追加①: ファイル権限の強化
+########################################
+- name: Ensure /etc/passwd permissions are set to 644
+  ansible.builtin.file:
+    path: /etc/passwd
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+- name: Ensure /etc/shadow permissions are set to 000
+  ansible.builtin.file:
+    path: /etc/shadow
+    owner: root
+    group: shadow
+    mode: '000'
+  become: true
+
+- name: Ensure sticky bit is set on /tmp
+  ansible.builtin.file:
+    path: /tmp
+    state: directory
+    mode: '1777'
+  become: true
+
+########################################
+# 追加②: ネットワーク設定の強化 (sysctl)
+########################################
+- name: Disable IPv4 IP forwarding
+  ansible.builtin.sysctl:
+    name: net.ipv4.ip_forward
+    value: 0
+    state: present
+    reload: yes
+  become: true
+
+- name: Disable IPv4 ICMP redirects
+  ansible.builtin.sysctl:
+    name: net.ipv4.conf.all.accept_redirects
+    value: 0
+    state: present
+    reload: yes
+  become: true
+
+- name: Ensure TCP SYN cookie protection is enabled
+  ansible.builtin.sysctl:
+    name: net.ipv4.tcp_syncookies
+    value: 1
+    state: present
+    reload: yes
+  become: true
+
