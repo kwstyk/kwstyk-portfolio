@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  localstack:
+    image: localstack/localstack:3.4
+    container_name: s3-public-guard_localstack
+    environment:
+      - SERVICES=s3,lambda,iam,cloudwatch,logs,events
+      - AWS_DEFAULT_REGION=us-east-1
+      - LAMBDA_EXECUTOR=docker-reuse
+      - DEBUG=1
+    ports:
+      - "4566:4566"   # Edge
+      - "4571:4571"   # Lambda
+    volumes:
+      - ./localstack-data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  controller:
+    image: public.ecr.aws/hashicorp/terraform:1.8-light
+    container_name: s3-public-guard_controller
+    working_dir: /work
+    volumes:
+      - ./terraform:/work
+      - ./lambda:/work/lambda
+    environment:
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - TF_VAR_endpoint=http://localstack:4566
+    depends_on:
+      - localstack
